@@ -75,7 +75,7 @@ class Default_Model_Dependencydetails extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		if($userId != 0)
 		{
-			$where = "user_id =".$userId;
+			$where = "isactive = 1 AND user_id =".$userId;
 			$empdependencyDetails = $this->select()
 									->from(array('d'=>'main_empdependencydetails'),array('dependent_relation'=>'d.dependent_relation'))
 									->where($where)

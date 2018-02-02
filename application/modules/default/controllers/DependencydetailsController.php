@@ -127,6 +127,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									'grandmother'=>'Grand Mother',
 									'grandson'=>"Grand Son",
 									'lifepartner mother'=>'LifePartner Mother',
+									'mother'=>"Mother" ,
 									'sister'=>"Sister",
 									'spouse'=>'Spouse'							
 									);
@@ -279,7 +280,8 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'grandfather'=>"Grand Father",
 								'grandmother'=>'Grand Mother',
 								'grandson'=>"Grand Son",
-								'lifepartner mother'=>'LifePartner Mother',
+		 						'lifepartner mother'=>'LifePartner Mother',
+		 						'mother'=>"Mother" ,
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
@@ -480,6 +482,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'grandmother'=>'Grand Mother',
 								'grandson'=>"Grand Son",
 								'lifepartner mother'=>'LifePartner Mother',
+								'mother'=>"Mother" ,
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
@@ -533,6 +536,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'grandmother'=>'Grand Mother',
 								'grandson'=>"Grand Son",
 								'lifepartner mother'=>'LifePartner Mother',
+								'mother'=>"Mother" ,
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
@@ -669,6 +673,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'grandmother'=>'Grand Mother',
 								'grandson'=>"Grand Son",
 								'lifepartner mother'=>'LifePartner Mother',
+								'mother'=>"Mother" ,
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
