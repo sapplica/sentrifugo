@@ -64,16 +64,16 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$where .= " and WEEK(holidaydate,2) = '".$calWeek."'";
 		} else
 		$where .= " and MONTH(holidaydate) = '".$month."'";
-			
+
 		$select = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('s'=>'main_employees_summary'),
 		array('date_of_joining','m.weekend_startday','m.weekend_endday','holiday_names'=>'GROUP_CONCAT(h.holidayname)' ,
-					 'holiday_dates'=>'GROUP_CONCAT(h.holidaydate)'))				
+					 'holiday_dates'=>'GROUP_CONCAT(h.holidaydate)'))
 		->joinInner(array('m'=>'main_leavemanagement'),"m.department_id = s.department_id and m.isactive=1",array())
 		->joinLeft(array('h'=>'main_holidaydates'),"h.groupid = s.holiday_group and h.isactive=1 and YEAR(holidaydate) = '".$year."' ".$where." ",array())
 		->where(" s.user_id = '".$empId."'");
-		//echo $select; 
+		//echo $select;
 		$result = $this->fetchAll($select)->toArray();
 
 		return $result;
@@ -105,12 +105,12 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->from(array('u'=>'main_employees_summary'),
 		array('u.user_id','u.emprole','tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' || g.group_name = 'Manager'  THEN  'Manager'
  ELSE CASE WHEN u.user_id IN (SELECT reporting_manager FROM main_employees_summary) THEN 'Manager'
-      ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId','u.holiday_group','u.department_id','u.date_of_joining','emp_cur_day' => new Zend_Db_Expr("(SELECT LOWER(DAYNAME(CONVERT_TZ(UTC_TIMESTAMP(),'+00:00',tz.offet_value))))")))
+      ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId','u.holiday_group','u.department_id','u.date_of_joining','u.emp_status_name','emp_cur_day' => new Zend_Db_Expr("(SELECT LOWER(DAYNAME(CONVERT_TZ(UTC_TIMESTAMP(),'+00:00',tz.offet_value))))")))
 		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->joinInner(array('d'=>'main_departments'),"d.id = u.department_id",array())
 		->joinInner(array('tz'=>'main_timezone'),"tz.id = d.timezone",array())
-		->where("u.isactive=1 and u.reporting_manager = '".$reportingToId."'");
+		->where("u.emp_status_name <> 'Deputation' and u.isactive=1 and u.reporting_manager = '".$reportingToId."'");
 		//->having('emp_cur_day = "'.$cron_run_day.'"');
 		//echo $select;exit;
 		$employeesReported = $this->fetchAll($select)->toArray();
@@ -130,7 +130,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$weekDatesArray = sapp_Global::createDateRangeArray($hidstartweek_date,$hidendweek_date); //echo '<pre>';print_r($weekDatesArray);
 			//End
 
-			$submittedtsdates = $holDates = $weekendDates = $leaveDates = array();
+			$submittedtsdates = $holDates = $weekendDates = $leaveDates = $oncallDates = array();
 
 			$startdateObj = DateTime::createFromFormat("Y-m-d", $hidstartweek_date);
 
@@ -141,6 +141,12 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 				$calWeekVal = strftime('%U',strtotime($loopDate));
 				$dateYearVal = strftime('%Y',strtotime($loopDate));
+
+        if($calWeekVal == "00") {
+          $prevYear = $dateYearVal - 1;
+          $calWeekVal = strftime('%U',strtotime($prevYear.'-12-31'));
+        }
+
 				if(!in_array($calWeekVal,$cal_weekArray)){
 					$cal_weekArray[] = $calWeekVal;
 					$yearCalWeekArray[$calWeekVal][] = $dateYearVal;
@@ -213,6 +219,19 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 			//End
 
+			//To get On call applied by user for the given duration
+			$empOncalls = $this->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+			if(!empty($empOncalls)){
+				$emponcallDatesArray = array();
+				foreach($empOncalls as $empOncallRow){
+					if($empOncallRow['oncallday'] == 1){
+						$oncallDatesArray = sapp_Global::createDateRangeArray($empOncallRow['from_date'],$empOncallRow['to_date']);
+					}
+					$emponcallDatesArray = array_merge($emponcallDatesArray,$oncallDatesArray);
+				}
+			}
+			//End
+
 			//To get default not working days(saturday and sunday)
 			if($emp_dept_id !='' && $emp_dept_id != NULL){
 				$weekendDetailsArr = $this->getWeekend($hidstartweek_date, $hidendweek_date, $emp_dept_id);
@@ -239,6 +258,15 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			if(isset($emponcallDatesArray) && count($emponcallDatesArray)> 0 )
+			{
+				foreach($emponcallDatesArray as $emponcallDate)
+				{
+					if(in_array($emponcallDate,$weekDatesArray)){
+						$oncallDates[] = $emponcallDate;
+					}
+				}
+			}
 			if(isset($weekendDetailsArr) && count($weekendDetailsArr)> 0 )
 			{
 				foreach($weekendDetailsArr as $weekendDate)
@@ -250,7 +278,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 
 			$totalDaysArray = array();
-			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$weekendDates);
+			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$oncallDates,$weekendDates);
 			//print_r($totalDaysArray);
 
 			$emptyDataDatesArray = array();
@@ -305,8 +333,22 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->from(array('el' => 'main_leaverequest'),
 		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','leavetypeid'=>'el.leavetypeid','leavestatus'=>'el.leavestatus','leaveday'=>'el.leaveday','leave_req_id'=>'el.id'))
 	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-		//echo $select;	
+		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND (el.from_date <= '".$endday."' AND el.to_date >= '".$startday."') ");
+		//echo $select;
+		return $this->fetchAll($select)->toArray();
+	}
+
+	public function getEmpOncalls($empid,$startday,$endday,$flag='')
+	{
+		$where = "";
+		if($flag != 'all') $where .= "el.oncallday = 1 AND";
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('el' => 'main_oncallrequest'),
+		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','oncalltypeid'=>'el.oncalltypeid','oncallstatus'=>'el.oncallstatus','oncallday'=>'el.oncallday','oncall_req_id'=>'el.id'))
+	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
+		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
+		//echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -319,6 +361,22 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		array('u.user_id','u.emprole','tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' || g.group_name = 'Manager'  THEN  'Manager'
  ELSE CASE WHEN u.user_id IN (SELECT reporting_manager FROM main_employees_summary) THEN 'Manager'
       ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId'))
+		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
+		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
+		->where("u.isactive=1")
+		->group("u.user_id")
+		->having("tm_role = 'Manager'");;
+
+		return $this->fetchAll($select)->toArray();
+	}
+
+	public function getManagement()
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('u'=>'main_employees_summary'),
+		array('u.user_id','u.emprole','tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' THEN  'Manager'
+      ELSE 'Employee' END)"),'u.userfullname','u.emailaddress','u.employeeId'))
 		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->where("u.isactive=1")

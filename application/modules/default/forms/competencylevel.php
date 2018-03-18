@@ -35,13 +35,13 @@ class Default_Form_competencylevel extends Zend_Form
         $competencylevel->setAttrib('maxLength', 20);
         
         $competencylevel->setRequired(true);
-        $competencylevel->addValidator('NotEmpty', false, array('messages' => 'Please enter competency level.')); 
+        $competencylevel->addValidator('NotEmpty', false, array('messages' => 'Please enter Competency Area.')); 
 		$competencylevel->addValidator("regex",true,array(
 									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
 								   
 								   'messages'=>array(
-									   'regexNotMatch'=>'Please enter valid competency level.'
+									   'regexNotMatch'=>'Please enter valid Competency Area.'
 								   )
 					));
 		$competencylevel->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -50,7 +50,7 @@ class Default_Form_competencylevel extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $competencylevel->getValidator('Db_NoRecordExists')->setMessage('Competency level already exists.');		
+        $competencylevel->getValidator('Db_NoRecordExists')->setMessage('Competency Area already exists.');		
 		
 		
    	

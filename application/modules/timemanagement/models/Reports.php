@@ -72,6 +72,18 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 
 		return $this->fetchAll($select)->toArray();
 	}
+	
+	public function getProjectTypeList()
+	{
+		$select = $this->select()
+					->setIntegrityCheck(false)
+					->from(array('e'=>'main_projecttype'), array('id'=>'e.id','projecttype'=>'e.projecttype'))
+					->where("e.isactive = 1 ")
+					->order("e.projecttype ASC")
+					->distinct('e.projecttype');
+
+		return $this->fetchAll($select)->toArray();
+	}
         
 	public function getEmployeeReportsbyProjectId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall, 
 			$start_date, $end_date, $projid,$org_start_date,$org_end_date,$param=''){
@@ -125,7 +137,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			);
 			return $dataTmp;
  	 }
-	
 
 	/**
 	 * This will fetch all the active client details.
@@ -256,6 +267,209 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		return $select;
 	}
 	
+	/**
+	 * This will fetch all the active client details.
+	 *
+	 * @param string $sort
+	 * @param string $by
+	 * @param string $searchQuery
+	 * @param string $start_date
+	 * @param string $end_date
+	 *
+	 * @return array $BillingReportEmployeesData
+	 */
+	public function getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.businessunit_name','e.office_faxnumber'))  
+					   	->where("(e.date_of_leaving IS NULL".
+							        " or e.date_of_leaving = ''".
+							        " or e.date_of_leaving >= '".$start_date.
+											"') and e.isactive <> 0".
+											" and e.isactive IS NOT NULL".
+											" and e.emp_status_name <> 'Deputation'")
+					   	->order("$by $sort");
+		return $this->fetchAll($select)->toArray(); 
+	}
+	
+	public function getBillingProjData($empid, $start_date, $end_date, $projecttype)
+	{		
+		if ($projecttype == "") 
+		{
+		  $projecttypecond = "";
+		} else {
+		  $projecttypecond = " and mp.id = ".$projecttype;			
+		}
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('tpe' => 'tm_project_employees'),
+										 array('tp.project_type',
+													 'tp.project_name',
+													 'tt.task',
+													 'tpe.billable_rate',
+												 	 'tpte.project_task_id',
+													 'mp.hours_day',
+													 'mp.id',
+												 	 'tet.sun_date',
+													 'tet.sun_duration',
+												   'tts.sun_status', 
+												 	 'tet.mon_date',
+													 'tet.mon_duration',
+												   'tts.mon_status',  
+												 	 'tet.tue_date',
+													 'tet.tue_duration',
+												   'tts.tue_status',  
+												 	 'tet.wed_date',
+													 'tet.wed_duration',
+												   'tts.wed_status',  
+												 	 'tet.thu_date',
+													 'tet.thu_duration',
+												   'tts.thu_status',  
+												 	 'tet.fri_date',
+													 'tet.fri_duration',
+												   'tts.fri_status',  
+												 	 'tet.sat_date',
+													 'tet.sat_duration',
+												   'tts.sat_status'))
+							->joinInner(array('tp'=>'tm_projects'), 
+																'tp.id = tpe.project_id',
+																array())
+							->joinInner(array('tpt'=>'tm_project_tasks'), 
+																'tpt.project_id = tpe.project_id',
+																array())
+							->joinInner(array('tt'=>'tm_tasks'), 
+																'tt.id = tpt.task_id',
+																array())
+							->joinInner(array('tpte'=>'tm_project_task_employees'), 
+																'tpte.project_id = tpe.project_id'.
+																' and tpte.task_id = tpt.task_id'.
+																' and tpte.emp_id = tpe.emp_id',
+																array())
+							->joinInner(array('tet'=>'tm_emp_timesheets'), 
+																'tet.emp_id = tpe.emp_id'.
+																' and tet.project_task_id = tpte.project_task_id',
+																array())
+							->joinInner(array('tts'=>'tm_ts_status'), 
+																'tts.emp_id = tpe.emp_id'.
+																' and tts.project_id = tpe.project_id'.
+																' and tts.ts_year = tet.ts_year'.
+																' and tts.ts_month = tet.ts_month'.
+																' and tts.ts_week = tet.ts_week'.
+																' and tts.cal_week = tet.cal_week',
+																array())
+							->joinInner(array('mp'=>'main_projecttype'), 
+																'mp.projecttype = tp.project_type',
+																array())
+					   	->where("tpe.is_active  = 1".
+											" and tp.is_active  = 1".
+											" and tpt.is_active  = 1".
+											" and tt.is_active  = 1".
+											" and tpte.is_active  = 1".
+											$projecttypecond.
+											" and mp.isactive  = 1".
+											" and tet.sat_date >= '".$start_date.
+											"' and tet.sun_date <= '".$end_date.
+											"' and tpe.emp_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch leave details for billing.
+	 *
+	 * @param string $empid
+	 * @param string $start_date
+	 * @param string $end_date
+	 *
+	 * @return array $leave_billing_data
+	 */	
+	public function getBillingLeaveData($empid,$start_date,$end_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('ml' => 'main_leaverequest'),
+							       array('me.leavetype',
+										       'ml.from_date',
+													 'ml.to_date',
+													 'ml.leaveday',
+													 'ml.no_of_days',
+													 'ml.appliedleavescount'))  
+							->joinInner(array('me'=>'main_employeeleavetypes'), 
+							                  'me.id = ml.Leavetypeid',array())
+					   	->where("ml.Leavestatus in ('Pending for approval', 'Approved')".
+							        " and ml.isactive = 1".
+											" and ml.from_date <= '".$end_date.
+											"' and ml.to_date >= '".$start_date.
+											"' and ml.user_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch on call details for billing.
+	 *
+	 * @param string $empid
+	 * @param string $start_date
+	 * @param string $end_date
+	 *
+	 * @return array $on_call_billing_data
+	 */	
+	public function getBillingOnCallData($empid,$start_date,$end_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mo' => 'main_oncallrequest'),
+							       array('me.oncalltype',
+										       'mo.from_date',
+													 'mo.to_date',
+													 'mo.oncallday',
+													 'mo.no_of_days',
+													 'mo.appliedoncallscount'))  
+							->joinInner(array('me'=>'main_employeeoncalltypes'), 
+							                  'me.id = mo.oncalltypeid',array())
+					   	->where("mo.oncallstatus in ('Pending for approval', 'Approved')".
+							        " and mo.isactive = 1".
+											" and mo.from_date <= '".$end_date.
+											"' and mo.to_date >= '".$start_date.
+											"' and mo.user_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch billing hours for the day.
+	 *
+	 * @param string $empid
+	 *
+	 * @return array $billing_hours
+	 */	
+	public function getWorkScheduleHours($empid)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mws' => 'main_work_schedule'),
+							       array('mws.startdate',
+										       'mws.enddate',
+											     'mws.sun_duration',
+										       'mws.mon_duration',
+										       'mws.tue_duration',
+										       'mws.wed_duration',
+										       'mws.thu_duration',
+										       'mws.fri_duration',
+										       'mws.sat_duration'))  
+							->joinInner(array('mes'=>'main_employees_summary'), 
+																'mes.businessunit_id = mws.businessunit_id'.
+																' and mes.department_id = mws.department_id',
+																array())
+					   	->where("mes.user_id = ".$empid.
+											" and mws.isactive = 1");
+		return $this->fetchAll($select)->toArray(); 
+	}
+		
 	function getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall,
 			 $start_date, $end_date, $empid,$org_start_date,$org_end_date,$param=""){
 
@@ -407,14 +621,12 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		//'SUM(TIME_TO_SEC(et.week_duration))'
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))',
+		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'p.project_type',
                                 'duration'=>$duration,'duration_sort'=>$duration_sort))  
 		->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
 		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())
 		->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
 		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
-		//->joinLeft(array('pm'=>new Zend_Db_Expr('(SELECT project_id,GROUP_CONCAT(emp_id) as manager_ids FROM tm_project_employees 
-		//WHERE is_active=1 and emp_type = \'manager\' GROUP BY project_id)')), 'pm.project_id = pt.project_id',array())
 		->where('et.is_active=1 '.$andwhere)
 		->order("$by $sort")
 		->group('p.id')
@@ -426,6 +638,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		//echo $select;//exit;
 		return $select;
 	}
+	
 	public function getEmpProjDuration($empId,$start_date,$end_date,$project_id,$param)
 	{
 		$andwhere = '';
@@ -509,6 +722,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					  // echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
+	
 	public function getProjTaskDuration($empId,$start_date,$end_date,$project_id,$param)
 	{
 		$andwhere = " AND (1=1)";

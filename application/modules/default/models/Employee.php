@@ -195,12 +195,17 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             $count = $count_row['cnt'];
             $page_cnt = ceil($count/$per_page);
             
-            $query = "select e.*,es.salary,p.freqtype,c.currencyname, case when e.isactive = 0 then 'Inactive' when e.isactive = 1 then 'Active' when e.isactive = 2 then 'Resigned'  when e.isactive = 3 then 'Left' when e.isactive = 4 then 'Suspended' end isactive"
+            $query = "select e.*,es.salary,p.freqtype,c.currencyname, mc.competencylevel, mec.course_name, mec.issued_date, case when e.isactive = 0 then 'Inactive' when e.isactive = 1 then 'Active' when e.isactive = 2 then 'Resigned'  when e.isactive = 3 then 'Left' when e.isactive = 4 then 'Suspended' end isactive"
                     . " from main_employees_summary e 
                         left join main_empsalarydetails es on es.user_id = e.user_id  "
                     . " left join main_currency c on c.id = es.currencyid "
                     . " left join main_payfrequency p on p.id = es.salarytype "
+                    . " left join main_empskills me on me.user_id = e.user_id "
+                    . " left join main_competencylevel mc on mc.id = me.competencylevelid "
+                    . " left join main_empcertificationdetails mec on mec.user_id = e.user_id "
                     . "where ".$search_str." "
+                    . " and (me.modifieddate = (select max(modifieddate) from main_empskills mex where mex.user_id = me.user_id and me.isactive = 1 and mex.isactive = 1) or me.modifieddate IS NULL) "
+                    . " and (mec.modifieddate = (select max(modifieddate) from main_empcertificationdetails mecx where mecx.user_id = mec.user_id and mec.isactive = 1 and mecx.isactive = 1) or mec.modifieddate IS NULL) "
                     . "order by ".$sort_name." ".$sort_type." ".$limit_str;
             $result = $db->query($query);
             $rows = $result->fetchAll();
@@ -328,7 +333,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 			
         $tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'Email',
                              'employeeId' =>'Employee ID','businessunit_name' => 'Business Unit','department_name' => 'Department','astatus' =>'User Status','extn'=>'Work Phone',
-                             'jobtitle_name'=>'Job Title','reporting_manager_name'=>'Reporting Manager','contactnumber'=>'Contact Number',
+                             'jobtitle_name'=>'Career Track','reporting_manager_name'=>'Reporting Manager','contactnumber'=>'Contact Number',
                              'emp_status_name' =>'Employment Status','emprole_name'=>"Role");
 		   
         $tablecontent = $this->getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,'',$exParam1);  
@@ -546,12 +551,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 	
 	public function getEmployeesForServiceDesk($bunitid='',$deptid='')
 	{
-		$where = 'e.isactive=1 AND r.group_id IN (2,3,4,6)';
-		if($bunitid != '' && $bunitid !='null')
-			$where .= ' AND e.businessunit_id = '.$bunitid.'';
-		if($deptid !='' && $deptid !='null')
-			$where .= ' AND e.department_id = '.$deptid.'';	
-		
+		$where = 'e.isactive=1 AND r.group_id IN (1,2,3,4,6)';		
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$qry = "select e.userfullname,e.user_id,e.emprole from main_employees_summary e 
@@ -571,7 +571,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		/*** modified on 18-08-2015 ***
-		*** to fix the issue when job title is empty ***
+		*** to fix the issue when Career Track is empty ***
 		*** query is returning empty userfullname ***
 		***/
 		$qry = "select case when e.jobtitle_name !='' then concat(e.userfullname,concat(' , ',e.jobtitle_name)) else e.userfullname end as userfullname,e.user_id,e.emprole from main_employees_summary e 

@@ -161,7 +161,7 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 		$projectResourcesModel = new Timemanagement_Model_Projectresources();
 		$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($projectId,$loginUserId);
 		$projectResourcesData = 'norows';
-		if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+		if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 			try{
 				if(is_numeric($projectId) && $projectId>0){
 					$projectModel = new Timemanagement_Model_Projects();

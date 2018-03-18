@@ -316,21 +316,21 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 			$Id = $bankaccounttypemodel->SaveorUpdateBankAccountData($data, $where);
 			if($Id == 'update')
 			{
-				sapp_Global::send_configuration_mail("Bank Account Type", $bank_data[0]['bankaccounttype']);
+				sapp_Global::send_configuration_mail("Bill Code", $bank_data[0]['bankaccounttype']);
 				$menuID = BANKACCOUNTTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$messages['message'] = 'Bank account type deleted successfully.';
+				$messages['message'] = 'Bill Code deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
 			{
-				$messages['message'] = 'Bank account type cannot be deleted.';
+				$messages['message'] = 'Bill Code cannot be deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Bank account type cannot be deleted.';
+			$messages['message'] = 'Bill Code cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		// delete success message after delete in view

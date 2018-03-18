@@ -365,7 +365,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			
 			foreach ($countrieslistArr as $countrieslistres)
 			{
-				$empadditionaldetailsform->countries_served->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+				$empadditionaldetailsform->countries_served->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
 			}
 		}else
 		{
@@ -558,7 +558,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			
 			foreach ($countrieslistArr as $countrieslistres)
 			{
-				$empadditionaldetailsform->countries_served->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+				$empadditionaldetailsform->countries_served->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
 			}
 		}
 

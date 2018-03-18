@@ -96,7 +96,7 @@ $data = $this->data;
 				sapp_Helper::viewBody('nor','Reporting Manager',(!sapp_Helper::SappEmpty( $this->data['reporting_manager']))? $this->data['reporting_manager']:"..."	,'','');
 				}
 				
-				sapp_Helper::viewBody('alt','Job Title',(!sapp_Helper::SappEmpty( $this->data['jobtitle_id']))? $this->data['jobtitle_id']:"...",'Position',(!sapp_Helper::SappEmpty( $this->data['position_id']))? $this->data['position_id']:"...");
+				sapp_Helper::viewBody('alt','Career Track',(!sapp_Helper::SappEmpty( $this->data['jobtitle_id']))? $this->data['jobtitle_id']:"...",'Career Level',(!sapp_Helper::SappEmpty( $this->data['position_id']))? $this->data['position_id']:"...");
 				if($this->data['is_orghead'] == 0)
 				{ 
 				sapp_Helper::viewBody('nor','Employment Status',(!sapp_Helper::SappEmpty( $this->data['emp_status_id']))? $this->data['emp_status_id']:"..."	,'','');
@@ -106,7 +106,7 @@ $data = $this->data;
 				{ 
 				sapp_Helper::viewBody('nor','Date of Leaving',(!sapp_Helper::SappEmpty($this->form->date_of_leaving->getValue()))? $this->form->date_of_leaving->getValue():"..."	,'','');
 				}
-				sapp_Helper::viewBody('alt','Years of Experience',(!sapp_Helper::SappEmpty($this->form->years_exp->getValue()))? $this->form->years_exp->getValue():"..."	,$this->form->office_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_number->getValue()))?$this->form->office_number->getValue():"...");
+				sapp_Helper::viewBody('alt','Client user ID',(!sapp_Helper::SappEmpty($this->form->years_exp->getValue()))? $this->form->years_exp->getValue():"..."	,$this->form->office_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_number->getValue()))?$this->form->office_number->getValue():"...");
 				sapp_Helper::viewBody('nor',$this->form->extension_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->extension_number->getValue()))?$this->form->extension_number->getValue():"...",$this->form->office_faxnumber->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_faxnumber->getValue()))?$this->form->office_faxnumber->getValue():"..."	);
 				
 				sapp_Helper::viewFooter();

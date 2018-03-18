@@ -39,12 +39,12 @@ sapp_Helper::editdeleteForView(BANKACCOUNTTYPE,$this->controllername,$this->id,$
 
 <?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Bank Account Type',$this->data['bankaccounttype'],'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewBody('nor','Bill Code',$this->data['bankaccounttype'],'Description',(!empty($this->data['description']))?$this->data['description']:"...");
 sapp_Helper::viewFooter();
 ?>
        <!--  <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
-			  <label>Bank Account Type</label>
+			  <label>Bill Code Type</label>
 			<div class="division"><?php //echo $this->form->bankaccounttype; ?></div>
 			</div>	
 			<div class="new-form-ui clearb textareaheight">

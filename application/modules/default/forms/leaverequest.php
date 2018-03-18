@@ -55,7 +55,6 @@ class Default_Form_leaverequest extends Zend_Form
        
         $leaveday = new Zend_Form_Element_Select('leaveday');
         $leaveday->setRegisterInArrayValidator(false);
-		$leaveday->setAttrib('onchange', 'hidetodatecalender(this)');
         $leaveday->setMultiOptions(array(							
 							'1'=>'Full Day' ,
 							'2'=>'Half Day',
@@ -80,8 +79,6 @@ class Default_Form_leaverequest extends Zend_Form
         $reason->setAttrib('rows', 10);
         $reason->setAttrib('cols', 50);
 		$reason ->setAttrib('maxlength', '30');
-		$reason->setRequired(true);
-        $reason->addValidator('NotEmpty', false, array('messages' => 'Please enter reason.'));
 		
 		$leavestatus = new Zend_Form_Element_Text('leavestatus');
         $leavestatus->setAttrib('readonly', 'true');

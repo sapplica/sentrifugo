@@ -39,7 +39,7 @@ sapp_Helper::editdeleteForView(POSITIONS,$this->controllername,$this->id,$msgtit
 
 <?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Job Title',$this->data['jobtitleid'],'Position ',$this->data['positionname']);
+sapp_Helper::viewBody('nor','Career Track',$this->data['jobtitleid'],'Career Level ',$this->data['positionname']);
 sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
 sapp_Helper::viewFooter();
 ?>

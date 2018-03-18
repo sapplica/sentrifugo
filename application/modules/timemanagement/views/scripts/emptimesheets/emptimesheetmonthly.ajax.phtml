@@ -195,15 +195,16 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
         
         	$leavesArray = array();
         	foreach($leavedData as $leavesRow) {
-	        	$from = $leavesRow['from_date'];
+						$from = $leavesRow['from_date'];
         		$to = $leavesRow['to_date'];
-        		$leaveType = $leavesRow['leavetypeid'];
+        		$leaveType = $leavesRow['leaveday'];
         		$dTo = date("Y-m-d",strtotime($to));
         		$dFrom = date("Y-m-d",strtotime($from));
         		$leaveStatus = $leavesRow['leavestatus'];
         		$leaveDay = $leavesRow['leaveday'];
+        		$leaveReqId = $leavesRow['leave_req_id'];
         		
-        		$currentMonth;
+						//	$currentMonth;
         		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday)); 
         		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));       		
         		if(($dTo > $monEnd ))$to=$monEnd; 
@@ -214,21 +215,67 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
         			if($dayNum != $weekend_start && $dayNum != $weekend_end) { 
         				if(!in_array($t, $holidayDates)) {  
         					if($leaveStatus == 'Approved') { 
-        					   $leaveT = ($leaveType == '1')?'L':'HD';
+										 $leaveT = ($leaveType == '1')?'L':'HD';
+        					   $leaveReqId = 'L';
         					}else if($leaveStatus == 'Pending for approval'){
         					    $leaveT = 'P';
         					   if($leaveDay == 2){
         					   	 $leaveT = 'PHD';
         					   }
         					}    			
-        					$leavesArray[] = (int)date("d",strtotime($t)).'-'.$leaveT;   
+									$leavesArray[] = (int)date("d",strtotime($t)).'-'.$leaveT.'-'.$leaveReqId;  
         				}
         			}
         			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
         			 	   		
         		}        	
         	}
+          	
+          	$oncalldData = $this->oncallsData;
+        
+        	$oncallsArray = array();
+        	foreach($oncalldData as $oncallsRow) {
+						$from = $oncallsRow['from_date'];
+        		$to = $oncallsRow['to_date'];
+        		$oncallType = $oncallsRow['oncallday'];
+        		$dTo = date("Y-m-d",strtotime($to));
+        		$dFrom = date("Y-m-d",strtotime($from));
+        		$oncallStatus = $oncallsRow['oncallstatus'];
+        		$oncallDay = $oncallsRow['oncallday'];
+        		$oncallReqId = $oncallsRow['oncall_req_id'];
+        		
+						//	$currentMonth;
+        		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday)); 
+        		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));       		
+        		if(($dTo > $monEnd ))$to=$monEnd; 
+        		if(($dFrom < $monStart ))$from=$monStart;
+        		for($t= $from;$t <= $to;) {
+        			       			        		
+        			$dayNum =  date("w",strtotime($t));        			
+        			if($dayNum != $weekend_start && $dayNum != $weekend_end) { 
+        				if(!in_array($t, $holidayDates)) {  
+        					if($oncallStatus == 'Approved') { 
+										 $oncallT = ($oncallType == '1')?'O':'O';
+        					   $oncallReqId = 'O';
+        					}else if($oncallStatus == 'Pending for approval'){
+        					    $oncallT = 'PO';
+        					   if($oncallDay == 2){
+        					   	 $oncallT = 'PO';
+        					   }
+        					}    			
+									$oncallsArray[] = (int)date("d",strtotime($t)).'-'.$oncallT.'-'.$oncallReqId;  
+        				}
+        			}
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
+        			 	   		
+        		}        	
+        	}
+
         	//print_r($leavesArray);
+					foreach($holidayDates as $k=>$holDay) {
+        		$holidayDates[$k] =  ($holDay != '')?date("d",strtotime($holDay)):'';
+        	}
+        	//print_r($holidayDates);
           	$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
           	$statusClasses = array('no_entry'=>'no_entry','saved'=>'yet_to_submit','approved'=>'approved',
           		'submitted'=>'for_approval','enabled'=>'enabled','rejected'=>'rejected','blocked'=>'blocked');
@@ -254,6 +301,7 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           			$currentDayClass = ""; 
           			$inactiveDayClass = "";
           			$blockedDayClass = "";  
+								$rejectNoteClass = ""; 
           			$holName = "";
           			$holLeaveClass = "";
           			$curDate = date('Y-m-d',strtotime($cDate));
@@ -262,8 +310,10 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           			$tdClass ="";           			
           			if($curDate == $today) {          			
           				$currentDayClass = " current_date";
-          			} else if($curDate > $today) {          				
+/* allow future timesheets                     
+          		   } else if($curDate > $today) {          				
 						$inactiveDayClass = " inactive_td";	
+*/
           			}else if($curDate < $empDoj) {          				
 						$inactiveDayClass = " inactive_td";	
           			} 
@@ -272,15 +322,19 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           				
           				$duration = ($weekData != "")?$weekData[strtolower($dayName).'_duration']:"00:00";
           				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry'; 
-						$rejected_note = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:''; 
+									$rejectNote = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:"";            				
           				$calDate = $selectedYrMon[0].'-'.$selectedYrMon[1].'-'.$dayCounter;
-          				$holiday = (in_array($calDate,$holidayDates))?"H":"";
-          				if((in_array($calDate,$holidayDates))){
+									//$holiday = (in_array($calDate,$holidayDates))?"H":"";
+          				$holiday = (in_array($dayCounter,$holidayDates))?"H":""; 
+          				//if((in_array($calDate,$holidayDates))){
+          				if((in_array($dayCounter,$holidayDates))){
 							
-          					$holKey = array_search($calDate, $holidayDates);
+										//$holKey = array_search($calDate, $holidayDates);
+          					$holKey = array_search($dayCounter, $holidayDates);
           					$holName = $holidayNames[$holKey];
           					
           				} 
+									
           				$keys = array_keys($weekdays, $day);
           				//$weekendClass = (in_array($keys[0],$weekendsArray))?" weekend_td":"";
           				if(!empty($weekendsArray))       				
@@ -313,14 +367,32 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           		 	<?php  
           		 	//$leave = (in_array($dayCounter, $leavesArray))?"L":"";
           		 	$leave = "";
-          			$leaveType = ""; 
+								$leaveType = $leaveId = ""; 
           			//print_r($leavesArray);        			
 					foreach($leavesArray as $k=>$v) {
 									
-					    if(preg_match("/\b$dayCounter\b/i", $v)) {					       
-					         $keyLeaveData = explode('-',$v);					        
-					         $leaveType = $keyLeaveData[1];
-					    }
+						if(preg_match("/\b$dayCounter\b/i", $v)) {					       
+								 $keyLeaveData = explode('-',$v);	
+						if($keyLeaveData[0] == $dayCounter){							 
+							 $leaveType = $keyLeaveData[1];
+							 $leaveId = $keyLeaveData[2];
+						 }
+						}
+					}
+
+          		 	//$oncall = (in_array($dayCounter, $oncallsArray))?"L":"";
+          		 	$oncall = "";
+								$oncallType = $oncallId = ""; 
+          			//print_r($oncallsArray);        			
+					foreach($oncallsArray as $k=>$v) {
+									
+						if(preg_match("/\b$dayCounter\b/i", $v)) {					       
+								 $keyOncallData = explode('-',$v);	
+						if($keyOncallData[0] == $dayCounter){							 
+							 $oncallType = $keyOncallData[1];
+							 $oncallId = $keyOncallData[2];
+						 }
+						}
 					}
 								
           		 	if($leaveType == "L") {          		 		
@@ -338,41 +410,50 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           		 	 	$holLeaveClass = 'one_hol';
           		 	 	$tooltip = 'Approval Pending for half day leave';
           		 	}
+
+          		 	if($oncallType == "O") {          		 		
+          		 		$oncall = "O";
+          		 		$holLeaveClass = 'one_hol';
+          		 	}else if($oncallType == "PO"){          		 		
+          		 	 	$oncall = "PO"; 
+          		 	 	$holLeaveClass = 'one_hol';
+          		 	 	$tooltip = 'Approval Pending for On Call';
+          		 	}
+
           		 	if($holiday == 'H')
         				$tooltip = $holName; 
         			else if($leave == 'L')
         				$tooltip = 'Full day Leave';
         			else if($leave == 'HD')
         				$tooltip = 'Half day Leave';
+        			else if($oncall == 'O')
+        				$tooltip = 'On Call';
         			   		
-          		 	if($holiday != "" || $leave != "" ) {
-          		 	
+								if($holiday != "" || $leave != "" || $oncall != "" ) {          		 	
           		 		?>
-          		 		<div class="hol_leave   <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave; ?> </div>
+          		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave.$oncall; ?> </div>
           		 	<?php  }
 
           		 		if(!strpos($tdClass, "inactive_td")) {	
+          		 			
+          		 			$rejNoteAttr  = "";
+          		 			if($status == 'rejected'){
+          		 				$rejectNoteClass = 'rejected_note';
+          		 				$rejNoteAttr = 'data-powertip="'.$rejectNote.'"';
+          		 			}
+          		 			
           		 	?>
-					<?php $class = '';
-					$tdata='';
-					$span='';
-					if($status == 'rejected') { 
-					$class = 'rejected_note';
-					$span = "<span class = 'note_tool_date'>".(isset($rejected_note) && $rejected_note!='')?$rejected_note:''."</span>";
-					$tdata='data-powertip="'.$span.'"';
-					}?>
-					<!--<input type="hidden" name="txt_rej_note" id="txt_rej_note" value="<?php //echo (isset($rejected_note) && $rejected_note!='')?$rejected_note:'';?>">-->
-          		 	<div class="sheet_status <?php echo $statusClasses[$status];?> <?php echo $class;?>" <?php echo $tdata;?>><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
+          		 	<div class="sheet_status <?php echo $statusClasses[$status];?> <?php echo  $rejectNoteClass?>"  <?php echo $rejNoteAttr;?>  leaveData = "leave_<?php echo $leaveId;?>"><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
           		<?php 
           		 		} else {
           		?>
-          				<div class="sheet_status <?php echo $statusClasses[$status];?>"></div></td>
-          	 	<?php  	 
+          				<div class="sheet_status <?php echo $statusClasses[$status];?>" leaveData = "leave_<?php echo $leaveId;?>"></div></td>
+          		<?php  	
           		 		}			
           				$dayCounter ++;
           			} else {
           	?>   
-          	 		<td class="no_date"><span class="date">&nbsp;</span></td>         		
+          	 		<td class="no_date"><span class="date">&nbsp;</span></a></td>         		
           	<?php          	
           			}          	          		
           		}
@@ -397,7 +478,7 @@ options = {
 	    //selectedYear: <?php echo date('Y');?>,
 	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 	$('#start_dates').monthpicker(options);
 	$('#start_dates').monthpicker().bind('monthpicker-click-month', function (e, month) {
@@ -435,6 +516,7 @@ options = {
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -446,9 +528,11 @@ options = {
 	    }
 	    else 
 	    {
+*/ ?>
 	        $('#start_dates').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
 	    }
-	
+*/ ?>	
 	}); 
 	
 	var dobj=new Date();
@@ -458,6 +542,10 @@ options = {
 	
 	var year_month='<?php echo $selYrMon;?>';
   var selmn_split=year_month.split('-');    
+<?php /* allow future timesheets                     
+added the following line, not sure it's needed */ ?>
+	$('#start_date').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
   if(selmn_split[0] == dYear ) {
 	   for(i=(dmonth+2);i<=12;i++)
 	   {
@@ -465,7 +553,7 @@ options = {
 	   }
 	}
 	$('#start_dates').monthpicker('disableMonths', dis_months);
-  
+*/ ?>
       var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
 	$('#start_date').val($('#start_dates').val());

@@ -1157,8 +1157,8 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 	
 	/**
 	 * 
-	 * Get job title name
-	 * @param Integer $job_title_id - Job title ID
+	 * Get Career Track name
+	 * @param Integer $job_title_id - Career Track ID
 	 */
 	public function getJobTitleName($job_title_id="") {
 		

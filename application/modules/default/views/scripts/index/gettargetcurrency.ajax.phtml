@@ -24,7 +24,7 @@
 $options_data = "";
 $options_data .= sapp_Global::selectOptionBuilder('', 'Select Target Currency');
 	foreach ($this->targetcurrencydata as $target) {
-            $options_data .= sapp_Global::selectOptionBuilder($target['id'],utf8_encode($target['targetcurr']));
+            $options_data .= sapp_Global::selectOptionBuilder($target['id'],$target['targetcurr']);
 	}
     echo $options_data;
 ?> 

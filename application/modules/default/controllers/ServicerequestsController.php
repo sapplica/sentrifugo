@@ -281,7 +281,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                     			foreach($user_allocate_cat as $userdata)
                     			{
                     	
-                    				$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],utf8_encode($userdata['name']));
+                    				$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],$userdata['name']);
                     			}
                     		}
                     	}
@@ -307,7 +307,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
 		                     foreach($user_allocate_cat as $userdata)
 							{
 								
-									$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],utf8_encode($userdata['name']));
+									$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],$userdata['name']);
 							}
 						}
                 	}
@@ -1098,7 +1098,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             {
                 foreach($data as $opt)
                 {                    
-                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
+                    $options .= sapp_Global::selectOptionBuilder($opt['id'], $opt['service_request_name'], '');
                 }
             }            
         }

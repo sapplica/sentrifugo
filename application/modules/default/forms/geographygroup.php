@@ -114,7 +114,7 @@ class Default_Form_geographygroup extends Zend_Form
 			$currencymodel = new Default_Model_Currency();
 			$currencymodeldata = $currencymodel->getCurrencyList();
 				foreach ($currencymodeldata as $currencyres){
-					$currency->addMultiOption($currencyres['id'],utf8_encode($currencyres['currency']));
+					$currency->addMultiOption($currencyres['id'],$currencyres['currency']);
 				}
         $currency->setRequired(true);
 		$currency->addValidator('NotEmpty', false, array('messages' => 'Please select currency.')); 		

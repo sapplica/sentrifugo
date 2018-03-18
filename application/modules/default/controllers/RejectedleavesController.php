@@ -137,7 +137,7 @@ class Default_RejectedleavesController extends Zend_Controller_Action
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
 							if($employeeleavetypeArr != 'norows')
 								{
-									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));
+									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],$employeeleavetypeArr[0]['leavetype']);
 									$data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];		   
 								}
 								

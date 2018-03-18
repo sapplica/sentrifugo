@@ -1,7 +1,7 @@
-<?php 
+<?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,35 +18,44 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
+ ?>
 <?php 
-if($this->ermsg !='')
+
+if($this->ermsg != '')
 {
 ?>
-     <div class="ml-alert-1-info m1-info-set">
-				<div class="style-1-icon info"></div>
-				No data found.
-	</div>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
 <?php 
 }
 else
 {
-$baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; 
-$msgtitle = $this->controllername.'_delete';
-sapp_Helper::editdeleteForView(PAYFREQUENCY,$this->controllername,$this->id,$msgtitle); ?>
-
-<?php 
-sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor',$this->form->freqtype->getLabel(),$this->data['freqtype'],$this->form->freqcode->getLabel(),(!empty($this->data['freqcode']))?$this->data['freqcode']:"...",'','');
-sapp_Helper::viewBody('alt','Description',(!empty($this->data['freqdescription']))?$this->data['freqdescription']:"...",'','');
-sapp_Helper::viewFooter();
 ?>
+		<?php
+		if($this->previ_data == 'Yes')
+		{
+		?>
+		<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; ">
+		   
+				<?php             	
+					$msgtitle = $this->controllername.'_delete';
+					sapp_Helper::editdeleteForView(WORK_SCHEDULE,$this->controllername,$this->id,$msgtitle); 
+				 ?>		
+			
+		</div>
+		<?php 
+		}
+		?>
 
-	<!--	<div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php //echo BASE_URL; ?>payfrequency';" type="button" >Cancel</button>
-		</div>  -->
-      
-<?php	}	?>
+<?php sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit',(!empty( $this->data['unitname']))?  $this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+sapp_Helper::viewBody('nor','Start Date',(!empty($this->data['startdate']))? $this->data['startdate']:"...",'End Date',(!empty($this->data['enddate']))?$this->data['enddate']:"...");
+sapp_Helper::viewBody('alt','Sunday Duration',(!empty($this->data['sun_duration']))? $this->data['sun_duration']:"...",'Monday Duration',(!empty($this->data['mon_duration']))? $this->data['mon_duration']:"...");
+sapp_Helper::viewBody('nor','Tuesday Duration',(!empty($this->data['tue_duration']))? $this->data['tue_duration']:"...",'Wednesday Duration',(!empty($this->data['wed_duration']))? $this->data['wed_duration']:"...");
+sapp_Helper::viewBody('alt','Thursday Duration',(!empty($this->data['thu_duration']))? $this->data['thu_duration']:"...",'Friday Duration',(!empty($this->data['fri_duration']))? $this->data['fri_duration']:"...");
+sapp_Helper::viewBody('nor','Saturday Duration',(!empty($this->data['sat_duration']))? $this->data['sat_duration']:"...",'','');
+sapp_Helper::viewFooter();
+}//end of else
+?>

@@ -45,7 +45,7 @@ sapp_Global::generateClientValidations($this->form);?>
                         <select name="ts_weekly_reminder_day" id="ts_weekly_reminder_day">
                                 <option value="" example="">Select Weekly Reminder Day</option>
                         <?php 
-                         $weekArray = array('sun'=>'Every Sunday','mon'=>'Every Monday','tue'=>'Every Tuesday','wed'=>'Every Wednesday','thu'=>'Every Thursday','fri'=>'Every Friday','sat'=>'Every Saturday');
+                         $weekArray = array('day'=>'Every day','sun'=>'Every Sunday','mon'=>'Every Monday','tue'=>'Every Tuesday','wed'=>'Every Wednesday','thu'=>'Every Thursday','fri'=>'Every Friday','sat'=>'Every Saturday');
 	                            foreach($weekArray as $key => $val)
 	                            {
 	                                $selected = ($key == $this->form->ts_weekly_reminder_day->getValue())?"selected":"";

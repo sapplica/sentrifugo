@@ -1,7 +1,7 @@
-/********************************************************************************* 
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2015 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -25,9 +25,9 @@ $(document).ready(function(){
 			location.hash = "mainDiv";
 		}
 	});
-    				
+
     apply_select2();
-    
+
     /**
      * In 'Management Details' add form, when user click on cancel button redirect user to previous page
      * In 'Change Organization Head' form -> 'Existing Employee' tab, when user click on cancel button redirect user to previous page
@@ -39,9 +39,9 @@ $(document).ready(function(){
     		history.go(-1);
     	} else if (form_action == 'add_new_org_head') {
     		window.location.href = base_url+"/employee";
-    	}    	
+    	}
     });
-    
+
 	/**
 	 * Handle error event on loading 'Profile image'.
 	 * Load default image.
@@ -49,7 +49,7 @@ $(document).ready(function(){
 	$(".js_profile_img").error(function () {
 		$(this).attr("src", domain_data + 'public/media/images/default-profile-pic.jpg');
 	});
-	
+
 });//end of ready function
 function apply_select2()
 {
@@ -80,29 +80,29 @@ var downloadPdf = function(url, formId){
 		                jAlert('Download of the report failed');
 		            }
 		        });
-		        return false; 
+		        return false;
 			}
-	});	
+	});
 };
 
 function getlastarrayelement(array) {
 	return array[array.length-1];
 }
 function display_child_reports()
-{ 
-    if($('#sub_reports').hasClass("config-up"))		
+{
+    if($('#sub_reports').hasClass("config-up"))
     {
         $( '#sub_reports').removeClass("config-up");
         $( '#sub_reports').addClass("config-down");
         $('#sub_reports').show();
-        $('#sub_reports').slideDown();	
+        $('#sub_reports').slideDown();
     }
     else
     {
         $( '#sub_reports').removeClass("config-down");
         $( '#sub_reports').addClass("config-up");
         $('#sub_reports').hide();
-        $('#sub_reports').slideUp();	
+        $('#sub_reports').slideUp();
     }
 
     var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
@@ -119,20 +119,20 @@ function timepicker_onclose(id)
                 $.unblockUI();
             },'json');
         }
-        else 
+        else
         {
             $.unblockUI();
         }
 }
 
 function disp_requisition(val,disp_id)
-{   
+{
 
 	if(val=='')
 	{
 	 $("#detailsview").hide();
 	}
-	
+
     $('#'+disp_id).val('');
     if(val != '')
     {
@@ -157,30 +157,30 @@ function getEmailOfUser(obj,email_id)
         email_obj.val('');
     }
 }
-function saveDetails(url,dialogMsg,toggleDivId,jsFunction){	
+function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 	var actionurl = url.split( '/' );
-	$("#formid").attr('action',base_url+"/"+url);       
+	$("#formid").attr('action',base_url+"/"+url);
 	$("#formid").attr('method','post');
 	$('#formid').ajaxForm({
 	    beforeSend: function(a,f,o) {
-        },			
+        },
 		dataType:'json',
-		
-		success: function(response, status, xhr) { 
+
+		success: function(response, status, xhr) {
 		     $("#formid").find('.errors').remove();
 			 $("#formid").find('.borderclass').removeClass('borderclass');
 			 $("#formid").find('span[class^="errors_"]').remove();
-			 
+
 			 elementid = '';
 			 var i =0;
 			 $.each(response, function(id) {
 				 if(i == 0){
 					 firstelementid = id;
 					 i++;
-				 } 
+				 }
 				 if(response['result'] !=  'saved' ){
-				  $.each(this, function(k, v) {	
-					  if(elementid != id){ 
+				  $.each(this, function(k, v) {
+					  if(elementid != id){
 						  elementid = id;
 						  var formName =  $('#formid').attr('name');
 						  if($("#"+id).length > 0){
@@ -196,7 +196,7 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 				  });
 				 }
 				});
-				
+
 				if($(".errors").length > 0)
 				{
 					var varaible = window.location.pathname;
@@ -207,34 +207,37 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 
 				if(response['result'] ==  'saved' ||  response['result'] ==  'fbsaved' || response['result'] == 'exception') {
 					if(toggleDivId.length > 2)
-						$("#"+toggleDivId).toggle("slow");								
-			
+						$("#"+toggleDivId).toggle("slow");
+
 					changepassworddefaultvalues();
-					if(dialogMsg.length > 2) 
-						eval(dialogMsg); 
+					if(dialogMsg.length > 2)
+						eval(dialogMsg);
 					else
-						
+
 						eval(jsFunction);
-						
-					if(response['controller'] == 'pendingleaves' )	
+
+					if(response['controller'] == 'pendingleaves' )
 					  window.location.href = base_url+'/pendingleaves';
-					  
-					if(response['nomessage'] != 'yes') 
+
+					if(response['controller'] == 'pendingoncalls' )
+					  window.location.href = base_url+'/pendingoncalls';
+
+					if(response['nomessage'] != 'yes')
 						{
-						
+
                                                 successmessage(response['message']);
 				}
-                   
+
 					if(response['page'] == 'changepassword')
                                                 successmessagechange(response['message']);
-				} 
-				
+				}
+
 		}
 		});
 }
 
 	function getErrorHtml(formErrors , id, flag )
-	{		
+	{
 		var o = '<span class="errors'+flag+'" id="errors-'+id+'">';
 			 o += formErrors;
 			 o += '</span>';
@@ -249,23 +252,23 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 
 	function successmessage(message){
 		$("#error_message").css('display','block');
-		$("#error_message").html("<div class='ml-alert-1-success'><div class='style-1-icon success'></div>"+message+"</div>"); 
+		$("#error_message").html("<div class='ml-alert-1-success'><div class='style-1-icon success'></div>"+message+"</div>");
 		setTimeout(function(){
 			$('#error_message').fadeOut('slow');
 		},3000);
 	}
         function error_message(message){
 		$("#error_message").css('display','block');
-		$("#error_message").html("<div class='ml-alert-1-error'><div class='style-1-icon error'></div>"+message+"</div>"); 
+		$("#error_message").html("<div class='ml-alert-1-error'><div class='style-1-icon error'></div>"+message+"</div>");
 		setTimeout(function(){
 			$('#error_message').fadeOut('slow');
 		},3000);
 	}
     function successmessage_changestatus_url(message,flag,controllername,url)
-	{	
+	{
 		var eleId = 'error_message_'+controllername;
 		$("#error_message").css('display','block');
-		if($("#"+eleId).length == 0) 
+		if($("#"+eleId).length == 0)
 		{
 			$("#error_message").attr("id","error_message_"+controllername);
 			$("#error_message_"+controllername).css('display','block');
@@ -274,7 +277,7 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 		{
 			$("#error_message_"+controllername).css('display','block');
 		}
-		$("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>'); 
+		$("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>');
 		setTimeout(function(){
 			$('#error_message_'+controllername).fadeOut('slow');
 			if(url)
@@ -282,10 +285,10 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 		},2000);
 	}
 	function successmessage_changestatus(message,flag,controllername)
-	{	
+	{
 		var eleId = 'error_message_'+controllername;
 		$("#error_message").css('display','block');
-		if($("#"+eleId).length == 0) 
+		if($("#"+eleId).length == 0)
 		{
 			$("#error_message").attr("id","error_message_"+controllername);
 			$("#error_message_"+controllername).css('display','block');
@@ -294,16 +297,16 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 		{
 			$("#error_message_"+controllername).css('display','block');
 		}
-		$("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>'); 
+		$("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>');
        	setTimeout(function(){
 			$('#error_message_'+controllername).fadeOut('slow');
 		},3000);
 	}
 function successmessage_requeststatus(message,flag,controllername,url,flag_type)
-{	
+{
         var eleId = 'error_message_'+controllername;
         $("#error_message").css('display','block');
-        if($("#"+eleId).length == 0) 
+        if($("#"+eleId).length == 0)
         {
                 $("#error_message").attr("id","error_message_"+controllername);
                 $("#error_message_"+controllername).css('display','block');
@@ -312,28 +315,28 @@ function successmessage_requeststatus(message,flag,controllername,url,flag_type)
         {
                 $("#error_message_"+controllername).css('display','block');
         }
-        $("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>'); 
+        $("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>');
 setTimeout(function(){
                 $('#error_message_'+controllername).fadeOut('slow',function(){
                     if(flag_type != 'dont_redirect')
                     window.location = url;
                 });
-                
+
         },3000);
-}          
+}
 	function redirecttocontroller(controllername)
 	{
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
-      window.location.href = base_url+'/'+controllername;	
+      window.location.href = base_url+'/'+controllername;
 	}
-	
+
 	function changeeditscreen(controllername,id)
 	{
 
-	  $.blockUI({ width:'50px',message: $("#spinner").html() });	
+	  $.blockUI({ width:'50px',message: $("#spinner").html() });
 	  window.location.href = base_url+'/'+controllername+'/edit/id/'+id;
 	}
-	
+
 	function redirecttoEditscreen(controllerName,actionName)
 	{
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
@@ -344,58 +347,62 @@ setTimeout(function(){
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
 	  window.location.href = base_url+'/'+controllername+'/view/id/'+id;
 	}
-	
+
 	function changeempeditscreen(controllername,id)
 	{
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
 		window.location.href = base_url+'/'+controllername+'/edit/userid/'+id;
 	}
-	
+
 	function changeempviewscreen(controllername,id)
 	{
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
 	      window.location.href = base_url+'/'+controllername+'/view/userid/'+id;
 	}
-	
+
 	function changemyempviewscreen(controllername,actionname,id)
 	{
 		$.blockUI({ width:'50px',message: $("#spinner").html() });
-	 window.location.href = base_url+'/'+controllername+'/'+actionname+'/userid/'+id;	
+	 window.location.href = base_url+'/'+controllername+'/'+actionname+'/userid/'+id;
 	}
-	
+
 	function changepopupeditscreen(controllername,id,unitid)
 	{
 	  window.parent.$('#'+controllername+'Container').dialog('close');
 	  var url = base_url+'/holidaydates/editpopup/id/6/unitId/1/popup/1';
 	    setTimeout(function(){
 		    displaydeptform(url,'');
-		},2000);	
+		},2000);
 	}
-var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
+var configurationsArr = new Array('employmentstatus','eeoccategory','projecttype','workschedule','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
 {
 	var deleteflag = $("#viewval").val();
-	var flagAr = flag.split("@#$"); 
+	var flagAr = flag.split("@#$");
 	var i;
 	var msgdta = ' ';
 	for(i=0;i<flagAr.length;i++)
 	{
 		msgdta += flagAr[i]+' ';
-	}	
-	
+	}
+
 	mdgdta = $.trim(msgdta);
-    if(controllername == 'bgscreeningtype') 
+    if(controllername == 'bgscreeningtype')
         var messageAlert = 'Are you sure you want to delete the selected screening type?';
-    else  if(controllername == 'businessunits') 
+    else  if(controllername == 'businessunits')
 		 var messageAlert = 'Are you sure you want to delete the selected business unit?';
-	else  if(controllername == 'agencylist') 
+	else  if(controllername == 'agencylist')
 		var messageAlert = 'You are trying to delete the selected agency. The background check processes assigned to this agency will become invalid. Please confirm.';
-	else if(controllername == 'pendingleaves')	
+	else if(controllername == 'pendingleaves')
 	    var messageAlert = 'Are you sure you want to cancel the selected leave request?';
-    else if(controllername == 'roles')	
+	else if(controllername == 'pendingoncalls')
+	    var messageAlert = 'Are you sure you want to cancel the selected on call request?';
+    else if(controllername == 'roles')
 	    var messageAlert = 'Are you sure you want to delete the selected role name?';
 	else if(controllername == 'categories')
 		var messageAlert = 'Documents added to the selected category will also be deleted. Are you sure you want to delete the category?';
+	else if(controllername == 'workschedule')
+		var messageAlert = 'Are you sure you want to delete the selected work schedule?';
 	else
 	{
         if($.inArray(controllername,configurationsArr) != -1)
@@ -407,11 +414,11 @@ function changestatus(controllername,objid,flag)
 			var messageAlert = 'Are you sure you want to delete the selected '+mdgdta+'? ';
 		}
 	}
-     
+
 	 jConfirm(messageAlert, "Delete "+msgdta, function(r) {
 
         if(r==true)
-        {               
+        {
             if(controllername == 'candidatedetails')
             {
                 $.post(base_url+"/candidatedetails/chkcandidate",{id:objid,deleteflag:deleteflag},function(data){
@@ -423,33 +430,33 @@ function changestatus(controllername,objid,flag)
 							redirecttocontroller(controllername);
 
 						}
-						
+
                     }
-                    else 
+                    else
                     {
                         $.ajax({
-                            url: base_url+"/"+controllername+"/delete",   
+                            url: base_url+"/"+controllername+"/delete",
                             type : 'POST',
                             data: 'objid='+objid+'&deleteflag='+deleteflag,
                             dataType: 'json',
                                     success : function(response)
-                                    {	
+                                    {
                                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
-                                        
+
                                         if(response['flagtype']=='process')
                                             location.reload();
                                         else{
 												if(deleteflag==1)
 												{
-													
+
 													redirecttocontroller(controllername);
 
 												}
 												else
 												{
-													getAjaxgridData(controllername);	
-												}							
-											}		    	        	
+													getAjaxgridData(controllername);
+												}
+											}
                                     }
                                 });
                     }
@@ -457,9 +464,9 @@ function changestatus(controllername,objid,flag)
             }
             else
             {
-				
+
                 $.ajax({
-                    url: base_url+"/"+controllername+"/delete",   
+                    url: base_url+"/"+controllername+"/delete",
                     type : 'POST',
                     data: 'objid='+objid+'&deleteflag='+deleteflag,
                     beforeSend: function () {
@@ -467,7 +474,7 @@ function changestatus(controllername,objid,flag)
                     },
                     dataType: 'json',
                     success : function(response)
-                    {	
+                    {
                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
                         if(response['flagtype']=='process')
                         {
@@ -482,11 +489,11 @@ function changestatus(controllername,objid,flag)
                             else if(deleteflag==1 && controllername=='categories')
                             {
                             	redirecttocontroller(controllername);
-                            } 
+                            }
                             else if(deleteflag==1 && controllername=='requisition')
                             {
                             	redirecttocontroller(controllername);
-                            } 
+                            }
                             else
                             {
                                 location.reload();
@@ -497,57 +504,57 @@ function changestatus(controllername,objid,flag)
 							window.location = base_url+"/"+controllername;
                         }
 						else{
-							
+
 							if(deleteflag==1)
 							{
 								redirecttocontroller(controllername);
 							}
 							else
 							{
-								getAjaxgridData(controllername);	
-							}							
+								getAjaxgridData(controllername);
+							}
 						}
                     }
                 });
             }
         }
-           else 
+           else
            {
 
            }
         });
-		 
+
     }
 	function changeEmployeestatus(controllername,objid,flag,userId)
 	{
-		var flagAr = flag.split("@#$"); 
+		var flagAr = flag.split("@#$");
 		var i;
 		var msgdta = ' ';
 		for(i=0;i<flagAr.length;i++)
 		{
 			msgdta += flagAr[i]+' ';
-		}	
+		}
 		mdgdta = $.trim(msgdta);
 	   var messageAlert = 'Are you sure you want to delete this '+mdgdta+'? ';
-		jConfirm(messageAlert, "Delete "+mdgdta, function(r) 
+		jConfirm(messageAlert, "Delete "+mdgdta, function(r)
 		{
 
 		 if(r==true)
 			{
 				$.ajax({
-					url: base_url+"/"+controllername+"/delete",   
+					url: base_url+"/"+controllername+"/delete",
 					type : 'POST',
 					data: 'objid='+objid,
 					dataType: 'json',
 					success : function(response)
-						{	
-						
-					
+						{
+
+
 							successmessage_changestatus(response['message'],response['msgtype']);
 							if(response['flagtype']=='process')
 								location.reload();
 							else
-								getEmployeeAjaxgridData(controllername,userId);		    	        	
+								getEmployeeAjaxgridData(controllername,userId);
 					}
 				});
 			}
@@ -555,40 +562,40 @@ function changestatus(controllername,objid,flag)
 		});
 	}
 function change_request_status(controllername,objid,status,grid_type)
-{    
+{
     if(status == 'To approve')
         dispm = " send for approve ";
     else if(status == 'To manager approve')
         dispm = " send for manager approve ";
-    else 
+    else
         dispm = status.toLowerCase();
     var messageAlert = 'Are you sure you want to '+dispm+' this request ? ';
-    jConfirm(messageAlert, status+" request", function(r) 
+    jConfirm(messageAlert, status+" request", function(r)
     {
         if(r==true)
         {
             $.ajax({
-                url: base_url+"/"+controllername+"/changestatus",   
+                url: base_url+"/"+controllername+"/changestatus",
                 type : 'POST',
                 data: 'objid='+objid+'&status='+status+'&grid_type='+grid_type,
                 dataType: 'json',
                 success : function(response)
-                {	
+                {
                     successmessage_requeststatus(response['message'],response['msgtype'],controllername,base_url+"/"+controllername+'/index/t/'+response['grid_type'],response['flagtype']);
-                    
+
                 }
             });
         }
-                
+
     });
 }// end of change_request_status
 
 /**
  * This function used to remove unnecessary actions in grid.
  * @param {string} status    = status of the request
- * @param {int} id           = id of the request 
+ * @param {int} id           = id of the request
  * @param {string} grid_type = grid type.
- * 
+ *
  * */
 manage_req_actions = function(status,id,grid_type)
 {
@@ -605,8 +612,8 @@ manage_req_actions = function(status,id,grid_type)
             $('#idreqapprove_'+id).remove();
             $('#idreqmapprove_'+id).remove();
         }
-        
-        
+
+
     }
     else if(grid_type == 'rept_app')
     {
@@ -637,12 +644,12 @@ manage_req_actions = function(status,id,grid_type)
     }
 };
 	function getEmployeeAjaxgridData(objname,userId)
-	{	
+	{
 		var sort = $("#sortval_"+objname).val();
 		var by = $("#byval_"+objname).val();
 		var userId = '';var context="";
-		var url = document.URL.split('/');  	//Taking userId from Current URL 
-		
+		var url = document.URL.split('/');  	//Taking userId from Current URL
+
                 if($.inArray("mydetails",url) != -1)
 		{
 			userId = loginUserId;	// if url has mydetails take login Id as user id...
@@ -650,68 +657,68 @@ manage_req_actions = function(status,id,grid_type)
 		}
 		else
 		{
-            if($.inArray("myemployees",url) != -1)	
+            if($.inArray("myemployees",url) != -1)
                 context = 'myteam';
 			userId = url[url.length-1];
 		}
-		if(userId == "")	
+		if(userId == "")
 			userId = loginUserId;
-		
+
 		var perpage = $("#perpage_"+objname).val();
-        
-		var page = $(".gotopage_input_"+objname).val(); 
-		var searchData = $("#"+objname+"_searchdata").val(); 
+
+		var page = $(".gotopage_input_"+objname).val();
+		var searchData = $("#"+objname+"_searchdata").val();
 		searchData = decodeURIComponent(searchData);
-		var formGridId = $("#formGridId").val(); 
+		var formGridId = $("#formGridId").val();
 		var unitId = '';mname='';mnuid='';
 		if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
-		formGridId = ''; 
+		formGridId = '';
 		else
 		{
-			unitId = formGridId.split("/"); 
+			unitId = formGridId.split("/");
 			mname = unitId[0]; mnuid = unitId[1];
-			
+
 		}
 		if(page == '' || page == 'undefined' || typeof(page) === 'undefined')
 		page = $(".currentpage").val();
-		
+
 		var dataparam = 'per_page='+ perpage+'&page='+page+'&call=ajaxcall&objname='+objname+'&'+mname+'='+mnuid+'&userid='+userId+"&context="+context+'&sort='+sort+'&by='+by;
 		if(searchData!='' && searchData!='undefined')
 			dataparam = dataparam+'&searchData='+searchData;
-		$('#searchdata').remove();	
+		$('#searchdata').remove();
 		$('#footer').append("<input type='hidden' value='"+searchData+"' id='searchdata' />");
-		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');	
+		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');
 		$.ajax({
-			url: base_url+"/"+objname+"/index/format/html",   
+			url: base_url+"/"+objname+"/index/format/html",
 			type : 'POST',
 			data : dataparam,
 			success : function(response){
 				$('#grid_'+objname).html(response);
 			}
 		});
-		
+
 	}
 	function getAjaxgridData(objname,dashboardcall)
-	{		
+	{
  		var perpage = $("#perpage_"+objname).val();
- 		var page = $(".gotopage_input_"+objname).val(); 
+ 		var page = $(".gotopage_input_"+objname).val();
 		var sort = $("#sortval_"+objname).val();
 		var by = $("#byval_"+objname).val();
 		var searchData = $("#"+objname+"_searchdata").val();
 		searchData = decodeURIComponent(searchData);
-		var formGridId = $("#formGridId").val(); 
+		var formGridId = $("#formGridId").val();
 		var unitId = '';mname='';mnuid='';
 		if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
-		formGridId = ''; 
+		formGridId = '';
 		else
 		{
-			unitId = formGridId.split("/"); 
+			unitId = formGridId.split("/");
 			mname = unitId[0]; mnuid = unitId[1];
-			
+
 		}
 		if(page == '' || page == 'undefined' || typeof(page) === 'undefined')
 		page = $(".currentpage").val();
-		
+
 		var dataparam = 'per_page='+ perpage+'&page='+page+'&call=ajaxcall&objname='+objname+'&'+mname+'='+mnuid+'&dashboardcall='+dashboardcall+'&sort='+sort+'&by='+by;
 		if(searchData!='' && searchData!='undefined')
 			dataparam = dataparam+'&searchData='+searchData;
@@ -724,16 +731,25 @@ manage_req_actions = function(status,id,grid_type)
                 }
                 if(objname == 'pendingleaves')
                 {
-                	var browserurl = document.URL.split('/');  
+                	var browserurl = document.URL.split('/');
         			var flag='';
         			if($.inArray("pendingleaves",browserurl) != -1){
         				flag = getlastarrayelement(browserurl);
         				dataparam = dataparam + '&flag='+flag;
         			}
-                }	
-		$('#'+objname+'_searchdata').remove();	
+                }
+                if(objname == 'pendingoncalls')
+                {
+                	var browserurl = document.URL.split('/');
+        			var flag='';
+        			if($.inArray("pendingoncalls",browserurl) != -1){
+        				flag = getlastarrayelement(browserurl);
+        				dataparam = dataparam + '&flag='+flag;
+        			}
+                }
+		$('#'+objname+'_searchdata').remove();
 		$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");
-		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');	
+		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');
 		var url ='';
 
 		if(objname == 'policydocuments'){
@@ -747,7 +763,7 @@ manage_req_actions = function(status,id,grid_type)
 			url = base_url+"/"+objname+"/index/format/html" ;
 
 		$.ajax({
-			url: url,   
+			url: url,
 			type : 'POST',
 			data : dataparam,
 			success : function(response){
@@ -756,9 +772,9 @@ manage_req_actions = function(status,id,grid_type)
 		});
 
 	}
-	
+
 	function moreMenus(con)
-	{	
+	{
 		if(con)
 		{
 			$('#moreMenusDiv').show();
@@ -771,7 +787,7 @@ manage_req_actions = function(status,id,grid_type)
 	}
 
 function redirecttolink(link,module)
-{    
+{
  $.blockUI({ width:'50px',message: $("#spinner").html() });
  if(module!='')
 	 window.location = base_url+'/'+module+'/'+link;
@@ -781,7 +797,7 @@ function redirecttolink(link,module)
 }
 
 function closetab(ele,pagename,pagelink)
-{ 
+{
 var newURL = window.location.protocol + "//" + window.location.host;
 
      jQuery.ajax({
@@ -808,62 +824,67 @@ var newURL = window.location.protocol + "//" + window.location.host;
         },'json');
 }
 function removeOptions(ele){
-	$(ele+" option").remove();	
+	$(ele+" option").remove();
 }
 function destroyandcreateCombobox(ele){
 	jQuery(ele).trigger("liszt:updated");
 	}
-					
+
 function paginationndsorting(url){
 			var myarr = url.split("/");
-			if(url.indexOf('/call/ajaxcall') == -1)                        
+			if(url.indexOf('/call/ajaxcall') == -1)
 				url = url+'/call/ajaxcall';
 			var dashboardcall = $("#dashboardcall").val();
-			if(url.indexOf("objname") != -1)                        
+			if(url.indexOf("objname") != -1)
 			{
 				divid = url.match(/objname\/(.*?)\//i)[1];
-			}	
-			
-			if(url.indexOf("sort") != -1) 
+			}
+
+			if(url.indexOf("sort") != -1)
 			{
 				var strSortParam = url.substring(url.lastIndexOf('sort')+5);
-				
+
 				var sortOrder = strSortParam.substring(0,strSortParam.lastIndexOf('by')-1);
-				
+
 				var sortBy = strSortParam.substring(strSortParam.lastIndexOf('by')+3);
 				$('#sort_param').val(sortBy+"/"+sortOrder);
 			}
-			
-			var browserurl = document.URL.split('/');  
+
+			var browserurl = document.URL.split('/');
 			var flag='';
 			if($.inArray("pendingleaves",browserurl) != -1){
 				flag = getlastarrayelement(browserurl);
 				divid='pendingleaves';
 			}
-			
+
+			if($.inArray("pendingoncalls",browserurl) != -1){
+				flag = getlastarrayelement(browserurl);
+				divid='pendingoncalls';
+			}
+
 			var searchData = $("#"+divid+"_searchdata").val();
 			var perfTimes = $("#gridblock *").serialize();
 			searchData = decodeURIComponent(searchData);
-			
-			$.post(url,{searchData:searchData,dashboardcall:dashboardcall,flag:flag} , function(response) {		
+
+			$.post(url,{searchData:searchData,dashboardcall:dashboardcall,flag:flag} , function(response) {
 				$('#grid_'+divid).html(response);
 		},'html');
-}	
+}
 
 function refreshgrid(objname,dashboardcall,catId)
 {
-	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
+	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','emponcalls','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');
 	var Url ="";var context ="";var flag='';
-	var formGridId = $("#formGridId").val(); 
+	var formGridId = $("#formGridId").val();
 	var unitId = '';mname='';mnuid='';$('#columnId').remove();
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
-	formGridId = ''; 
+	formGridId = '';
 	else
 	{
-		unitId = formGridId.split("/"); 
+		unitId = formGridId.split("/");
 		mname = unitId[0]; mnuid = unitId[1];
 	}
-	var url = document.URL.split('/');  
+	var url = document.URL.split('/');
 	if($.inArray("mydetails",url) != -1)
 	{
 		context = 'mydetails';
@@ -873,9 +894,11 @@ function refreshgrid(objname,dashboardcall,catId)
 		context = 'myteam';
 	}else if($.inArray("pendingleaves",url) != -1){
 		flag = getlastarrayelement(url);
+	}else if($.inArray("pendingoncalls",url) != -1){
+		flag = getlastarrayelement(url);
 	}
 	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid+"&context="+context+"&dashboardcall="+dashboardcall+"&flag="+flag;
-        
+
         if(objname == 'servicerequests')
         {
             var v_val = $('#service_grid_status').val();
@@ -889,28 +912,28 @@ function refreshgrid(objname,dashboardcall,catId)
 		Url = base_url+"/"+objname+"/index/format/html";
 	$("#"+objname+"_searchdata").val('');
 	$.ajax({
-		url: Url,   
+		url: Url,
 		type : 'POST',
 		data : dataparam,
 		success : function(response){
 			$('#grid_'+objname).html(response);
 		}
 	});
-}	
+}
 function refreshgrid_23092013(objname)
-{	
-	var formGridId = $("#formGridId").val(); 
+{
+	var formGridId = $("#formGridId").val();
 	var unitId = '';mname='';mnuid='';
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
-	formGridId = ''; 
+	formGridId = '';
 	else
 	{
-		unitId = formGridId.split("/"); 
+		unitId = formGridId.split("/");
 		mname = unitId[0]; mnuid = unitId[1];
 	}
 	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid;
 	$.ajax({
-		url: base_url+"/"+objname+"/index/format/html",   
+		url: base_url+"/"+objname+"/index/format/html",
 		type : 'POST',
 		data : dataparam,
 		success : function(response){
@@ -925,25 +948,25 @@ function opensearch(objname)
 	if($(".searchtxtbox_"+objname).is(":visible"))
 	{
             $('.ui-datepicker-trigger').hide();
-            $(".searchtxtbox_"+objname).hide();	
-            $("#search_tr_"+objname).hide();	
-            refreshgrid(objname,dashboardcall,"");		
+            $(".searchtxtbox_"+objname).hide();
+            $("#search_tr_"+objname).hide();
+            refreshgrid(objname,dashboardcall,"");
 	}
-	else 
-        {           
+	else
+        {
             $('.ui-datepicker-trigger').show();
-            $(".searchtxtbox_"+objname).show();					
-            $("#search_tr_"+objname).show();	
+            $(".searchtxtbox_"+objname).show();
+            $("#search_tr_"+objname).show();
         }
-}	
+}
 
 function check_zerovalue(obj)
 {
-    var val = parseFloat(obj.value);    
+    var val = parseFloat(obj.value);
     if(val == 0)
     {
         $('#errors-'+obj.id).remove();
-        $('#'+obj.id).parent().append("<span class='errors' id='errors-"+obj.id+"'>No.of positions cannot be zero.</span>");        
+        $('#'+obj.id).parent().append("<span class='errors' id='errors-"+obj.id+"'>No.of positions cannot be zero.</span>");
     }
 }
 function addslashes(string) {
@@ -961,15 +984,15 @@ function getsearchdata(objname,conText,colname,event,etype)
     if(etype == 'text')
     {
         var code = event.keyCode || event.which;
-        if(code != 13) 
-        { 
+        if(code != 13)
+        {
             return ;
         }
     }
     var dashboardcall = $("#dashboardcall").val();
-	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
+	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','emponcalls','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');
 	var Url ="";
-	var perpage = $("#perpage_"+objname).val(); 
+	var perpage = $("#perpage_"+objname).val();
 	if(perpage == 'undefined' || typeof(perpage) === 'undefined')
 	{
 		if(dashboardcall == 'Yes')
@@ -978,39 +1001,43 @@ function getsearchdata(objname,conText,colname,event,etype)
 		perpage = '20';
 	}
 	var page = $(".gotopage_input_"+objname).val();
-	var formGridId = $("#formGridId").val(); 
+	var formGridId = $("#formGridId").val();
 	var unitId = '';var mname='';var mnuid='';var columnid = '';var flag='';
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
-	formGridId = ''; 
+	formGridId = '';
 	else
 	{
-		unitId = formGridId.split("/"); 
+		unitId = formGridId.split("/");
 		mname = unitId[0]; mnuid = unitId[1];
 	}
-	var searchData = '{';	
+	var searchData = '{';
 	$('.searchtxtbox_'+objname).each(function() {
             if(this.value != '')
             {
-		  searchData += '"'+this.id+'":"'+encodeURIComponent(this.value)+'",';		  
+		  searchData += '"'+this.id+'":"'+encodeURIComponent(this.value)+'",';
 		  if(columnid == '')
 		  columnid = colname;
-	    } 		
+	    }
 	});
 	searchData = searchData.substr(0,(searchData.length - 1));
 	if(searchData !='' && searchData !='undefined')
 	searchData += '}';
     if(page == '' || page == 'undefined' || typeof(page) === 'undefined')
 	page = $(".currentpage").val();
-	page = 1; 
-	
-	var url = document.URL.split('/');  
+	page = 1;
+
+	var url = document.URL.split('/');
 	if($.inArray("pendingleaves",url) != -1){
 		flag = getlastarrayelement(url);
 	}
-	
+
+	if($.inArray("pendingoncalls",url) != -1){
+		flag = getlastarrayelement(url);
+	}
+
 	var dataparam = 'per_page='+ perpage+'&page='+page+'&call=ajaxcall&objname='+objname+'&'+mname+'='+mnuid+'&context='+conText+'&dashboardcall='+dashboardcall+'&flag='+flag;
 	if(searchData != '' && searchData != '{}')
-            dataparam = dataparam+'&searchData='+searchData;	
+            dataparam = dataparam+'&searchData='+searchData;
         if(objname == 'servicerequests')
         {
             var v_val = $('#service_grid_status').val();
@@ -1020,11 +1047,11 @@ function getsearchdata(objname,conText,colname,event,etype)
         }
 	$('#'+objname+'_searchdata').remove();
 	$('#objectName').remove();
-	$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");							
-	$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');							
+	$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");
+	$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');
 	if ($("#columnId").length)
 	$('#columnId').val(columnid);
-	else $('#footer').append('<input type="hidden" value="'+columnid+'" id="columnId" />');	
+	else $('#footer').append('<input type="hidden" value="'+columnid+'" id="columnId" />');
 
 	if(objname == 'policydocuments'){
 			Url = base_url+"/"+objname+"/id/";
@@ -1034,24 +1061,24 @@ function getsearchdata(objname,conText,colname,event,etype)
 	}
 	else
 		Url = base_url+"/"+objname+"/index/format/html";
-	
+
 	$.ajax({
-		url: Url,   
+		url: Url,
 		type : 'POST',
 		data : dataparam,
-		success : function(response){	
-			$('#grid_'+objname).html(response);                                      
+		success : function(response){
+			$('#grid_'+objname).html(response);
 		},
-		
+
 	});
-       
-}	
+
+}
 
 function getrolepopup(group_id,sort_name,sort_type,dialog_id)
 {
     var myPos = [ $(window).width() / 5, 150 ];
     $('#'+dialog_id).dialog({
-        resizable: false,        
+        resizable: false,
         modal: true,
         title: 'Roles',
         position :myPos,
@@ -1065,7 +1092,7 @@ function getrolepopup(group_id,sort_name,sort_type,dialog_id)
                 $('#'+dialog_id).html(data);
                 $.unblockUI();
             },'html');
-            
+
         },
         close:function(){
             $('#'+dialog_id).html('');
@@ -1079,7 +1106,7 @@ function emprolesgroup_popup(group_id,role_id,page_no,sort_name,sort_type,dialog
     var myPos = [ $(window).width() / 5, 150 ];
      $('#'+dialog_id).dialog({
         resizable: false,
-        
+
         modal: true,
         title: 'Employees/Users',
         position :myPos,
@@ -1093,7 +1120,7 @@ function emprolesgroup_popup(group_id,role_id,page_no,sort_name,sort_type,dialog
                 $('#'+dialog_id).html(data);
                 $.unblockUI();
             },'html');
-            
+
         },
         close:function(){
             $('#'+dialog_id).dialog('destroy');
@@ -1103,19 +1130,19 @@ function emprolesgroup_popup(group_id,role_id,page_no,sort_name,sort_type,dialog
 }
 function selectrow(objid,tr)
 {
-	var row = $(tr);      
+	var row = $(tr);
 	if(!row.hasClass('newclass')){
-			row.addClass('newclass')       
-				.siblings()                
-				.removeClass('newclass');  
+			row.addClass('newclass')
+				.siblings()
+				.removeClass('newclass');
 	}
-}	
+}
 function viewrecord(objname)
 {
 	var hrefData = $('#'+objname+' .newclass').children().children().children().attr('name');
 		var id = hrefData;
 		if(typeof(id) !== 'undefined')
-		{	
+		{
 			$.ajax({
 				url: base_url+"/"+objname+"/view/format/html",
 				type : 'POST',
@@ -1129,10 +1156,10 @@ function viewrecord(objname)
 						modal: true,
 						title: 'View Data',
 						width: 600
-						
-					});			
+
+					});
 				}
-			}); 
+			});
 		}
 		else return false;
 }
@@ -1143,7 +1170,7 @@ function getApprReqData(obj)
     $('#emp_type,#additional_info,#priority,#exp_range,#orderdate,#businessunit,#department,#position,#report_manager,#jobtitle,#no_of_positions,#jobdescription,#required_skills,#required_qualifications').html('');
     if(rval != '')
     {
-        $.post(base_url+"/default/requisition/getapprreqdata",{req_id:rval},function(data){        
+        $.post(base_url+"/default/requisition/getapprreqdata",{req_id:rval},function(data){
             $('#orderdate').html(data.onboard_date);
             $('#businessunit').html(data.unitname);
             $('#department').html(data.deptname);
@@ -1200,20 +1227,20 @@ function getpositions_req(dept_id,bunit_id,position_id,job_id)
         $.post(base_url+"/default/requisition/getpositions",{bunitid:bunit_val,dept_id:dept_val,job_id:job_val},function(data){
             $('#'+position_id).find('option').remove();
             $('#'+position_id).html(data.options);
-            $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Position');
+            $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Career Level');
             var opt_len = $('#'+position_id).find('option').length;
             if(opt_len == 1)
             {
                 $("#errors-"+position_id).remove();
-			  $('#'+position_id).after("<span class='errors' id='errors-"+position_id+"'>Positions are not configured yet.</span>");
+			  $('#'+position_id).after("<span class='errors' id='errors-"+position_id+"'>Career Levels are not configured yet.</span>");
             }
         },'json');
     }
-    else 
+    else
     {
         $('#'+position_id).find('option').remove();
-        $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Position');
-        $('#'+position_id).html("<option value=''>Select Position</option>");
+        $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Career Level');
+        $('#'+position_id).html("<option value=''>Select Career Level</option>");
     }
 }
 function bunit_emailcontacts(bunit_id)
@@ -1229,7 +1256,7 @@ function bunit_emailcontacts(bunit_id)
             var opt_len = $('#group_id').find('option').length;
             if(opt_len == 1)
             {
-                $("#errors-group_id").remove();                   
+                $("#errors-group_id").remove();
                 $('#group_id').parent().append("<span class='errors' id='errors-group_id'>No more groups are available for this business unit.</span>");
             }
         },'json');
@@ -1246,18 +1273,18 @@ function getStates_cand(country_id,state_id,city_id)
             $('#s2id_'+state_id).find('a.select2-choice').find('span').html('Select State');
             $('#s2id_'+city_id).find('a.select2-choice').find('span').html('Select City');
         },'json');
-    
+
 }
 
 function getcities_cand(state_id,city_id)
 {
     var state_val = $('#'+state_id).val();
-    $.post(base_url+"/default/cities/getcitiescand",{state_id:state_val},function(data){           
+    $.post(base_url+"/default/cities/getcitiescand",{state_id:state_val},function(data){
             $('#'+city_id).find('option').remove();
-            $('#'+city_id).html(data.options);           
+            $('#'+city_id).html(data.options);
             $('#s2id_'+city_id).find('a.select2-choice').find('span').html('Select City');
         },'json');
-    
+
 }
 
 function check_child_roles(menu_id,con)
@@ -1267,24 +1294,24 @@ function check_child_roles(menu_id,con)
     var parent_id = chk_obj.attr('parent_id');
     var rad_btns_yes = new Array('cls_radio_add_yes','cls_radio_edit_yes','cls_radio_delete_yes','cls_radio_view_yes','cls_radio_upatt_yes','cls_radio_viewatt_yes');
     var rad_btns_no = new Array('cls_radio_add_no','cls_radio_edit_no','cls_radio_delete_no','cls_radio_view_no','cls_radio_upatt_no','cls_radio_viewatt_no');
-    
+
     var complete_width = $('.poc-ui-data-control').width();
     $('.left-block-ui-data').css("width", "230");
-    $('.right-block-data').css("width", (complete_width-(263)));	
+    $('.right-block-data').css("width", (complete_width-(263)));
 
     var classList =chk_obj.attr('class').split(/\s+/);
     if(chk_status)
-    {      
+    {
         $.each( classList, function(index, item){
             if (item !== 'cls_checkboxes') {
-               
+
                var carr = item.split('_');
-               
+
                $('#idcheckbox'+carr[1]).prop('checked',true);
                $('#idcls_checkboxes_'+carr[1]).show('slow','swing');
-               $('.cls_radiomenu_yes_'+carr[1]).prop('checked',true); 
+               $('.cls_radiomenu_yes_'+carr[1]).prop('checked',true);
             }
-            
+
         });
 
         $('.childclass_'+menu_id).prop('checked',true);
@@ -1294,13 +1321,13 @@ function check_child_roles(menu_id,con)
             if(menu_chk_len > 0)
                 $('.cls_radiobuttons_div'+menu_id).show('slow','swing');
         }
-        $('.cls_radiomenu_yes_'+menu_id).prop('checked',true);   
+        $('.cls_radiomenu_yes_'+menu_id).prop('checked',true);
         for(i = 0;i < rad_btns_yes.length;i++)
         {
-            $('.'+rad_btns_yes[i]+menu_id).prop('checked',true);   
+            $('.'+rad_btns_yes[i]+menu_id).prop('checked',true);
         }
     }
-    else 
+    else
     {
         $('.childclass_'+menu_id).prop('checked',false);
         if(con == '')
@@ -1309,10 +1336,10 @@ function check_child_roles(menu_id,con)
         $('.cls_radiomenu_no_'+menu_id).prop('checked',false);
         for(i = 0;i < rad_btns_yes.length;i++)
         {
-            $('.'+rad_btns_yes[i]+menu_id).prop('checked',false);   
-            $('.'+rad_btns_no[i]+menu_id).prop('checked',false);   
+            $('.'+rad_btns_yes[i]+menu_id).prop('checked',false);
+            $('.'+rad_btns_no[i]+menu_id).prop('checked',false);
         }
-        var chk_cnt = $('.childclass_'+parent_id+':checked').length; 
+        var chk_cnt = $('.childclass_'+parent_id+':checked').length;
         if(chk_cnt == 0)
         {
             $('#idcheckbox'+parent_id).prop('checked',false);
@@ -1321,8 +1348,8 @@ function check_child_roles(menu_id,con)
             $('.cls_radiomenu_no_'+parent_id).prop('checked',false);
             for(i = 0;i < rad_btns_yes.length;i++)
             {
-                $('.'+rad_btns_yes[i]+parent_id).prop('checked',false);   
-                $('.'+rad_btns_no[i]+parent_id).prop('checked',false);   
+                $('.'+rad_btns_yes[i]+parent_id).prop('checked',false);
+                $('.'+rad_btns_no[i]+parent_id).prop('checked',false);
             }
             $.each( classList, function(index, item){
                 if (item !== 'cls_checkboxes' && item !== 'childclass_'+parent_id) {
@@ -1333,8 +1360,8 @@ function check_child_roles(menu_id,con)
                     $('.cls_radiomenu_no_'+carr[1]).prop('checked',false);
                     for(i = 0;i < rad_btns_yes.length;i++)
                     {
-                        $('.'+rad_btns_yes[i]+carr[1]).prop('checked',false);   
-                        $('.'+rad_btns_no[i]+carr[1]).prop('checked',false);   
+                        $('.'+rad_btns_yes[i]+carr[1]).prop('checked',false);
+                        $('.'+rad_btns_no[i]+carr[1]).prop('checked',false);
                     }
                 }
 
@@ -1346,7 +1373,7 @@ function check_child_roles(menu_id,con)
     {
         $('#prev_cnt').val('1');
     }
-    else 
+    else
     {
         $('#prev_cnt').val('');
     }
@@ -1354,17 +1381,17 @@ function check_child_roles(menu_id,con)
 
 function checkradio_child_roles(class_name,obj)
 {
-    var checked_status = obj.checked;    
+    var checked_status = obj.checked;
     var id = obj.id;
     $('.'+class_name).prop('checked',checked_status);
     var parent_cls = "cls_radiomenu_yes_";
-    var parent_id = $('#'+id).attr("data-parent"); 
+    var parent_id = $('#'+id).attr("data-parent");
     var clen = $("."+parent_cls+parent_id+":checked").length;
     if(clen == 0)
-    {                
+    {
         $('#idcheckbox'+parent_id).trigger('click');
         $('#idcheckbox'+parent_id).prop('checked',false);
-        
+
     }
 }
 function checkradio_child_roles_original(class_name)
@@ -1377,18 +1404,18 @@ function checkradio_child_roles_original(class_name)
 function displaydeptform(url,menuname)
 {
 	$.ajax({
-		type:"post",		
+		type:"post",
 		url:base_url+'/index/checkisactivestatus',
 		dataType:'json',
 		success: function(response)
-		{  
+		{
 			if(typeof (response['result']) == 'undefined' || response['result'] == 'false' || response['result'] == '')
 			 {
 				window.location.href = base_url+'/index';
 			 }
 			else if(response['result'] == 'true')
 			{
-				var urlArr = url.split('/');   
+				var urlArr = url.split('/');
 				var baseurlArr = base_url.split('/');
 				var request_hostname = window.location.hostname;
 				var job_title = '';var country_id = ''; var country = '';var state_id = ''; var state = '';
@@ -1397,14 +1424,14 @@ function displaydeptform(url,menuname)
 				var controllername = urlArr[baseurlArr.length];
 					if(menuname == 'Employment Status'){
 					if($('#screenflag').length > 0){
-						screenflag = $('#screenflag').val(); 
-						
+						screenflag = $('#screenflag').val();
+
 						if(url.indexOf('addpopup') != -1){
-							url =url+'/screenflag/'+screenflag;		
-						}		
+							url =url+'/screenflag/'+screenflag;
+						}
 					}
-				}		
-				if(menuname == 'Position'){
+				}
+				if(menuname == 'Career Level'){
 					jobtitle_id = $('#jobtitle_id').val();
 					if(jobtitle_id!=null && jobtitle_id.length>0){
 						job_title = jobtitle_id;
@@ -1415,21 +1442,21 @@ function displaydeptform(url,menuname)
 						}
 					}
 					if(url.indexOf('addpopup') != -1){
-						url =url+'/jobtitleid/'+job_title;		
-					}		
+						url =url+'/jobtitleid/'+job_title;
+					}
 				}
 				if(menuname == 'State')
 				{
 					country_id = $('#country').val();
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#country_1').val();
 					}
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#countryid').val();
 					}
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#perm_country').val();
 					}
@@ -1439,8 +1466,8 @@ function displaydeptform(url,menuname)
 					}
 					if(url.indexOf('addpopup') != -1 || url.indexOf('addnewstate') != -1)
 					{
-						url =url+'/selectcountryid/'+country;		
-					}		
+						url =url+'/selectcountryid/'+country;
+					}
 				}
 				if(menuname == 'City')
 				{
@@ -1450,7 +1477,7 @@ function displaydeptform(url,menuname)
 						country_id = $('#country_1').val();
 					if(country_id == '' || typeof country_id == 'undefined')
 						country_id = $('#countryid').val();
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 						country_id = $('#perm_country').val();
 					if(state_id == '' || typeof state_id == 'undefined')
 						state_id = $('#state_1').val();
@@ -1466,36 +1493,36 @@ function displaydeptform(url,menuname)
 					}
 					if(url.indexOf('addpopup') != -1 || url.indexOf('addnewcity') != -1)
 					{
-						url =url+'/selectcountryid/'+country+'/selectstateid/'+state;		
-					}		
+						url =url+'/selectcountryid/'+country+'/selectstateid/'+state;
+					}
 				}
 				if(menuname == 'Candidate Details')
 				{
 					candidateid = $('#rccandidatename').val();
-					url =url+'/id/'+candidateid;	
+					url =url+'/id/'+candidateid;
 				}
-				
+
 				if(controllername =='interviewrounds')
 				{
 					var act_name = '';
-					if(url.indexOf("interviewrounds") != -1)                        
+					if(url.indexOf("interviewrounds") != -1)
 					{
 						act_name = url.match(/interviewrounds\/(.*?)\//i)[1];
-					}			
+					}
 					var deptid = '';
 					deptid = $('#deptidHidden').val();
-					if(url.indexOf('deptid') == -1)                                       
-					{						
+					if(url.indexOf('deptid') == -1)
+					{
 						if(deptid!= '' && typeof(deptid) !== 'undefined')
 						url = url+'/deptid/'+deptid;
 					}
 					var int_status = $('#hiddeninterview_status').val();
-					var round_status = $('#previousstatus').val();	
+					var round_status = $('#previousstatus').val();
 					var round_count = $('#interviewroundcount').val();
 					if(act_name == 'editpopup')
 					{
 						if(int_status == 'Completed')
-						{				
+						{
 							jAlert('As the interview process is completed, you cannot edit the record.');
 							flag = 'no';
 						}
@@ -1517,7 +1544,7 @@ function displaydeptform(url,menuname)
 						else
 						{
 										if(round_status == '' && round_count != 0)
-										{ 
+										{
 											flag = 'no';
 											jAlert('The candidate is not scheduled to the next round. So you cannot assign a new round to the candidate.');
 										}
@@ -1529,12 +1556,12 @@ function displaydeptform(url,menuname)
 					}
 					else
 					{
-						flag = 'yes';		
+						flag = 'yes';
 					}
-				}	
+				}
 					if(flag == 'yes'){
 						$("body").append('<div id="blockingdiv" class="ui-widget-overlay ui-front"></div>');
-						
+
 						var capitalizedtitle = '';
 						if(menuname !='')
 						{
@@ -1549,18 +1576,18 @@ function displaydeptform(url,menuname)
 									{
 										capitalizedtitle = "Background check process";
 									}
-						}			
+						}
 						$(".closeAttachPopup").remove();
 							window.parent.$('#'+controllername+'Container').dialog({
 																	open:function(){
 																																$('#'+controllername+'Container').css('display','block');
 						$('#'+controllername+'Cont').attr('src', url);
 																	  $(document).bind('keydown',function(e) {
-																		
+
 																		if (e.keyCode === 8) {
 																			return false;
 																		};
-																	});														  
+																	});
 																	},
 											close: function() {
 											 $('#blockingdiv').remove();
@@ -1581,7 +1608,7 @@ function displaydeptform(url,menuname)
 		},
 		global: false
 	});
-	
+
 }
 function displaydeptform_frame(url,menuname)
 {
@@ -1592,7 +1619,7 @@ function displaydeptform_frame(url,menuname)
 	var controllername = urlsplitArr[3];
 	else
 	var controllername = urlsplitArr[2];
-	if(menuname == 'Position'){
+	if(menuname == 'Career Level'){
 		jobtitle_id = $('#jobtitle_id').val();
 		if(jobtitle_id!=null && jobtitle_id.length>0){
 			job_title = jobtitle_id;
@@ -1603,8 +1630,8 @@ function displaydeptform_frame(url,menuname)
 			}
 		}
 		if(url.indexOf('addpopup') != -1){
-			url =url+'/jobtitleid/'+job_title;		
-		}		
+			url =url+'/jobtitleid/'+job_title;
+		}
 	}
 	if(menuname == 'State'){
 		country_id = $('#country').val();
@@ -1612,8 +1639,8 @@ function displaydeptform_frame(url,menuname)
 			country = country_id;
 		}
 		if(url.indexOf('addpopup') != -1){
-			url =url+'/selectcountryid/'+country;		
-		}		
+			url =url+'/selectcountryid/'+country;
+		}
 	}
 		if(flag == 'yes'){
 			$("body").append('<div id="blockingdiv" class="ui-widget-overlay ui-front"></div>');
@@ -1631,18 +1658,18 @@ function displaydeptform_frame(url,menuname)
                         {
                             capitalizedtitle = "Background check process";
                         }
-			}			
+			}
 			$(".closeAttachPopup").remove();
 			window.parent.$('#'+controllername+'Container').dialog({
 														open:function(){
                                                                                                                     $('#'+controllername+'Container').css('display','block');
 			window.parent.$('#'+controllername+'Cont').attr('src', url);
                                                           $(document).bind('keydown',function(e) {
-															
+
 															if (e.keyCode === 8) {
 																return false;
 															};
-														});														  
+														});
 														},
 								close: function() {
 								 $('#blockingdiv').remove();
@@ -1655,61 +1682,61 @@ function displaydeptform_frame(url,menuname)
 								});
 			$('#processesCont').contents().find('input[name="bg-check-details-id"]').val(urlsplitArr[5]);
 		}
-	
+
 }
-	  
+
 function closeframe(id)
 {
 	window.parent.$('#DepartmentContainer').dialog("close");
 }
 
 function refreshgridfromIframe(objname,dashboardcall)
-{	
+{
 	var Url ="";var context ="";
 	var formGridId = window.parent.$("#formGridId").val();
 	var unitId = '';mname='';mnuid='';$('#columnId').remove();
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
 	{
-		formGridId = ''; 
+		formGridId = '';
 		var curUrl = window.parent.$(location).attr('href');
 		mname = 'unitId';
 		lastChar = curUrl.substr(curUrl.length - 1);
 		if(lastChar != '/')
 		curUrl = curUrl+'/';
-		if(curUrl.indexOf("id") != -1)                        
+		if(curUrl.indexOf("id") != -1)
 		{
 			mnuid = curUrl.match(/id\/(.*?)\//i)[1];
 		}
 	}
 	else
 	{
-		unitId = formGridId.split("/"); 
+		unitId = formGridId.split("/");
 		mname = unitId[0]; mnuid = unitId[1];
 	}
 	if(window.parent.$('#grid_'+objname).length == 0)
-	{	
+	{
 		window.parent.$('.total-form-controller').after('<div id="grid_'+objname+'" class="all-grid-control"></div>');
-	}	
+	}
 	window.parent.$('#createdept').remove();
 	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid+"&context="+context+"&dashboardcall="+dashboardcall;
 	Url = base_url+"/"+objname+"/index/format/html";
 	window.parent.$("#"+objname+"_searchdata").val('');
 	$.ajax({
-		url: Url,   
+		url: Url,
 		type : 'POST',
 		data : dataparam,
 		success : function(response){
 			window.parent.$('#grid_'+objname).html(response);
 		}
 	});
-}	
+}
 
 function closeiframepopup(controllername,con)
-{	
+{
 	if($('#'+controllername+'Container', window.parent.document).html() !='null' && con == 'cancel')
 	{
-	   window.parent.$('#'+controllername+'Container').dialog('close');	
-		
+	   window.parent.$('#'+controllername+'Container').dialog('close');
+
 	}
 	else if(con == 'refreshgrid')
 	{
@@ -1725,29 +1752,29 @@ function removeselectoptions(con)
 {
 	if(con == 'country' || con == 'country_1' || con == 'perm_country')
 	{
-		window.parent.$('#state').find('option').remove(); 	   
+		window.parent.$('#state').find('option').remove();
 		window.parent.$('#s2id_state .select2-choice span').html('Select state');
-		window.parent.$('#state_1').find('option').remove(); 	   
+		window.parent.$('#state_1').find('option').remove();
 		window.parent.$('#s2id_state_1 .select2-choice span').html('Select state');
-		window.parent.$('#perm_state').find('option').remove(); 	   
+		window.parent.$('#perm_state').find('option').remove();
 		window.parent.$('#s2id_perm_state .select2-choice span').html('Select state');
-	}	
-	window.parent.$('#city').find('option').remove(); 	   
+	}
+	window.parent.$('#city').find('option').remove();
 	window.parent.$('#s2id_city .select2-choice span').html('Select city');
-	window.parent.$('#city_1').find('option').remove(); 	   
+	window.parent.$('#city_1').find('option').remove();
 	window.parent.$('#s2id_city_1 .select2-choice span').html('Select city');
-	window.parent.$('#perm_city').find('option').remove(); 	   
+	window.parent.$('#perm_city').find('option').remove();
 	window.parent.$('#s2id_perm_city .select2-choice span').html('Select city');
 }
 
 function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
-{    
+{
 	var option = '';
 	if(textstr != '')
-	{           
-       var defOption = "<option value=''>Select "+textstr+"</option>";	
+	{
+       var defOption = "<option value=''>Select "+textstr+"</option>";
 		window.parent.$('#s2id_'+con+' .select2-choice span').html('Select '+textstr);
-	}else{		
+	}else{
 		if(con != 'bg_checktype')
 		{
 			var defOption = "<option value=''> </option>";
@@ -1761,7 +1788,7 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 	window.parent.$("#"+con).find('option').remove();
 	window.parent.$("#"+con).parent().find('.select2-container').find('.select2-search-choice').remove();
 	window.parent.$("#"+con).html(defOption+addpopupdata);
-	
+
 	/** to set the new category as selected value - start **/
 	if(newId != '' && con == 'category_id')
 	{
@@ -1771,7 +1798,7 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 	{
 		window.parent.$('#'+con).select2('val',newId);
 	}
-	 
+
 	/** to set the new category as selected value - end **/
 
 	if($('#'+controllername+'Container', window.parent.document).html() !='null')
@@ -1783,21 +1810,21 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 	}
 }
 function closeiframeAddPopup_identity(addpopupdata,controllername,con,prev_cntrl)
-{  		
+{
     if(prev_cntrl == 'usermanagement')
     {
-	window.parent.$("#"+con).find('option').remove();	
+	window.parent.$("#"+con).find('option').remove();
 	window.parent.$("#"+con).parent().find('.select2-container').find('.select2-search-choice').remove();
-	window.parent.$("#"+con).html(addpopupdata);       
+	window.parent.$("#"+con).html(addpopupdata);
         window.parent.$('#s2id_'+con).find('a.select2-choice').find('span').html(window.parent.$("#"+con+" option:first").text());
-    } 
+    }
     else if(prev_cntrl == 'organisationinfo')
     {
         window.parent.$("#"+con).val(addpopupdata);
     }
     else if(prev_cntrl == 'employee')
     {
-        window.parent.$("#"+con).val(addpopupdata);        
+        window.parent.$("#"+con).val(addpopupdata);
         window.parent.$("#spanempid").html(addpopupdata);
     }
     if($('#'+controllername+'Container', window.parent.document).html() !='null')
@@ -1815,7 +1842,7 @@ function closeiframeAddPopup_frame(addpopupdata,controllername,con,textstr,prev_
     if(prev_iframename == 'empskillsCont')
      {
          mobj = window.top.empskillsCont;
-     }   
+     }
 	var option = '';
 	if(textstr != '')
 	{
@@ -1831,7 +1858,7 @@ function closeiframeAddPopup_frame(addpopupdata,controllername,con,textstr,prev_
 }
 
 function closeiframepopup_03102013(controllername,con)
-{	
+{
 	window.parent.$('#'+controllername+'Container').dialog('close');
     if(con != 'cancel')
    parent.window.location.reload();
@@ -1849,9 +1876,9 @@ function displayStateCode(ele)
 		   $('#otherstatediv').show();
 		}
 	else
-		{ 
+		{
 			   $('#otherstatediv').hide();
-		}	
+		}
 }
 function displayCityCode(ele)
 {
@@ -1863,9 +1890,9 @@ function displayCityCode(ele)
 		   $('#othercitydiv').show();
 		}
 	else
-		{ 
+		{
 			   $('#othercitydiv').hide();
-		}	
+		}
 }
 function displayParticularState(ele,con,eleId,countryid){
 	var id;
@@ -1873,7 +1900,7 @@ function displayParticularState(ele,con,eleId,countryid){
 	{
 	  id = countryid;
 	}else
-    {	
+    {
 		if(ele.selectedIndex != -1){
 		 id = ele[ele.selectedIndex].value;
 		}else{
@@ -1883,27 +1910,27 @@ function displayParticularState(ele,con,eleId,countryid){
 	if(id !='')
 	{
 		$.ajax({
-                url: base_url+"/index/getstates/format/html",				
-				type : 'POST',	
+                url: base_url+"/index/getstates/format/html",
+				type : 'POST',
 				data : 'country_id='+id+'&con='+con,
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
 				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
-				success : function(response){	
+				success : function(response){
 				        if($.trim(response) == 'nostates')
 						{
                           $("#loader").remove();
 						  $("#errors-"+eleId).remove();
 						 if(con == 'otheroption')
 						  {
-						   $('#s2id_'+eleId).find('ul li:not(:last)').remove(); 
+						   $('#s2id_'+eleId).find('ul li:not(:last)').remove();
 							$("#"+eleId).html("<option value='other'>Other</option>");
-                            $('#'+eleId).parent().append("<span class='errors' id='errors-"+eleId+"'>All states have been configured already.</span>"); 							
-						
+                            $('#'+eleId).parent().append("<span class='errors' id='errors-"+eleId+"'>All states have been configured already.</span>");
+
 						}
-						  else 
+						  else
 						  {
 						                                if($('#'+eleId).parent().find("span.add-coloum").length > 0)
                                                             $('#'+eleId).parent().find("span.add-coloum").prepend("<span class='errors' id='errors-"+eleId+"'>States are not configured yet.</span>");
@@ -1915,26 +1942,26 @@ function displayParticularState(ele,con,eleId,countryid){
 						  }
                         }
                         if(response != '' && response != 'null' && $.trim(response) != 'nostates')
-						{ 	
+						{
 							$('#s2id_'+eleId+' .select2-choice span').html('Select state');
-							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();									
+							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
 							$("#loader").remove();
 							if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
-							$("#"+eleId).html(response);	 
+							$("#"+eleId).html(response);
 							if($("#otherstatediv").is(':visible'))
 							 $('#otherstatediv').hide();
 							if(countryid!='')
 							{
 							  $('#s2id_'+eleId).find('span').html($("#perm_state option:selected").text());
 							  $("#"+eleId).val($("#perm_state option:selected").val());
-							} 
-							 
+							}
+
 							 if(eleId == 'perm_state')
 							   {
 									$('#perm_city').find('option').remove();
 									$('#s2id_perm_city .select2-choice span').html('Select city');
-							   } 
+							   }
 							   else if(eleId == 'current_state')
 							   {
 								   $('#current_city').find('option').remove();
@@ -1942,13 +1969,13 @@ function displayParticularState(ele,con,eleId,countryid){
 							   }
 							   else if(eleId == 'state')
 							   {
-									$('#city').find('option').remove(); 	   
+									$('#city').find('option').remove();
 									$('#s2id_city .select2-choice span').html('Select city');
-									$('#s2id_city ul li:not(:last)').remove();	
+									$('#s2id_city ul li:not(:last)').remove();
 							   }
 							   else if(eleId == 'issuingauth_state')
 							   {
-									$('#issuingauth_city').find('option').remove(); 	   
+									$('#issuingauth_city').find('option').remove();
 									$('#s2id_issuingauth_city .select2-choice span').html('Select city');
 							   }
 							   else if(eleId.indexOf('1') != -1){
@@ -1960,8 +1987,8 @@ function displayParticularState(ele,con,eleId,countryid){
 							   }else if(eleId.indexOf('3') != -1){
 									$('#s2id_city_3 .select2-choice span').html('Select city');
 									$('#city_3').find('option').remove();
-							   } 
-                        } 						 
+							   }
+                        }
 				}
 			});
 	}
@@ -1973,7 +2000,7 @@ function displayParticularState(ele,con,eleId,countryid){
 		   $('#s2id_'+eleId+' .select2-choice span').html('Select state');
 		   $('#perm_city').find('option').remove();
 		   $('#s2id_perm_city .select2-choice span').html('Select city');
-	   } 
+	   }
        else if(eleId == 'current_state')
        {
 	       $('#'+eleId).find('option').remove();
@@ -1985,16 +2012,16 @@ function displayParticularState(ele,con,eleId,countryid){
 	   {
 	        $('#'+eleId).find('option').remove();
 		    $('#s2id_'+eleId+' .select2-choice span').html('Select state');
-		    $('#city').find('option').remove(); 	   
+		    $('#city').find('option').remove();
 		    $('#s2id_city .select2-choice span').html('Select city');
 			$('#s2id_state ul li:not(:last)').remove();
-			$('#s2id_city ul li:not(:last)').remove();	
+			$('#s2id_city ul li:not(:last)').remove();
 	   }
 	   else if(eleId == 'issuingauth_state')
 	   {
 	        $('#'+eleId).find('option').remove();
 		    $('#s2id_'+eleId+' .select2-choice span').html('Select state');
-		    $('#issuingauth_city').find('option').remove(); 	   
+		    $('#issuingauth_city').find('option').remove();
 		    $('#s2id_issuingauth_city .select2-choice span').html('Select city');
 	   }
 	   else if(eleId.indexOf('1') != -1){
@@ -2007,31 +2034,31 @@ function displayParticularState(ele,con,eleId,countryid){
 			$('#s2id_city_3 .select2-choice span').html('Select city');
 			$('#city_3').find('option').remove();
 	   }
-	}	
+	}
 }
 
 function displayParticularState_normal(ele,con,eleId,city_id)
 {
-    var id;		
+    var id;
     id = ele.value;
     $('#s2id_'+eleId+' .select2-choice span').html('Select state');
-    $('#s2id_'+city_id+' .select2-choice span').html('Select city');                        
+    $('#s2id_'+city_id+' .select2-choice span').html('Select city');
     $('#'+eleId).find('option').remove();
-    $('#'+city_id).find('option').remove();            
+    $('#'+city_id).find('option').remove();
     $("#"+eleId).html("<option value='' label='Select State'>Select State</option>");
     $("#"+city_id).html("<option value='' label='Select State'>Select City</option>");
     if(id !='')
     {
-        $.ajax({				
-                url: base_url+"/index/getstatesnormal/format/html",				
-                type : 'POST',	
+        $.ajax({
+                url: base_url+"/index/getstatesnormal/format/html",
+                type : 'POST',
                 data : 'country_id='+id+'&con='+con,
                 dataType: 'html',
                 beforeSend: function () {
                     $("#"+eleId).before("<div id='loader'></div>");
                     $("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
                 },
-                success : function(response){	
+                success : function(response){
                     if($.trim(response) == 'nostates')
                     {
                         $("#loader").remove();
@@ -2042,37 +2069,37 @@ function displayParticularState_normal(ele,con,eleId,city_id)
                         $("#"+eleId).prepend("<option value='' label='select state'>Select State</option>");
                     }
                     if(response != '' && response != 'null' && $.trim(response) != 'nostates')
-                    { 	
+                    {
                         $('#s2id_'+eleId+' .select2-choice span').html('Select state');
-                        $("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();											
+                        $("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
                         $("#loader").remove();
                         if($("#errors-"+eleId).is(':visible'))
                             $("#errors-"+eleId).hide();
-                        $("#"+eleId).html(response);	 
+                        $("#"+eleId).html(response);
                         if($("#otherstatediv").is(':visible'))
                         $('#otherstatediv').hide();
-							
-                    } 						 
+
+                    }
                 }
             });
-	}		
+	}
 }
 function displayParticularCandidates(ele,flag)
 {
 	var id;
-	
+
 	if(ele.selectedIndex != -1){
 	 id = ele[ele.selectedIndex].value;
 	}else{
 		id = '';
 	}
-	$("#s2id_candidate_name").find('a.select2-choice').find("span").html("select Candidate");  
-	$("#s2id_interviewer_id").find('a.select2-choice').find("span").html("select Interviewer");  
+	$("#s2id_candidate_name").find('a.select2-choice').find("span").html("select Candidate");
+	$("#s2id_interviewer_id").find('a.select2-choice').find("span").html("select Interviewer");
 	if(id !='' && id!=0)
 	{
 		$.ajax({
-				url: base_url+"/scheduleinterviews/getcandidates",				
-				type : 'POST',	
+				url: base_url+"/scheduleinterviews/getcandidates",
+				type : 'POST',
 				data : 'req_id='+id,
 				dataType: 'json',
 				beforeSend: function () {
@@ -2082,11 +2109,11 @@ function displayParticularCandidates(ele,flag)
 						$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 					}
 				},
-				success : function(response){							
+				success : function(response){
 						if(flag == 'cand')
 						{
-							$('#job_title').val('');	
-							$('#job_title').val(response.jobtitle);		
+							$('#job_title').val('');
+							$('#job_title').val(response.jobtitle);
 						}
 				        else
 						{
@@ -2098,17 +2125,17 @@ function displayParticularCandidates(ele,flag)
 							  $("#candidate_name").find('option').remove();
 							  $("#s2id_candidate_name").find("span").html("Select candidate");
 							  $("#candidate_name").html("<option value='' label='select Candidate'>Select candidate</option>");
-							}						
+							}
 							else if(response.candidates != '' && response.candidates != 'null' && $.trim(response.candidates) != 'nocandidates')
 							{
-								$("#candidate_name").parent().find('.select2-container').find('.select2-search-choice').remove();					
+								$("#candidate_name").parent().find('.select2-container').find('.select2-search-choice').remove();
 								$("#loader").remove();
 								if($("#errors-candidate_name").is(':visible'))
 								 $("#errors-candidate_name").hide();
-                            	$("#candidate_name").html("<option value='' label='select Candidate'>Select candidate</option>"+response.candidates);	 						
+                            	$("#candidate_name").html("<option value='' label='select Candidate'>Select candidate</option>"+response.candidates);
 							}
-							$('#job_title').val('');	
-							$('#job_title').val(response.jobtitle);							
+							$('#job_title').val('');
+							$('#job_title').val(response.jobtitle);
 							if($.trim(response.managers) == 'nomanagers')
 							{
 							  $("#loader").remove();
@@ -2117,14 +2144,14 @@ function displayParticularCandidates(ele,flag)
 							  $("#interviewer_id").find('option').remove();
 							  $("#s2id_interviewer_id").find("span").html("Select Interviewer");
 							  $("#interviewer_id").html("<option value='' label='select Candidate'>Select Interviewer</option>");
-							}						
+							}
 							else if(response.managers != '' && response.managers != 'null' && $.trim(response.managers) != 'nomanagers')
 							{
-								$("#interviewer_id").parent().find('.select2-container').find('.select2-search-choice').remove();					
+								$("#interviewer_id").parent().find('.select2-container').find('.select2-search-choice').remove();
 								$("#loader").remove();
 								if($("#errors-interviewer_id").is(':visible'))
 								 $("#errors-interviewer_id").hide();
-								$("#interviewer_id").html("<option value='' label='select Candidate'>Select Interviewer</option>"+response.managers);	 						
+								$("#interviewer_id").html("<option value='' label='select Candidate'>Select Interviewer</option>"+response.managers);
 							}
 						}
 				}
@@ -2132,18 +2159,18 @@ function displayParticularCandidates(ele,flag)
 	}
 	else
 	{
-	  
+
 	   $("#candidate_name").parent().find('.select2-container').find('.select2-search-choice').remove();
 	   $('#candidate_name').find('option').remove();
 	   $("#candidate_name").html("<option value='' label='Select Candidate'>Select Candidate</option>");
-	   $('#job_title').val('');	
+	   $('#job_title').val('');
 	   $("#interviewer_id").parent().find('.select2-container').find('.select2-search-choice').remove();
 	   $('#interviewer_id').find('option').remove();
 	   $("#interviewer_id").html("<option value='' label='select Candidate'>Select Interviewer</option>");
            $('#s2id_interviewer_id').find('a.select2-choice').find('span').html('Select Interviewer');
            $('#s2id_candidate_name').find('a.select2-choice').find('span').html('Select Candidate');
 	}
-	
+
 }
 function displayParticularCity(ele,con,eleId,stateid)
 {
@@ -2158,13 +2185,13 @@ function displayParticularCity(ele,con,eleId,stateid)
 	}else{
 		id = '';
 	}
-  }	
-	
+  }
+
 	if(id !='')
 	{
 		$.ajax({
-				url: base_url+"/index/getcities/format/html",				
-				type : 'POST',	
+				url: base_url+"/index/getcities/format/html",
+				type : 'POST',
 				data : 'state_id='+id+'&con='+con,
 				dataType: 'html',
 				beforeSend: function () {
@@ -2178,18 +2205,18 @@ function displayParticularCity(ele,con,eleId,stateid)
 						  $("#errors-"+eleId).show();
 						  $("#errors-"+eleId).remove();
 						  if(con == 'otheroption')
-						  {	
-			                $('#s2id_'+eleId).find('ul li:not(:last)').remove();						  
-							$("#"+eleId).html("<option value='other'>Other</option>");	
+						  {
+			                $('#s2id_'+eleId).find('ul li:not(:last)').remove();
+							$("#"+eleId).html("<option value='other'>Other</option>");
 							$('#'+eleId).parent().append("<span class='errors' id='errors-"+eleId+"'>All cities have been configured already.</span>");
 						  }
-						  else 
-						  { 
+						  else
+						  {
 				              if($('#'+eleId).parent().find("span.add-coloum").length > 0)
                                   $('#'+eleId).parent().find("span.add-coloum").prepend("<span class='errors' id='errors-"+eleId+"'>Cities are not configured yet.</span>");
                               else
                                   $('#'+eleId).parent().append("<span class='errors' id='errors-"+eleId+"'>Cities are not configured yet.</span>");
-                          
+
 							  $("#"+eleId).find('option').remove();
 							  $("#s2id_"+eleId).find("span").html("Select City");
 							  $("#"+eleId).prepend("<option value='' label='select city'>Select City</option>");
@@ -2197,27 +2224,27 @@ function displayParticularCity(ele,con,eleId,stateid)
                         }
 						 if(response != '' && response != 'null' && $.trim(response) != 'nocities')
 						{
-							if(stateid =='') 
+							if(stateid =='')
 							 $('#s2id_'+eleId+' .select2-choice span').html('Select city');
-							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();					
+							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
 							$("#loader").remove();
 							if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
-							$("#"+eleId).html(response);	 
+							$("#"+eleId).html(response);
 							if($("#otherstatediv").is(':visible'))
 							 $('#otherstatediv').hide();
 							if(stateid!='')
 							{
 							 $('#s2id_'+eleId).find('span').html($("#perm_city option:selected").text());
 							 $("#"+eleId).val($("#perm_city option:selected").val());
-							} 
-                        }						 
+							}
+                        }
 				}
 			});
 	}
 	else
 	{
-	  
+
 	   $("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
 	   $('#'+eleId).find('option').remove();
 	   $("#"+eleId).prepend("<option value='' label='Select city'>Select city</option>");
@@ -2238,13 +2265,13 @@ function displayParticularCity_normal(ele,con,eleId,stateid)
 	}else{
 		id = '';
 	}
-  }	
-	
+  }
+
 	if(id !='')
 	{
 		$.ajax({
-				url: base_url+"/index/getcitiesnormal/format/html",				
-				type : 'POST',	
+				url: base_url+"/index/getcitiesnormal/format/html",
+				type : 'POST',
 				data : 'state_id='+id+'&con='+con,
 				dataType: 'html',
 				beforeSend: function () {
@@ -2263,27 +2290,27 @@ function displayParticularCity_normal(ele,con,eleId,stateid)
                         }
 						 if(response != '' && response != 'null' && $.trim(response) != 'nocities')
 						{
-							if(stateid =='') 
+							if(stateid =='')
 							 $('#s2id_'+eleId+' .select2-choice span').html('Select city');
-							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();					
+							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
 							$("#loader").remove();
 							if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
-							$("#"+eleId).html(response);	 
+							$("#"+eleId).html(response);
 							if($("#otherstatediv").is(':visible'))
 							 $('#otherstatediv').hide();
 							if(stateid!='')
 							{
 							 $('#s2id_'+eleId).find('span').html($("#perm_city option:selected").text());
 							 $("#"+eleId).val($("#perm_city option:selected").val());
-							} 
-                        }						 
+							}
+                        }
 				}
 			});
 	}
 	else
 	{
-	  
+
 	   $("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();
 	   $('#'+eleId).find('option').remove();
 	   $("#"+eleId).prepend("<option value='' label='Select city'>Select city</option>");
@@ -2304,8 +2331,8 @@ function displayTargetCurrency(ele)
 	if(idstr !='')
 	{
 		$.ajax({
-				url: base_url+"/index/gettargetcurrency/format/html",   
-				type : 'POST',	
+				url: base_url+"/index/gettargetcurrency/format/html",
+				type : 'POST',
 				data : 'basecurr_id='+idstr[0],
 				dataType: 'html',
 				beforeSend: function () {
@@ -2314,15 +2341,15 @@ function displayTargetCurrency(ele)
 				},
 				success : function(response){
 						$('#s2id_targetcurrency .select2-choice span').html('Select target currency');
-						$("#targetcurrency").parent().find('.select2-container').find('.select2-search-choice').remove();					
+						$("#targetcurrency").parent().find('.select2-container').find('.select2-search-choice').remove();
 						$("#loader").remove();
-						$("#targetcurrency").html(response);	 
+						$("#targetcurrency").html(response);
 					}
 			});
 	}
 	else
 	{
-	  
+
 	   $("#targetcurrency").parent().find('.select2-container').find('.select2-search-choice').remove();
 	   $('#targetcurrency').find('option').remove();
 	   $("#targetcurrency").prepend("<option value='' label='Select city'>Select Department</option>");
@@ -2339,10 +2366,10 @@ function displayPasswordDesc(ele)
 	}else{
 		id = '';
 	}
-	
+
   if($('[id^=password_]').html()!='')
     $('[id^=password_]').hide();
-	
+
 	$("#password_"+id).show();
 
 }
@@ -2356,7 +2383,7 @@ function displayFormElements()
 		$('#add-more-form').css('display','none');
 		$('#less-form').css('display','block');
 	}
-	else 
+	else
 	{
 		$("#secondpoc").show();
 		$("#secondpocid").val('shown');
@@ -2372,7 +2399,7 @@ function hideFormElements()
 		$("#thirdpocid").val('');
 		$('#add-more-form').css('display','block');
 	}
-	else 
+	else
 	{
 		$("#secondpoc").hide();
 		$("#secondpocid").val('');
@@ -2383,13 +2410,13 @@ function hideFormElements()
 function contactElements(eleId)
 {
 	if(eleId == 'first')
-	{		
+	{
 		$("#firstpoc").show();
 		$("#secondpoc").hide();
-		$("#thirdpoc").hide();	
-		$('[id^="pocli"]').removeClass('active');	
-		$('#poclifirst').addClass('active');	
-		$('.right-block-data').addClass('right-over-border');		
+		$("#thirdpoc").hide();
+		$('[id^="pocli"]').removeClass('active');
+		$('#poclifirst').addClass('active');
+		$('.right-block-data').addClass('right-over-border');
 	}
 	else if(eleId == 'second')
 	{
@@ -2398,16 +2425,16 @@ function contactElements(eleId)
 		$("#thirdpoc").hide();
 		$('[id^="pocli"]').removeClass('active');
 		$('#poclisecond').addClass('active');
-		$('.right-block-data').removeClass('right-over-border');		
+		$('.right-block-data').removeClass('right-over-border');
 	}
 	else if(eleId == 'third')
 	{
 		$("#firstpoc").hide();
 		$("#secondpoc").hide();
-		$("#thirdpoc").show();	
+		$("#thirdpoc").show();
 		$('[id^="pocli"]').removeClass('active');
 		$('#poclithird').addClass('active');
-		$('.right-block-data').removeClass('right-over-border');			
+		$('.right-block-data').removeClass('right-over-border');
 	}
 }
 
@@ -2415,21 +2442,21 @@ function contact1Elements()
 {
 	$("#firstpoc").show();
 	$("#secondpoc").hide();
-	$("#thirdpoc").hide();	
+	$("#thirdpoc").hide();
 }
 
 function contact2Elements()
 {
 	$("#firstpoc").hide();
 	$("#secondpoc").show();
-	$("#thirdpoc").hide();		
+	$("#thirdpoc").hide();
 }
 
 function contact3Elements()
 {
 	$("#firstpoc").hide();
 	$("#secondpoc").hide();
-	$("#thirdpoc").show();	
+	$("#thirdpoc").show();
 }
 
 function deletepoc(agencyid,pocid,contacttype)
@@ -2442,12 +2469,12 @@ function deletepoc(agencyid,pocid,contacttype)
 	else
 	{
 		$.ajax({
-			url: base_url+"/agencylist/deletepoc",   
+			url: base_url+"/agencylist/deletepoc",
 			type : 'POST',
 			data: 'agencyid='+agencyid+'&pocid='+pocid,
 			dataType: 'json',
-			beforeSend : function () 
-							{								
+			beforeSend : function ()
+							{
 								$.blockUI({ width:'50px',message: $("#spinner").html() });
 							},
 			success : function(response)
@@ -2470,15 +2497,15 @@ function getemployeeData(ele)
 	if(id !='' && id!='0')
 	{
 		$.ajax({
-				url: base_url+"/empscreening/getemployeedata/format/html",   
-				type : 'POST',	
+				url: base_url+"/empscreening/getemployeedata/format/html",
+				type : 'POST',
 				data : 'empid='+id,
 				dataType: 'html',
 				beforeSend: function () {
 				$('#company1').css('display','none');$('#company2').css('display','none');$('#company3').css('display','none');
 				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
-				success : function(response){						
+				success : function(response){
 					$('#personaldatadiv').css('display','block');
 					$('#personaldatadiv').html(response);
 					var complete_empwidth = $('.emp-screen-view').width();
@@ -2496,54 +2523,54 @@ function displayAgencyList()
 	var val = [];
 	$('input:checkbox[id^="checktype"]:checked').each(function(i){
 		val[i] = $(this).val();
-	});		
+	});
 	if(val == '')
 	{
-		$('.agency-selecters').css('display','none');		
-		$('.popup-agency-selecters').css('display','none');	
+		$('.agency-selecters').css('display','none');
+		$('.popup-agency-selecters').css('display','none');
 	}
 	else
 	{
 		$.ajax({
-		url: base_url+"/empscreening/getagencylist/format/html",   
-		type : 'POST',	
+		url: base_url+"/empscreening/getagencylist/format/html",
+		type : 'POST',
 		data : 'checktypeid='+val,
 		dataType: 'html',
 		beforeSend: function () {
 		$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
 		},
-		success : function(response){		
+		success : function(response){
 				if(response !='')
 				{
-					$('.agency-selecters').css('display','block');		
+					$('.agency-selecters').css('display','block');
 					$('.popup-agency-selecters').css('display','block');
 					 $('#chooseagency').css('display','block');
 					 $('#chooseagency').html(response);
-					
+
 					var complete_width = $('#chooseagency').width();
 					$('#agencyDataDiv').css("width", "230");
-					$('#pocdataDiv').css("width", (complete_width-(273)));	
+					$('#pocdataDiv').css("width", (complete_width-(273)));
 				}
 				else
 				{
-					$('.agency-selecters').html('');		
-					$('.popup-agency-selecters').css('display','none');		
-					$('#chooseagency').html('');				
+					$('.agency-selecters').html('');
+					$('.popup-agency-selecters').css('display','none');
+					$('#chooseagency').html('');
 					$('#agencyDataDiv').html('');
-					$('#pocdataDiv').html('');				
+					$('#pocdataDiv').html('');
 				}
 			}
 		});
 	}
-	
+
 }
 
 function getPOCData(id,divnum)
-{			
+{
 	id = id.value;
 	$.ajax({
-		url: base_url+"/empscreening/getpocdata/format/html",   
-		type : 'POST',	
+		url: base_url+"/empscreening/getpocdata/format/html",
+		type : 'POST',
 		data : 'agencyid='+id,
 		dataType: 'html',
 		beforeSend: function () {
@@ -2574,20 +2601,20 @@ function validateleavingdate(ele)
    }
    var datejoinval = $('#date_of_joining').val();
    var dateleaveval = $('#date_of_leaving').val();
-    
+
     $.post(base_url+"/index/fromdatetodate",{from_val:datejoinval,to_val:dateleaveval},function(data){
         if(data.result == 'no')
         {
             $("#errors-date_of_leaving").show();
-            $("#errors-date_of_leaving").html("Date of leaving should be greater than date of joining."); 
+            $("#errors-date_of_leaving").html("Date of leaving should be greater than date of joining.");
          }
         else
         {
         	 $('#errors-date_of_joiningg').html('');
         }
-        
-       
-    },'json');	
+
+
+    },'json');
 
 }
 function validatejoiningdate(ele)
@@ -2604,26 +2631,26 @@ function validatejoiningdate(ele)
         if(data.result == 'no')
         {
             $("#errors-date_of_joiningg").show();
-            $("#errors-date_of_joiningg").html("Date of joining should be less than date of leaving."); 
-           
+            $("#errors-date_of_joiningg").html("Date of joining should be less than date of leaving.");
+
         }
         else
         {
         	$("#errors-date_of_leaving").html('');
         }
-        
-    },'json');	
+
+    },'json');
    }
 
 }
 
 function from_to_date_validation(from_date_id,to_date_id,obj,message)
 {
-   var obj_id = $(obj).prop('id');	
+   var obj_id = $(obj).prop('id');
    var from_val = $('#'+from_date_id).val();
    var to_val = $('#'+to_date_id).val();
    $("#errors-"+obj_id).remove();
- 
+
     if(from_val != '' && to_val != '')
     {
         $.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val},function(data){
@@ -2633,7 +2660,7 @@ function from_to_date_validation(from_date_id,to_date_id,obj,message)
                     $('#'+obj_id).val('');
                 }
         },'json');
-        
+
     }
     else
     {
@@ -2643,16 +2670,16 @@ function from_to_date_validation(from_date_id,to_date_id,obj,message)
 
 function from_to_date_validation_org(from_date_id,to_date_id,obj,message)
 {
-   var obj_id = $(obj).prop('id');	 
-   
-   var from_val = $('#'+from_date_id).val();   
+   var obj_id = $(obj).prop('id');
+
+   var from_val = $('#'+from_date_id).val();
    var to_val = $('#'+to_date_id).val();
    $("#errors-"+obj_id).remove();
-   
+
    if(to_date_id == 'date_of_joining_head')
    {
-		var from_val = window.parent.$('#'+from_date_id).val();		
-   }  
+		var from_val = window.parent.$('#'+from_date_id).val();
+   }
     if(from_val != '' && to_val != '')
     {
     	 $("#org_startdate").before("<div id='loader'></div>");
@@ -2679,7 +2706,7 @@ function from_to_date_validation_org(from_date_id,to_date_id,obj,message)
 }
 function chk_future_date(obj,msg)
 {
-    var obj_id = $(obj).prop('id');	
+    var obj_id = $(obj).prop('id');
     $("#errors-"+obj_id).remove();
     var from_val = $("#"+obj_id).val();
 	var to_val = '';
@@ -2692,7 +2719,7 @@ function chk_future_date(obj,msg)
 				$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>"+msg+"</span>");
 			}
 		},'json');
-        
+
     }
 	else
 	{
@@ -2701,7 +2728,7 @@ function chk_future_date(obj,msg)
 }
 function hidetodatecalender()
 {
-	
+
     if($("#fromdateerrorspan").is(":visible"))
       $("#fromdateerrorspan").hide();
 	if($("#errors-from_date").is(":visible"))
@@ -2724,8 +2751,8 @@ function hidetodatecalender()
 	else if(dayselected == 2)
 	{
 			$.ajax({
-					url: base_url+"/leaverequest/gethalfdaydetails/format/json",   
-					type : 'POST',	
+					url: base_url+"/leaverequest/gethalfdaydetails/format/json",
+					type : 'POST',
 					dataType: 'json',
 					success : function(response){
 							if(response['result'] == 1)
@@ -2749,7 +2776,60 @@ function hidetodatecalender()
 							}
 					}
 				});
-	}			
+	}
+
+}
+function hidetodatecalenderoncall()
+{
+
+    if($("#fromdateerrorspan").is(":visible"))
+      $("#fromdateerrorspan").hide();
+	if($("#errors-from_date").is(":visible"))
+      $("#errors-from_date").hide();
+	if($("#errors-to_date").is(":visible"))
+	  $("#errors-to_date").hide();
+	if($("#todateerrorspan").is(":visible"))
+      $("#todateerrorspan").hide();
+
+    var dayselected =  $('#oncallday :selected').val();
+    var todate = $('#to_date').val();
+    var fromdate = $('#from_date').val();
+    if(dayselected == 1)
+	{
+	    $("#todatediv").show();
+		$('#to_date').val(fromdate);
+		$('#from_date').val(fromdate);
+		$("#appliedoncallsdaycount").val('1');
+	}
+	else if(dayselected == 2)
+	{
+			$.ajax({
+					url: base_url+"/oncallrequest/gethalfdaydetails/format/json",
+					type : 'POST',
+					dataType: 'json',
+					success : function(response){
+							if(response['result'] == 1)
+							{
+							    $("#todatediv").hide();
+								$('#to_date').val('');
+								$('#from_date').val(fromdate);
+								$("#appliedoncallsdaycount").val('0.5');
+							}
+							else if(response['result'] == 2)
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+							else if($.trim(response['result']) == 'error')
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+					}
+				});
+	}
 
 }
 
@@ -2777,20 +2857,20 @@ function emptytodate(ele)
 	if(fromdate <= y )
 	{
 	  if(dayselected == 1)
-	    {  
-	      validateselecteddate(ele);  
+	    {
+	      validateselecteddate(ele);
 		}
 	  else if(dayselected == 2)
 	    {
-		  if(fromdateval !='') 
+		  if(fromdateval !='')
 		    $("#appliedleavesdaycount").val(0.5);
 		  else
-	        $("#appliedleavesdaycount").val('');	  
+	        $("#appliedleavesdaycount").val('');
 	    }
 	}
 	else
 	{
-	
+
 		if(fromdate > y)
 		{
 			$("#"+selector).val('');
@@ -2805,7 +2885,62 @@ function emptytodate(ele)
 		} */
 		
 	}
-	
+
+}
+
+function emptytodateoncall(ele)
+{
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  var todateval = $('#to_date').val();
+  var selector = $(ele).prop('id');
+  var date1 = new Date(fromdateval);
+ // var date2 = new Date(todateval);
+ 
+	if(date1 != '')
+	{
+		var fromdate = date1.getFullYear();
+	}
+	/* if(date2 != '')
+	{
+		var todate = date2.getFullYear();
+	} */
+ 
+  var date = new Date();
+  var y = date.getFullYear();
+ 
+	if(fromdate <= y )
+	{
+	  if(dayselected == 1)
+	    {
+	      validateselecteddateoncall(ele);
+		}
+	  else if(dayselected == 2)
+	    {
+		  if(fromdateval !='')
+		    $("#appliedoncallsdaycount").val(0.5);
+		  else
+	        $("#appliedoncallsdaycount").val('');
+	    }
+	}
+	else
+	{
+
+		if(fromdate > y)
+		{
+			$("#"+selector).val('');
+			 $('#errors-from_date').remove();
+			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+		}
+		/* if(todate > y)
+		{
+			$("#"+selector).val('');
+			$('#errors-to_date').remove();
+			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+		} */
+		
+	}
+
 }
 
 function validateselecteddate(ele)
@@ -2813,7 +2948,7 @@ function validateselecteddate(ele)
   if($("#todateerrorspan").is(":visible"))
      $("#todateerrorspan").hide();
   var leavetypeselectedval =  $('#leavetypeid :selected').val();
-  var leavetypeselectedstr = leavetypeselectedval.split('!@#'); 
+  var leavetypeselectedstr = leavetypeselectedval.split('!@#');
   var leavetypeid = leavetypeselectedstr[0];
   var leavetypelimit = leavetypeselectedstr[1];
   var leavetypetext = leavetypeselectedstr[2];
@@ -2828,15 +2963,15 @@ function validateselecteddate(ele)
   var selector = $(ele).prop('id');
   if(selector == 'from_date')
      selectorid = 1;
-  else	 
+  else
      selectorid = 2;
-	
+
 	var fromdateArr = fromdateval.split("-");
 	var fromDate = Date.parse(new Date(fromdateArr[2], fromdateArr[0], fromdateArr[1]));
-	
+
 	var todateArr = todateval.split("-");
 	var toDate = Date.parse(new Date(todateArr[2], todateArr[0], todateArr[1]));
-	
+
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
 /* 	var date1 = $('#from_date').datepicker('getDate');
@@ -2858,10 +2993,10 @@ function validateselecteddate(ele)
 	
     if(fromdateval != '' && todateval != '' && leavetypeselectedval !='' && todate <= y )	
 	  {
-		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
+		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>");
 		$.ajax({
-					url: base_url+"/index/calculatebusinessdays/format/json",   
-					type : 'POST',	
+					url: base_url+"/index/calculatebusinessdays/format/json",
+					type : 'POST',
 					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&leavetypelimit='+leavetypelimit+'&leavetypetext='+leavetypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&leavetypeid='+leavetypeid,
 					dataType: 'json',
 					beforeSend: function ()
@@ -2869,7 +3004,7 @@ function validateselecteddate(ele)
 						$.blockUI({ width:'50px',message: $("#spinner").html() });
 					},
 					success : function(response){
-						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='')
 							{
 							  $("#appliedleavesdaycount").val(response['days']);
 							  $("#errors-"+selector).remove();
@@ -2878,7 +3013,7 @@ function validateselecteddate(ele)
 							  		if(response['days'] > 1)
 							  		{
 							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
-							  			
+
 							  		}
 							  		if(response['days'] > response['availableleaves'])
 									 jAlert("Applied leaves exceed the available leaves count. Additional leaves will be considered as Loss of Pay.");
@@ -2903,11 +3038,11 @@ function validateselecteddate(ele)
 		 if(selector=='from_date') {
 			  if($("#to_date").val()!='') {
 				$("#"+selector).val('');
-			  }	
+			  }
 		  }else{
 			  if($("#from_date").val()!='') {
 					$("#"+selector).val('');
-			  }		
+			  }
 		  }
 		  $("#appliedleavesdaycount").val('');
 		  if(leavetypeselectedval == '') {
@@ -2928,12 +3063,128 @@ function validateselecteddate(ele)
 	  }
 }
 
+function validateselecteddateoncall(ele)
+{
+  if($("#todateerrorspan").is(":visible"))
+     $("#todateerrorspan").hide();
+  var oncalltypeselectedval =  $('#oncalltypeid :selected').val();
+  var oncalltypeselectedstr = oncalltypeselectedval.split('!@#');
+  var oncalltypeid = oncalltypeselectedstr[0];
+  var oncalltypelimit = oncalltypeselectedstr[1];
+  var oncalltypetext = oncalltypeselectedstr[2];
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  var todateval = $('#to_date').val();
+  var weekend_startday = $('#wkstrtday').val();
+  var weekend_endday = $('#wkendday').val();
+  var ishalfday = $('#ishalfday').val();
+  var context = 1;
+  var selectorid = '';
+  var selector = $(ele).prop('id');
+  if(selector == 'from_date')
+     selectorid = 1;
+  else
+     selectorid = 2;
+
+	var fromdateArr = fromdateval.split("-");
+	var fromDate = Date.parse(new Date(fromdateArr[2], fromdateArr[0], fromdateArr[1]));
+
+	var todateArr = todateval.split("-");
+	var toDate = Date.parse(new Date(todateArr[2], todateArr[0], todateArr[1]));
+
+	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
+	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
+
+	var date1 = new Date(fromdateval);
+	var date2 = new Date(todateval);
+
+	  if(date1 != '' && date2 != '')
+	  {
+		  var fromdate = date1.getFullYear();
+		  var todate = date2.getFullYear();
+	  }
+
+	  var date = new Date();
+	  var y = date.getFullYear();
+
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='' && fromdate <= y && todate <= y )
+	  {
+		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>");
+		$.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",
+					type : 'POST',
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&oncalltypeid='+oncalltypeid,
+					dataType: 'json',
+					beforeSend: function ()
+					{
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='')
+							{
+							  $("#appliedoncallsdaycount").val(response['days']);
+							  $("#errors-"+selector).remove();
+							  	if(response['availableoncalls'] !='' && response['days'] !='')
+								{
+							  		if(response['days'] > 1)
+							  		{
+							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
+
+							  		}
+							  		if(response['days'] > response['availableoncalls'])
+									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
+								}
+							}
+							if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
+							{
+							    $("#errors-"+selector).show();
+								$("#errors-"+selector).html(response['message']);
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
+							if(response['result'] != 'error' && response['days'] == 0) {
+								$("#errors-"+selector).show();
+								$("#errors-"+selector).html('You cannot apply on call on Weekend/Holidays.');
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
+					}
+				});
+	  } else {
+		 if(selector=='from_date') {
+			  if($("#to_date").val()!='') {
+				$("#"+selector).val('');
+			  }
+		  }else{
+			  if($("#from_date").val()!='') {
+					$("#"+selector).val('');
+			  }
+		  }
+		  $("#appliedoncallsdaycount").val('');
+		  if(oncalltypeselectedval == '') {
+			  jAlert("Please select on call type.");
+		  }
+		  	if(fromdate > y)
+			{
+		  		$("#"+selector).val('');
+			  	$('#errors-from_date').remove();
+			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+			}
+			if(todate > y)
+			{
+				$("#"+selector).val('');
+				 $('#errors-to_date').remove();
+				 $('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+			}
+	  }
+}
+
 function calcBusinessDays(dDate1, dDate2,constantday,weekend_startday,weekend_endday) { // input given as Date objects
         var iWeeks, iDateDiff, iAdjust = 0;
-        if (dDate2 < dDate1) return -1; 
+        if (dDate2 < dDate1) return -1;
         var iWeekday1 = dDate1.getDay();
         var iWeekday2 = dDate2.getDay();
-		
+
         if ((iWeekday1 > constantday) && (iWeekday2 > constantday)) iAdjust = 1; // adjustment if both days on weekend
         iWeekday1 = (iWeekday1 > constantday) ? constantday : iWeekday1; // only count weekdays
         iWeekday2 = (iWeekday2 > constantday) ? constantday : iWeekday2;
@@ -2943,22 +3194,35 @@ function calcBusinessDays(dDate1, dDate2,constantday,weekend_startday,weekend_en
         } else {
           iDateDiff = ((iWeeks + 1) * constantday) - (iWeekday1 - iWeekday2);
         }
-        iDateDiff -= iAdjust; 
-        return (iDateDiff + 1); 
+        iDateDiff -= iAdjust;
+        return (iDateDiff + 1);
     }
-	
+
 function calculateBusinessDays(from_date,to_date)
 {
   $.ajax({
-					url: base_url+"/index/calculatebusinessdays/format/json",   
-					type : 'POST',	
+					url: base_url+"/index/calculatebusinessdays/format/json",
+					type : 'POST',
 					data : 'fromDate='+from_date+'&toDate='+to_date,
 					dataType: 'json',
 					success : function(response){
 							return response;
 					}
 				});
-}	
+}
+
+function calculateBusinessDaysoncall(from_date,to_date)
+{
+  $.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",
+					type : 'POST',
+					data : 'fromDate='+from_date+'&toDate='+to_date,
+					dataType: 'json',
+					success : function(response){
+							return response;
+					}
+				});
+}
 
 function saveExplanation()
 {
@@ -2978,14 +3242,14 @@ function saveExplanation()
 		}
 		if(i!=0) params += '&';
 		params += 'id'+i+'='+id+'&text'+i+'='+text;
-	}	
-	
+	}
+
 	params += '&count='+count+'&specimenId='+specId+'&empFlag='+flag;
 	if(params != '' && errorFlag != 'false')
 	{
 		$.ajax({
-					url: base_url+"/empscreening/forcedfullupdate/format/json",   
-					type : 'POST',	
+					url: base_url+"/empscreening/forcedfullupdate/format/json",
+					type : 'POST',
 					data : params,
 					dataType: 'json',
 					beforeSend: function () {
@@ -2993,18 +3257,18 @@ function saveExplanation()
 						},
 					success : function(response){
 							if(response['result'] == 'saved')
-							{	
+							{
 								$.unblockUI();
 								$('#error_message_force').html('<div class="ml-alert-1-success"><div class="style-1-icon success"></div>Screening Details updated successfully.</div>');
-								$('#error_message_force').css('display','block');															
+								$('#error_message_force').css('display','block');
 							    setTimeout(function(){
-									window.parent.$('#inprocessContainer').dialog('close');		
+									window.parent.$('#inprocessContainer').dialog('close');
 									window.parent.location.href = base_url+'/empscreening/edit/id/'+specId+'-'+flag;
-								},2000);								
+								},2000);
 							}
 					}
 				});
-		
+
 	}else {
 		return false;
 	}
@@ -3016,21 +3280,21 @@ function savecommentData()
 	var detail_id = $('#commentrecord').val();
 	var agency_id = $('#agencyrecord').val();
 	var hr_id = $('#createduserRecord').val();
-		
+
 	if(comment != '' && comment != 'undefined')
-	{		
+	{
 		$('#cmnterrmsg').html('');
 		var data;
 		data = 'comment='+comment+'&detailid='+detail_id+'&agency_id='+agency_id+'&hr_id='+hr_id;
-		
+
 			$.ajax({
-				url: base_url+"/processes/savecomments/format/json",   
-				type : 'POST',	
+				url: base_url+"/processes/savecomments/format/json",
+				type : 'POST',
 				data : data,
 				dataType: 'json',
 				success : function(response){
 						if(response['result'] == 'saved')
-						{				
+						{
 							$('#respp').css('display','block');
 							$('#resppdiv').css('display','block');
 							$('#respp').html('Your comment is Posted successfully.');
@@ -3052,10 +3316,10 @@ function savecommentData()
 										$('#postcommentdiv').append('<div id="commenthidediv" style="display:none" class="commentsdiv"><span style="cursor:pointer;" onclick="hidecommentsarea();">Hide comments</span></div>');
 										hideshowcomments == '100';
 									}
-								}								
+								}
 								displaycomments(detail_id,'limit');
 							},1000);
-						}else if(response['result'] == 'error')	
+						}else if(response['result'] == 'error')
 						{
 							$('#commentData').focus();
 							$('#cmnterrmsg').html('Please enter comment.');
@@ -3073,14 +3337,14 @@ function savecommentData()
 }
 
 function displaycomments(detailId,con)
-{	
+{
 	if(con == 'all')
 	$('#commentopendiv').css('display','none');
 	if(detailId != '' && detailId != 'undefined')
 	{
 		$.ajax({
-			url: base_url+"/processes/displaycomments/format/html",   
-			type : 'POST',	
+			url: base_url+"/processes/displaycomments/format/html",
+			type : 'POST',
 			data : 'detailid='+detailId+'&dispFlag='+con+'&limcount='+hideshowcomments,
 			dataType: 'html',
 			success : function(response){
@@ -3107,7 +3371,7 @@ function displaycomments(detailId,con)
 
 function displayStatusdata(controllername)
 {
-var id;	
+var id;
  id = $("#statusid").val();
 
 	if(id)
@@ -3144,7 +3408,7 @@ function displaycommentsarea()
 }
 
 function hidecommentsarea()
-{	
+{
 	hideshowcomments = '2';
 	$('#commenthidediv').css('display','none');
 	$('#commentsArea').css('display','none');
@@ -3163,18 +3427,27 @@ function displayEmployeeDepartments(ele,eleId,con)
 	}
 	if(con == 'leavemanagement')
 	{
-	
+
 	  params += 'business_id='+id+'&con='+con;
 	}else
 	{
-	
+
+	  params += 'business_id='+id;
+	}
+	if(con == 'oncallmanagement')
+	{
+
+	  params += 'business_id='+id+'&con='+con;
+	}else
+	{
+
 	  params += 'business_id='+id;
 	}
 	if(id !='')
 	{
 		$.ajax({
-                url: base_url+"/index/getdepartments/format/html",   				
-				type : 'POST',	
+                url: base_url+"/index/getdepartments/format/html",
+				type : 'POST',
 				data : params,
 				dataType: 'html',
 				beforeSend: function () {
@@ -3253,12 +3526,12 @@ function displayEmployeeDepartments(ele,eleId,con)
 					}
 			});
 	}
-	
+
 
 }
 
 function displayReportingmanagers_emp(ele,eleId,role_id,empId)
-{    
+{
     var id = '';  var params = '';var Url='';var employeeId = '';var empRole='';
     $('#errors-'+eleId).remove();
     id = $('#'+ele).val();
@@ -3270,16 +3543,16 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
         {
             params="id="+id+"&empId="+employeeId;
         }
-    }		
+    }
     empRole = $("#"+role_id).val();
     if(empRole != "")
     {
-        var roleArr = empRole.split('_');   
+        var roleArr = empRole.split('_');
         if(roleArr.length > 0)
-        {	
+        {
             if(roleArr[1] != management_group && $("#"+ele).val()== "")
-            {	
-                Url="";					
+            {
+                Url="";
             }
             else
             {
@@ -3291,25 +3564,25 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
     }
     else
         Url= base_url+"/employee/getempreportingmanagers/format/html";
-	   
+
     $("#"+eleId).find('option').remove();
     $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
     $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
     if(Url != "" && empRole != "")
     {
         $.ajax({
-            url:Url,   				
-            type : 'POST',	
+            url:Url,
+            type : 'POST',
             data : params,
             dataType: 'html',
             beforeSend: function () {
                 $("#"+eleId).before("<div id='loader'></div>");
                 $("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
             },
-            success : function(response){							
+            success : function(response){
                 if($.trim(response) == 'nomanagers')
                 {
-                    $("#loader").remove();							
+                    $("#loader").remove();
                     $("#errors-"+eleId).show();
                     $("#"+eleId).parent().append('<span id="errors-'+eleId+'" class="errors">Managers are not added for the selected department.</span>');
                     $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
@@ -3317,21 +3590,21 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
 
                 }
                 else if(response != '' && response != 'null' && $.trim(response) != 'nomanagers')
-                {								
+                {
                     if($("#errors-"+eleId).is(':visible'))
                         $("#errors-"+eleId).hide();
                         $("#loader").remove();
-                    $("#"+eleId).html(response);  
+                    $("#"+eleId).html(response);
                 }
                 else
                 {
-                    $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");							 
+                    $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
                     $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
-                }						  	
+                }
             }
         });
     }
-    else 
+    else
     {
         $("#"+eleId).find('option').remove();
         $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
@@ -3345,14 +3618,14 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
         $('#errors-'+eleId).remove();
 	if(ele.selectedIndex != -1)
 	{
-		id = ele[ele.selectedIndex].value;	
+		id = ele[ele.selectedIndex].value;
 		params="id="+id;
-		
+
 	}
 	else
 	{
 		id = '';
-	}	
+	}
 	if(empId != "")
 	{
 		employeeId = $("#"+empId).val();
@@ -3373,10 +3646,10 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 			var roleArr = empRole.split('_');
 			var empGroup = $("#emp_group").val();
 			if(roleArr.length > 0)
-			{	
+			{
 				if(roleArr[1]== management_group && $("#department_id").val()== "")
-				{	
-					Url="";					
+				{
+					Url="";
 				}
 				else
 				{
@@ -3391,8 +3664,8 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 	if(id !='' && Url != "")
 	{
 		$.ajax({
-				url:Url,   				
-				type : 'POST',	
+				url:Url,
+				type : 'POST',
 				data : params,
 				dataType: 'html',
 				beforeSend: function () {
@@ -3400,13 +3673,13 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response)
-					{							
+					{
 				       if($.trim(response) == 'nomanagers')
 						{
 							$("#loader").remove();
 							if(con == "req")
-							{									
-								$("#"+eleId).parent().append('<span id="errors-reporting_id" class="errors">Managers are not added for the selected department.</span>');				
+							{
+								$("#"+eleId).parent().append('<span id="errors-reporting_id" class="errors">Managers are not added for the selected department.</span>');
 								$("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
 								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
 								$('#'+eleId).trigger('change');
@@ -3417,14 +3690,14 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 								$("#"+eleId).parent().append('<span id="errors-'+eleId+'" class="errors">Managers are not added for the selected department.</span>');
 								$("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
 								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
-							}							 
+							}
 						}
 				        else if(response != '' && response != 'null' && $.trim(response) != 'nomanagers')
 						  {
 								if(con == "req")
 								{
 									if($("#errors-"+eleId).is(':visible'))
-										$("#errors-"+eleId).hide();						
+										$("#errors-"+eleId).hide();
 									$('#'+eleId).trigger('change');
 									$('#s2id_'+eleId).find('span').html('Select a Reporting Manager');
 									$("#loader").remove();
@@ -3440,13 +3713,13 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 									{
 										if(roleArr.length >0)
 										{
-											if(roleArr[1]== management_group)	
+											if(roleArr[1]== management_group)
 											{
 												$('#s2id_reporting_manager').find('a.select2-choice').find('span').html('Super Admin');
 											}
 										}
 									}
-											
+
 								}
 						 }
 						else
@@ -3457,15 +3730,15 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 								$('#'+eleId).trigger('change');
 							}
 						}
-						  	
+
 					}
 
 				});
 	}
-	else 
+	else
 	{
 		if(con == "req")
-		{                
+		{
 			$("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
 			$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
 			$('#'+eleId).trigger('change');
@@ -3500,8 +3773,8 @@ function displayPositions(ele,eleId,con)
 	if(id !='')
 	{
 		$.ajax({
-	            url: base_url+"/index/getpositions/format/html",    				
-				type : 'POST',	
+	            url: base_url+"/index/getpositions/format/html",
+				type : 'POST',
 				data : params,
 				dataType: 'html',
 				beforeSend: function () {
@@ -3512,31 +3785,31 @@ function displayPositions(ele,eleId,con)
 				        if($.trim(response) == 'nopositions')
 						 {
 						    $("#loader").remove();
-						    $("#errors-"+eleId).show();					
-						    $("#errors-"+eleId).html("Positions are not configured for this job title.");
+						    $("#errors-"+eleId).show();
+						    $("#errors-"+eleId).html("Career Levels are not configured for this Career Track.");
 							$("#"+eleId).find('option').remove();
-	                        $("#"+eleId).prepend("<option value='' label='select position'>Select Position</option>");
-							$('#s2id_'+eleId).find('span').html('Select Position');		 
+	                        $("#"+eleId).prepend("<option value='' label='select career level'>Select Career Level</option>");
+							$('#s2id_'+eleId).find('span').html('Select Career Level');
 						 }
 				         if(response != '' && response != 'null' && $.trim(response) != 'nopositions')
 						  {
 						    if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
-							$('#s2id_'+eleId).find('span').html('Select Position');
+							$('#s2id_'+eleId).find('span').html('Select Career Level');
                             $("#loader").remove();
 							$("#"+eleId).html(response);
 						  }
-						  	
+
 						}
 			});
 	}
         else
         {
-            $('#'+eleId).find('option').remove();       
-            $('#'+eleId).html("<option value='' label='select position'>Select Position</option>");
-            $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select Position');
+            $('#'+eleId).find('option').remove();
+            $('#'+eleId).html("<option value='' label='select career level'>Select Career Level</option>");
+            $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select Career Level');
         }
-	
+
 
 }
 
@@ -3591,7 +3864,7 @@ function populateCurrentAddress(ele)
 		}
 		if(street_address !='' && country !='' && state !='' && city !='' && pincode !='')
 		{
-		  
+
 		  $.blockUI({ width:'50px',message: $("#spinner").html() });
 		  if($("#errors-address_flag").is(':visible'))
 		     $("#errors-address_flag").hide();
@@ -3602,15 +3875,15 @@ function populateCurrentAddress(ele)
 		   setTimeout(function(){
 			  displayParticularCity('',"","current_city",state);
 			},0100);
-		 
-		  $("#current_pincode").val(pincode); 
-		  
+
+		  $("#current_pincode").val(pincode);
+
 		}
 	}else
 	{
 	  if($("#errors-address_flag").is(':visible'))
 		$("#errors-address_flag").hide();
-		
+
 	  $("#current_streetaddress").val('');
 	  $("#current_country").val('');
 	  $('#s2id_current_country').find('span').html('Select Country');
@@ -3620,22 +3893,22 @@ function populateCurrentAddress(ele)
 	   $('#current_city').find('option').remove();
 	   $('#s2id_current_city').find('span').html('Select City');
 	   $('#current_city').val('');
-	   $("#current_pincode").val(''); 
+	   $("#current_pincode").val('');
 	}
 }
 
 function showformFields(id,dateFormatConst)
-{	
+{
 	var haserrorMsg="";
 	if(id != "")
 	{
 		var injuryType = $("#"+id).val();
 		if(injuryType == 1)
-		{	
+		{
 			$("#injuryName,#injurySeverity,#OtherdisabilityType,#disabilityType").css("display","none");
 			$("#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css("display","block");
 			$('#injuredDate label').html('Paternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
-		
+
 			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
 			$("#medicalinsurerName label").text('Medical Insurer');
 			$("#approvedLeaveslbl").show();
@@ -3646,12 +3919,12 @@ function showformFields(id,dateFormatConst)
 			fieldBlurvalidations(injuryType);
 			$("#hasInjury").css("display","block");
 			$("#formSubmit").css("display","block");
-			
+
 		}
 		else if(injuryType == 2)
 		{
 			$("#injuryName,#injurySeverity,#OtherdisabilityType,#disabilityType").css("display","none");
-			$("#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css("display","block");	
+			$("#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css("display","block");
 			$('#injuredDate label').html('Maternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
 			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
 			$("#medicalinsurerName label").text('Medical Insurer');
@@ -3665,7 +3938,7 @@ function showformFields(id,dateFormatConst)
 			$("#formSubmit").css("display","block");
 		}
 		else if(injuryType == 4)
-		{	
+		{
 			$("#injuryName,#injurySeverity,#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost,#injury_name").css("display","block");
 			$("#OtherdisabilityType,#disabilityType").css("display","none");
 			$('#injuryName label').html('Injury <img class="tooltip" title="Accepts spaces,hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
@@ -3673,7 +3946,7 @@ function showformFields(id,dateFormatConst)
 			$("#medicalinsurerName label").text('Medical Insurer');
 			$("#approvedLeaveslbl").show();
 			$("#medicalclaimslbl").html('Hospital & Medical Claim Details');
-			
+
 				$('#injury_name').bind('blur');
 				$('#injury_severity').bind('blur');
 				$('#empleave_from_date').bind('blur');
@@ -3686,12 +3959,12 @@ function showformFields(id,dateFormatConst)
 				$('#total_cost').bind('blur');
 				$('#disability_type').unbind('blur');
 				fieldBlurvalidations(injuryType);
-			
+
 			$("#hasInjury").css("display","block");
 			$("#formSubmit").css("display","block");
 		}
 		else
-		{	
+		{
 			$("#injurySeverity,#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css('display','none');
 			$("#disabilityType,#injuryName").css("display","block");
 			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
@@ -3720,7 +3993,7 @@ function showformFields(id,dateFormatConst)
 function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,conText)
 {
    var txt="";var new_to_val =""; var userId='';
-   var obj_id = $(obj).prop('id');	
+   var obj_id = $(obj).prop('id');
    var from_val = $('#'+from_date_id).val();
    var to_val = $('#'+to_date_id).val();
    if(to_date_id == 'leavebyemp_from_date')
@@ -3737,7 +4010,7 @@ function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,c
 	}
    var medicalclaimType = $("#type").val();
    if(medicalclaimType != "")
-   {	
+   {
 		switch(medicalclaimType)
 		{
 			case '1':	txt = "paternity";	break;
@@ -3747,11 +4020,11 @@ function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,c
 		}
    }
     $("#errors-"+obj_id).remove();
-	
+
 	if(from_val != '' && to_val != '')
     {
 		$.post(base_url+"/index/medicalclaimdates",{from_val:from_val,to_val:to_val,new_to_val:new_to_val,con:conText,claimtype:txt},function(data)
-		{	
+		{
 			if(data.result == 'no')
 			{
 				if(conText == 1)
@@ -3780,13 +4053,13 @@ function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,c
 					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Approved leave end date should be in between employee applied leave limit.</span>");
 				}
 				else if(conText == 5)
-				{	
+				{
 					$("#errors-"+from_date_id).remove();
 					$("#errors-"+to_date_id).remove();
 					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Date of joining should be greater than or equal to  "+txt +"  date and employee leave start date.</span>");
 				}
 				else if(conText == 2)
-				{	
+				{
 					$("#errors-"+from_date_id).remove();
 					$("#errors-"+to_date_id).remove();
 					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should greater than from date.</span>");
@@ -3801,23 +4074,23 @@ function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,c
 				  $("#empleave_days").val('');
 				}
 				if(conText == 2 || conText == 4)
-				{	
+				{
 					if(document.URL != "")
 					{
 						var url = document.URL;
 						var myarr = url.split("/");
 						 var unitId = myarr.indexOf("unitId");
-							if(unitId != -1)                        
+							if(unitId != -1)
 							{
 								//userId = url.match(/unitId\/(.*?)\//i)[1];
 								userId = myarr[unitId+1];
-							}	
+							}
 					}
-		
+
 					calcDays(from_date_id,to_date_id,obj,0,userId);
 				}
 			}
-		},'json');      
+		},'json');
     }
 	else
 	{
@@ -3837,22 +4110,22 @@ function fieldBlurvalidations(injury_typeVal)
 				$(this).parent().append("<span class='errors' id='errors-injury_name'>Please enter disability.</span>");
 			}
 			else
-			{	
+			{
 				$("#errors-injury_name").remove();
 			}
-		});  
+		});
 		$('#s2id_disability_type').on("blur",function()
-		{	
+		{
 			if($.trim($("#disability_type").val()) == '')
 			{
 				if($('#errors-disability_type').length)	$("#errors-disability_type").remove();
 				$(this).parent().append("<span class='errors' id='errors-disability_type'>Please select disability type.</span>");
 			}
 			else if($.trim($("#disability_type").val()) != '' && $.trim($("#disability_type").val()) == 'other impairments')
-			{	
+			{
 				$("#errors-disability_type").remove();
 				$('#other_disability_type').on("blur",function()
-				{	
+				{
 					if($("#other_disability_type").val() == "")
 					{
 						if($('#errors-other_disability_type').length)	$("#errors-other_disability_type").remove();
@@ -3868,7 +4141,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$("#errors-disability_type").remove();
 			}
-		}); 
+		});
 	}
 	else if(injury_typeVal == 4)
 	{
@@ -3879,7 +4152,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-injury_name'>Please enter injury .</span>");
 			}
-		});  
+		});
 		$('#injury_severity').on("blur",function()
 		{
 			if($('#errors-injury_severity').length)	$("#errors-injury_severity").remove();
@@ -3887,7 +4160,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-injury_severity'>Please select injury severity.</span>");
 			}
-		});  
+		});
 		$('#empleave_from_date').on("blur",function()
 		{
 			if($('#errors-empleave_from_date').length)	$("#errors-empleave_from_date").remove();
@@ -3899,7 +4172,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 			medicalclaimDates_validation('leavebyemp_from_date','empleave_from_date',this,'leavebyemp_to_date',3);
 			}
-		});  
+		});
 		$('#empleave_to_date').on("blur",function()
 		{
 			if($('#errors-empleave_to_date').length)	$("#errors-empleave_to_date").remove();
@@ -3911,7 +4184,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				medicalclaimDates_validation('empleave_from_date','empleave_to_date',this,'leavebyemp_to_date',4);
 			}
-		});  
+		});
 		$('#hospital_name').on("blur",function()
 		{
 			if($('#errors-hospital_name').length)	$("#errors-hospital_name").remove();
@@ -3919,7 +4192,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-hospital_name'>Please enter hospital name.</span>");
 			}
-		}); 
+		});
 		$('#hospital_addr').on("blur",function()
 		{
 			if($('#errors-hospital_addr').length)	$("#errors-hospital_addr").remove();
@@ -3927,7 +4200,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-hospital_addr'>Please enter hospital address.</span>");
 			}
-		}); 
+		});
 		$('#room_num').on("blur",function()
 		{
 			if($('#errors-room_num').length)	$("#errors-room_num").remove();
@@ -3935,7 +4208,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-room_num'>Please enter /ward number.</span>");
 			}
-		}); 
+		});
 		$('#gp_name').on("blur",function()
 		{
 			if($('#errors-gp_name').length)	$("#errors-gp_name").remove();
@@ -3943,7 +4216,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-gp_name'>Please enter concerned physician name.</span>");
 			}
-		}); 
+		});
 		$('#treatment_details').on("blur",function()
 		{
 			if($('#errors-treatment_details').length)	$("#errors-treatment_details").remove();
@@ -3951,7 +4224,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-treatment_details'>Please enter treatment details.</span>");
 			}
-		}); 
+		});
 		$('#total_cost').on("blur",function()
 		{
 			if($('#errors-total_cost').length)	$("#errors-total_cost").remove();
@@ -3959,10 +4232,10 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-total_cost'>Please enter total cost.</span>");
 			}
-		}); 
+		});
 	}
 	else if(injury_typeVal == 1 || injury_typeVal == 2)
-	{	
+	{
 		$('#empleave_from_date').on("blur",function()
 		{
 			if($('#errors-empleave_from_date').length)	$("#errors-empleave_from_date").remove();
@@ -3974,7 +4247,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				medicalclaimDates_validation('leavebyemp_from_date','empleave_from_date',this,'leavebyemp_to_date',3);
 			}
-		});  
+		});
 		$('#empleave_to_date').on("blur",function()
 		{
 			if($('#errors-empleave_to_date').length)	$("#errors-empleave_to_date").remove();
@@ -3986,7 +4259,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				medicalclaimDates_validation('empleave_from_date','empleave_to_date',this,'leavebyemp_to_date',4);
 			}
-		});  
+		});
 		$('#hospital_name').on("blur",function()
 		{
 			if($('#errors-hospital_name').length)	$("#errors-hospital_name").remove();
@@ -3994,7 +4267,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-hospital_name'>Please enter hospital name.</span>");
 			}
-		}); 
+		});
 		$('#hospital_addr').on("blur",function()
 		{
 			if($('#errors-hospital_addr').length)	$("#errors-hospital_addr").remove();
@@ -4002,7 +4275,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-hospital_addr'>Please enter hospital address.</span>");
 			}
-		}); 
+		});
 		$('#room_num').on("blur",function()
 		{
 			if($('#errors-room_num').length)	$("#errors-room_num").remove();
@@ -4010,7 +4283,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-room_num'>Please enter room number.</span>");
 			}
-		}); 
+		});
 		$('#gp_name').on("blur",function()
 		{
 			if($('#errors-gp_name').length)	$("#errors-gp_name").remove();
@@ -4018,7 +4291,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-gp_name'>Please enter concerned physician name.</span>");
 			}
-		}); 
+		});
 		$('#treatment_details').on("blur",function()
 		{
 			if($('#errors-treatment_details').length)	$("#errors-treatment_details").remove();
@@ -4026,7 +4299,7 @@ function fieldBlurvalidations(injury_typeVal)
 			{
 				$(this).parent().append("<span class='errors' id='errors-treatment_details'>Please enter treatment details.</span>");
 			}
-		}); 
+		});
 		$('#total_cost').on("blur",function()
 		{
 			if($('#errors-total_cost').length)	$("#errors-total_cost").remove();
@@ -4052,12 +4325,12 @@ function fieldBlurvalidations(injury_typeVal)
 		}
 	}
  }
- 
+
  function confirmadd()
  {
-	var status = $('#bgstatusvalue').val();	
-	if(status == 'Complete')	
-	{		
+	var status = $('#bgstatusvalue').val();
+	if(status == 'Complete')
+	{
 		jConfirm("You are trying to re-open the background check process for the employee/candidate. Please confirm", "Confirmation", function(r) {
 		if(r==true)
 		 {
@@ -4072,7 +4345,7 @@ function fieldBlurvalidations(injury_typeVal)
 		return true;
 	}
  }
- 
+
  function opencontactnumberpopup(id,flag)
  {
   $("#number_value").val('');
@@ -4082,32 +4355,32 @@ function fieldBlurvalidations(injury_typeVal)
   var number = $('#contactnospan').html();
   $("#number_value").bind("blur keyup",function(){
 	  validatecontactnumber($("#number_value").val());
-	});	
-	
+	});
+
   if(flag == 'edit')
   {
     title = "Update Contact Number";
 	$("#number_value").val(number);
-  }	
+  }
   else
   {
-    title = "Add Contact Number"; 
-  }	
+    title = "Add Contact Number";
+  }
 
    $("#dialog-confirm").dialog({
-       		draggable:false, 
+       		draggable:false,
 			resizable: false,
 		    width:252,
 			title: title,
-		    modal: true, 
+		    modal: true,
 			buttons: [{
                                 id:"btn-accept",
                                 text: "Ok",
                                 click: function() {
                                         result = validatenumber(id,flag);
 										if(result != 'false')
-										{ 
-											$(this).dialog("close");						
+										{
+											$(this).dialog("close");
 										}
                                 }
                         },{
@@ -4122,7 +4395,7 @@ function fieldBlurvalidations(injury_typeVal)
                         }]
 		    });
  }
- 
+
  function validatecontactnumber(val)
  {
    $("#errors-contactnumber").html('');
@@ -4131,17 +4404,19 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if(val == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
+	   $("#errors-contactnumber").html('Please enter contact number.');
 	}
-	else if(contactnumber.length > 12 || contactnumber.length <9 ) { 
+	 else if(contactnumber.length < 9) {
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-
 	}
-    else if(contactnumber == '000000000000') { 
+  	 else if(contactnumber.length > 15) {
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-	}	
+   }
+    else if(contactnumber == '000000000') {
+	   $("#errors-contactnumber").html('Please enter valid phone number.');
+	}
  }
- 
+
  function validatenumber(id,flag)
  {
   var contactnumber = $("#number_value").val();
@@ -4149,21 +4424,23 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if($("#number_value").val() == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
-	  msg = "false";
-	}
-	else if(contactnumber.length > 12 || contactnumber.length <9 ) { 
+	   $("#errors-contactnumber").html('Please enter contact number.');
+	   msg = "false";
+   }
+  	 else if(contactnumber.length < 9) {
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-	   msg = "false"; 
-	} 
-	else if(contactnumber == '000000000000') { 
+   }
+	 else if(contactnumber.length > 15) {
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-       msg = "false";
+   }
+	 else if(contactnumber == '000000000') {
+	   $("#errors-contactnumber").html('Please enter valid phone number.');
+      msg = "false";
 	}
-	else {
+	 else {
 	  $.ajax({
-				url: base_url+"/index/updatecontactnumber",   
-				type : 'POST',	
+				url: base_url+"/index/updatecontactnumber",
+				type : 'POST',
 				data : 'id='+id+'&contactnumber='+contactnumber,
 				dataType: 'json',
 				beforeSend: function () {
@@ -4171,46 +4448,46 @@ function fieldBlurvalidations(injury_typeVal)
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
-				             $("#loader").remove();	
+				             $("#loader").remove();
 							 $("#dialog-confirm").dialog("close");
 							 if(flag == 'edit')
 							 {
 							    $("#contactnospan").html(contactnumber);
-							 } 
+							 }
 							 else
-                             { 	
-                               html ='<span class="number-edit"><input type="button" value="Update" onclick="opencontactnumberpopup('+id+',\'edit\');"></span>';							 
+                             {
+                               html ='<span class="number-edit"><input type="button" value="Update" onclick="opencontactnumberpopup('+id+',\'edit\');"></span>';
 							   $("#contactnospan").html(contactnumber);
 							   $(".number-add").html(html);
-							 }  
+							 }
 							 $('#empdetailsmsgdiv').show();
 							 $('#successtext').html(response['message']);
 							 setTimeout(function(){
 							  $('#empdetailsmsgdiv').fadeOut('slow');
 							},3000);
                          }
-						
+
 			    });
 	     msg = "true";
-	} 
+	}
    return msg;
  }
 
-function calcDays(from_date_id, to_date_id,obj,conText,userId) 
-{ 	
+function calcDays(from_date_id, to_date_id,obj,conText,userId)
+{
 	var obj_id = $(obj).prop('id');
 	var from_val = $('#'+from_date_id).val();
 	var to_val ='';	var Url="";
-   if(conText == 1)	
-   {	
+   if(conText == 1)
+   {
 	Url=base_url+"/index/calculatedays/format/json";
    }
    else
-   {	
+   {
 		to_val = $('#'+to_date_id).val();
-		Url=base_url+"/index/calculatebusinessdays/format/json";		
+		Url=base_url+"/index/calculatebusinessdays/format/json";
 	}
- 
+
    $("#errors-"+obj_id).remove();
    if(from_val != '' && (to_val != '' || conText == 1))
     {
@@ -4233,29 +4510,29 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
 					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Date of birth should be less than current date</span>");
 				}
 				else
-				{	
+				{
 					$("#errors-"+obj_id).remove();
 					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
 				}
 				$('#'+obj_id).val('');
 			}
 			else if(data.result == 'yes')
-			{	
+			{
 				$.ajax({
-					url: Url,   
-					type : 'POST',	
+					url: Url,
+					type : 'POST',
 					dataType: 'json',
 					data : 'fromDate='+from_val+"&toDate="+to_val+"&conText="+conText+"&userId="+userId,
-					beforeSend: function () 
+					beforeSend: function ()
 					{
 						if(conText == 1)	$("#"+from_date_id).before("<div id='loader'></div>");
 						else				$("#"+to_date_id).before("<div id='loader'></div>");
-						
+
 						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 					},
 					success : function(response)
 					{
-						$("#loader").remove();	
+						$("#loader").remove();
 						if(from_date_id == "leavebyemp_from_date")
 							$("#leavebyemp_days").val(response);
 						else if(from_date_id == "empleave_from_date")
@@ -4263,13 +4540,90 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
 						else
 							$('#dependent_age').val(response);
 					}
-							
+
 				 });
-				
-				
+
+
 			}
 		},'json');
-        
+
+    }
+  }
+
+function calcDaysoncall(from_date_id, to_date_id,obj,conText,userId)
+{
+	var obj_id = $(obj).prop('id');
+	var from_val = $('#'+from_date_id).val();
+	var to_val ='';	var Url="";
+   if(conText == 1)
+   {
+	Url=base_url+"/index/calculatedaysoncall/format/json";
+   }
+   else
+   {
+		to_val = $('#'+to_date_id).val();
+		Url=base_url+"/index/calculatebusinessdays/format/json";
+	}
+
+   $("#errors-"+obj_id).remove();
+   if(from_val != '' && (to_val != '' || conText == 1))
+    {
+		$.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val,con:conText},function(data){
+			if(data.result == 'no')
+			{
+				if(obj_id=="to_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				else if(obj_id == "from_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>From date should be less than to date.</span>");
+				}
+				else if(obj_id == "dependent_dob")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Date of birth should be less than current date</span>");
+				}
+				else
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				$('#'+obj_id).val('');
+			}
+			else if(data.result == 'yes')
+			{
+				$.ajax({
+					url: Url,
+					type : 'POST',
+					dataType: 'json',
+					data : 'fromDate='+from_val+"&toDate="+to_val+"&conText="+conText+"&userId="+userId,
+					beforeSend: function ()
+					{
+						if(conText == 1)	$("#"+from_date_id).before("<div id='loader'></div>");
+						else				$("#"+to_date_id).before("<div id='loader'></div>");
+
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+					},
+					success : function(response)
+					{
+						$("#loader").remove();
+						if(from_date_id == "oncallbyemp_from_date")
+							$("#oncallbyemp_days").val(response);
+						else if(from_date_id == "emponcall_from_date")
+							$("#emponcall_days").val(response);
+						else
+							$('#dependent_age').val(response);
+					}
+
+				 });
+
+
+			}
+		},'json');
+
     }
   }
 
@@ -4277,19 +4631,19 @@ function displayempstatusmessage()
 {
  var empstatusval = $("#emp_status_id").val();
  var empstatustext = $("#emp_status_id option:selected").text();
- 
+
 	 if(empstatusval == 8 || empstatusval == 9 || empstatusval == 10)
 	 {
 	  $("#empstatusmessage").html("You are trying to change the employment status of this employee to "+empstatustext+". The employee will not be able to log into the system.");
 	    $("#empstatus-alert").dialog({
-       		draggable:false, 
+       		draggable:false,
 			resizable: false,
 		    width:252,
 			title: "Alert",
-		    modal: true, 
+		    modal: true,
 		    buttons : {
 		        "Ok" : function() {
-				$(this).dialog("close");								
+				$(this).dialog("close");
 		        }
 		      }
 		    });
@@ -4297,12 +4651,12 @@ function displayempstatusmessage()
 }
 
 function gobacktocontroller(context)
-{ 
+{
 if(context == 'view' || context == 'edit')
   window.location.href = base_url+'/employee';
 else if(context == 'myemployees' || context == 'myemployeesedit')
  window.location.href = base_url+'/myemployees';
- else 
+ else
  window.location.href = base_url+'/mydetails/edit';
 }
 
@@ -4314,15 +4668,15 @@ function showleavealert(leavetransfercount,prevyear)
 	 {
 	   $("#empleavesmessage").html(leavetransfercount+" leaves will be transfered to the employee from the year "+prevyear);
 	    $("#empleaves-alert").dialog({
-       		draggable:false, 
+       		draggable:false,
 			resizable: false,
 		    width:252,
 			title: "Transfer of Leaves",
-		    modal: true, 
+		    modal: true,
 		    buttons : {
 		        "Ok" : function() {
 				document.getElementById("formid").submit();
-				$(this).dialog("close");								
+				$(this).dialog("close");
 		        },
 				"Cancel" : function() {
 		        	$(this).dialog("close");
@@ -4332,8 +4686,38 @@ function showleavealert(leavetransfercount,prevyear)
 	 }
    }else
    {
-    document.getElementById("formid").submit(); 
-   }   
+    document.getElementById("formid").submit();
+   }
+}
+
+function showoncallalert(oncalltransfercount,prevyear)
+{
+  if($("#emp_oncall_limit").val() !='')
+    {
+	 if(oncalltransfercount !='' && prevyear !='')
+	 {
+	   $("#emponcallsmessage").html(oncalltransfercount+" on call will be transfered to the employee from the year "+prevyear);
+	    $("#emponcalls-alert").dialog({
+       		draggable:false,
+			resizable: false,
+		    width:252,
+			title: "Transfer of On Call",
+		    modal: true,
+		    buttons : {
+		        "Ok" : function() {
+				document.getElementById("formid").submit();
+				$(this).dialog("close");
+		        },
+				"Cancel" : function() {
+		        	$(this).dialog("close");
+		        }
+		      }
+		    });
+	 }
+   }else
+   {
+    document.getElementById("formid").submit();
+   }
 }
 
 function makeActiveInactive_1(status,emp_id)
@@ -4346,9 +4730,9 @@ function makeActiveInactive_1(status,emp_id)
 	   else if(emp_id == 3)
          empstatus = 'Left';
        else if(emp_id == 4)
-         empstatus = 'Suspended';		 
+         empstatus = 'Suspended';
 	   jAlert('You cannot activate / inactivate an employee when the employement status is '+empstatus+'', 'Alert');
-	   
+
 	}
 	else
 	{
@@ -4359,7 +4743,7 @@ function makeActiveInactive_1(status,emp_id)
 				mstatus = 'activate this employee';
 			jConfirm("Are you sure you want to "+mstatus+'?', 'Confirmation', function(r) {
 				if(r==true)
-				{  
+				{
 					$.post(base_url+"/default/employee/makeactiveinactive",{emp_id:emp_id,status:status},function(data){
 						if(data.result == 'yes')
 						{
@@ -4375,7 +4759,7 @@ function makeActiveInactive_1(status,emp_id)
 									makeActiveInactive("inactive",emp_id);
 								}));
 							}
-							else 
+							else
 							{
 								var parent = $('.cb-disable').parents('.switch');
 								$('.cb-enable',parent).removeClass('selected');
@@ -4406,8 +4790,8 @@ function makeActiveInactive(status,emp_id)
 	   else if(emp_id == 3)
          empstatus = 'Left';
        else if(emp_id == 4)
-         empstatus = 'Suspended';		 
-	   jAlert('You cannot activate / inactivate an employee when the employement status is '+empstatus+'', 'Alert');  
+         empstatus = 'Suspended';
+	   jAlert('You cannot activate / inactivate an employee when the employement status is '+empstatus+'', 'Alert');
 	}
 	else
 	{
@@ -4417,7 +4801,7 @@ function makeActiveInactive(status,emp_id)
 				mstatus = 'activate this employee';
 				jConfirm("Are you sure you want to "+mstatus+'?', 'Confirmation', function(r) {
 				if(r==true)
-				{		
+				{
 					var hasteam = $('#hasteam').val();
 					if(hasteam == 'true' && status == 'inactive')
 					{
@@ -4442,8 +4826,8 @@ function makeActiveInactive(status,emp_id)
 										makeActiveInactive("inactive",emp_id);
 									}));
 								}
-								else 
-								{   
+								else
+								{
 									var parent = $('.cb-disable').parents('.switch');
 									$('.cb-enable',parent).removeClass('selected');
 									$('.cb-disable').addClass('selected');
@@ -4469,9 +4853,9 @@ function profileImageSave(){
 	var profile_photo = $('#uploadimagepath').val();
 	var user_id = $('#userid').val();
 	 $.ajax({
-		url: base_url+'/dashboard/update',  
+		url: base_url+'/dashboard/update',
 		async:false,
-		data:'user_id='+user_id+'&profile_photo='+profile_photo,			
+		data:'user_id='+user_id+'&profile_photo='+profile_photo,
 		type : 'POST',
 		dataType: 'json',
 		beforeSend: function () {
@@ -4483,9 +4867,9 @@ function profileImageSave(){
 					$("#loaderimg").hide();
 					$("#profile_img").attr('src', domain_data +'public/uploads/profile/' + $("#uploadimagepath").val());
 					successmessage('Your profile image updated.');
-            }		
+            }
 		}
-	},'json'); 
+	},'json');
 }
 
 function empprofileImageSave(id){
@@ -4495,9 +4879,9 @@ function empprofileImageSave(id){
 	var user_id = id;
 
 	 $.ajax({
-		url: base_url+'/dashboard/employeeimageupdate',  
+		url: base_url+'/dashboard/employeeimageupdate',
 		async:false,
-		data:'user_id='+user_id+'&profile_image='+profile_image,			
+		data:'user_id='+user_id+'&profile_image='+profile_image,
 		type : 'POST',
 		dataType: 'json',
 		beforeSend: function () {
@@ -4506,7 +4890,7 @@ function empprofileImageSave(id){
 		success : function(response){
 			if(response == 'update'){
 				$("#loaderimgprofileedit").hide();
-						
+
 			 $(".employee-pic-emp img").attr("src",  domain_data +'public/uploads/profile/' + profile_image);
 
 			 $('#empdetailsmsgdiv').show();
@@ -4514,11 +4898,11 @@ function empprofileImageSave(id){
 				 setTimeout(function(){
 				  $('#empdetailsmsgdiv').fadeOut('slow');
 				},3000);
-			
-			
-            }		
+
+
+            }
 		}
-	},'json'); 
+	},'json');
 }
 
 function validatecost()
@@ -4538,7 +4922,7 @@ function validatecost()
      {
 	    $('#amount_claimed').after("<span class='errors' id='errors-amountvalidation'>Amount claimed cannot be more than total cost.</span>");
         return false;
-     }	 
+     }
 }
 
 function displayotherdocumentdiv(ele)
@@ -4550,7 +4934,7 @@ function displayotherdocumentdiv(ele)
 	}else
 	{
 	  $('#otherdocument').val('');
-	  $('#otherdocumentdiv').hide(); 
+	  $('#otherdocumentdiv').hide();
 	}
 }
 
@@ -4559,20 +4943,20 @@ function createorremoveshortcut(menuid,shortcutflag)
     var actionvar = '';
     var html = '';
     if(shortcutflag == 1)
-        
+
         actionvar = 'pin to shortcuts';
     else if(shortcutflag == 2)
-        
+
         actionvar = 'unpin from shortcuts';
     else if(shortcutflag == 3)
-        
+
         actionvar = 'pin to shortcuts';
-  
-    if($("#errors-pageshortcut").is(":visible"))  
-    $("#errors-pageshortcut").hide();  
+
+    if($("#errors-pageshortcut").is(":visible"))
+    $("#errors-pageshortcut").hide();
     $.ajax({
-        url: base_url+"/index/createorremoveshortcut",   
-        type : 'POST',	
+        url: base_url+"/index/createorremoveshortcut",
+        type : 'POST',
         data : 'menuid='+menuid+'&shortcutflag='+shortcutflag,
         dataType: 'json',
         beforeSend: function () {
@@ -4580,11 +4964,11 @@ function createorremoveshortcut(menuid,shortcutflag)
             $("#loader-shortcut").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
         },
         success : function(response){
-            $("#loader-shortcut").remove(); 
+            $("#loader-shortcut").remove();
             if(response['result'] !='' )
             {
                 if(response['result'] !='error' && response['result'] !='inactive')
-                { 	
+                {
                     if($.trim(response['result']) == 'limit')
                     {
                         jConfirm("You have already added 16 shortcut icons.Please visit settings page to manage your shortcut icons", "Confirmation",function(r)
@@ -4600,39 +4984,39 @@ function createorremoveshortcut(menuid,shortcutflag)
                         });
                     }
                     else
-                    {									 
+                    {
                         if(shortcutflag == 1 || shortcutflag == 3)
                         {
-                            
+
                             html ="<div id='pageshortcut' class ='sprite remove-shortcut-icon' onclick='createorremoveshortcut("+menuid+",2)'>Unpin from shortcuts";
                             html +="</div>";
                         }
                         else if(shortcutflag == 2)
                         {
-                            
+
                             html ="<div id='pageshortcut' class ='sprite shortcut-icon' onclick='createorremoveshortcut("+menuid+",1)'>Pin to shortcuts";
-                            html +="</div>"; 
+                            html +="</div>";
                         }
                         $("#pageshortcutdiv").html(html);
                         location.reload();
                     }
-                } 
-    						
+                }
+
                 if(response['result'] =='error')
                 {
                     $('#pageshortcut').before("<span class='shortcuterrors' id='errors-pageshortcut'>You cannot "+actionvar+".</span>");
-                }								
+                }
                 if(response['result'] =='inactive')
                 {
                     $('#pageshortcut').before("<span class='shortcuterrors' id='errors-pageshortcut'>You cannot "+actionvar+".</span>");
                 }
-            }				             
+            }
         }
-						
+
     });
  }
- 
- 
+
+
  function validateorgstartdate(ele,con,bunitid)
  {
  var startdate = $(ele).val();
@@ -4642,21 +5026,21 @@ function createorremoveshortcut(menuid,shortcutflag)
  if($(".errors").is(":visible"))
 	$(".errors-"+ele.id).remove();
  if(startdate !='')
-    { 
+    {
         $.ajax({
-				url: base_url+"/organisationinfo/validateorgstartdate",   
-				type : 'POST',	
+				url: base_url+"/organisationinfo/validateorgstartdate",
+				type : 'POST',
 				data : 'startdate='+startdate+'&con='+con+'&bunitid='+bunitid,
 				dataType: 'json',
 				beforeSend: function () {
 				if(con == 'organisationinfo')
 				  $("#org_startdate").before("<div id='loader'></div>");
-				else 
+				else
 				  $("#start_date").before("<div id='loader'></div>");
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
-				           $("#loader").remove(); 
+				           $("#loader").remove();
 				           if(response['result'] =='error' && response['result'] !='')
 						    {
 							  if(con == 'organisationinfo')
@@ -4669,7 +5053,7 @@ function createorremoveshortcut(menuid,shortcutflag)
 							    if(bunitid !='')
 							     errormsg = "Business unit start date must be less than Department start date and greater than Organization start date.";
 								else
-                                 errormsg = "Business unit start date must be greater than Organization start date.";								
+                                 errormsg = "Business unit start date must be greater than Organization start date.";
 							    $("#start_date").parent().append('<span id="errors-start_date" class="errors">'+errormsg+'</span>' );
 								$("#start_date").val('');
                               }
@@ -4681,20 +5065,20 @@ function createorremoveshortcut(menuid,shortcutflag)
                                  errormsg = "Department start date must be greater than Organization start date.";
 							    $("#start_date").parent().append('<span id="errors-start_date" class="errors">'+errormsg+'</span>' );
 								$("#start_date").val('');
-                              } 							  
+                              }
 						    }else if(response['result'] =='success'){
 						    	if(con == 'organisationinfo')
 								{
 						    		$("#errors-org_startdate").remove();
 								}else if(con == 'departments' || con == 'businessunit'){
 									$("#errors-start_date").remove();
-								}     
-						    }             
+								}
+						    }
                          }
 				 });
-	}			
+	}
  }
- 
+
  function validateorgandunitstartdate(ele,con)
  {
  var startdate = $('#start_date').val();
@@ -4709,10 +5093,10 @@ function createorremoveshortcut(menuid,shortcutflag)
  if($(".errors").is(":visible"))
 	$(".errors").remove();
  if(startdate !='' && bunitid !='')
-    { 
+    {
         $.ajax({
-				url: base_url+"/organisationinfo/validateorgstartdate",   
-				type : 'POST',	
+				url: base_url+"/organisationinfo/validateorgstartdate",
+				type : 'POST',
 				data : 'startdate='+startdate+'&con='+con+'&bunitid='+bunitid,
 				dataType: 'json',
 				beforeSend: function () {
@@ -4720,40 +5104,40 @@ function createorremoveshortcut(menuid,shortcutflag)
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
-				           $("#loader").remove(); 
+				           $("#loader").remove();
 				           if(response['result'] =='error' && response['result'] !='')
 						    {
-							  
+
                               if(con == 'deptunit')
                               {
 							  	errormsg = "Department start date must be greater than Business unit and Organization start dates.";
 							    $("#start_date").parent().append('<span id="errors-start_date" class="errors">'+errormsg+'</span>' );
 								$("#start_date").val('');
-                              } 							  
+                              }
 						    }
-				             
-                         }			
+
+                         }
 			    });
-	}			
+	}
  }
 
 function modifylist(actionName,userid,level,parent)
-{	
+{
 	var buttons1;
 	if(actionName == 'add')
-	{		
+	{
 		var level = parseInt(level) + 1;
 		$.ajax({
-				url: base_url+"/heirarchy/addlist/format/html",				
+				url: base_url+"/heirarchy/addlist/format/html",
 				type : 'POST',
 				data : 'userid='+userid+'&level='+level+'&parent='+parent+'&actionName='+actionName,
 				dataType: 'html',
-				success : function(response){					
+				success : function(response){
 					if(response == 'nodata'){
-						response = '<div class="newframe-div hierarchypopup"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>No employees to add to the hierarchy.</div></div>';	
+						response = '<div class="newframe-div hierarchypopup"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>No employees to add to the hierarchy.</div></div>';
 						buttons1 = buttons1 = [{
                                 id:"dialogclose",
-                                text: "Close",								
+                                text: "Close",
                                 click: function() {
                                        $("#addlist").dialog('close');
                                 }
@@ -4763,7 +5147,7 @@ function modifylist(actionName,userid,level,parent)
 					{
 						buttons1 = [{
                                 id:"dialogadd",
-                                text: "Add",								
+                                text: "Add",
                                 click: function() {
                                         savehierarchylevel();
                                 }
@@ -4776,7 +5160,7 @@ function modifylist(actionName,userid,level,parent)
                                 }
                         }];
 					}
-					
+
 					$("#addlist").html(response);
 					$("#addlist").dialog({
 						resizable: false,
@@ -4785,11 +5169,11 @@ function modifylist(actionName,userid,level,parent)
 						title: 'Add - Hierarchy level '+level,
 						closeOnEscape: false,
 						buttons: buttons1
-					});						
+					});
 					$("#addlist").css('display','block');
 					$('#editdialogbox').slimscroll({	});
 				}
-			});		
+			});
 	}
 	else if(actionName == 'remove')
 	{
@@ -4799,22 +5183,22 @@ function modifylist(actionName,userid,level,parent)
 			{
 				var message = '';
 				$.ajax({
-						url: base_url+"/heirarchy/deletelist/format/json",				
+						url: base_url+"/heirarchy/deletelist/format/json",
 						type : 'POST',
 						data : 'userid='+userid+'&level='+level+'&parent='+parent,
 						dataType: 'json',
 						success : function(response){
 							if(response['result'] == 'updated')
-							{	
+							{
 								window.location = base_url+"/heirarchy/edit";
 							}else
-							{								
+							{
 								message = "Hierarchy is not updated successfully.";
 								$("#error_message").html('<div id="messageData" class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>'+message+'</div></div>');
 								setTimeout(function(){
 									$('#error_message').fadeOut('slow');
 								},3000);
-							}							
+							}
 						}
 					});
 			}else{
@@ -4826,16 +5210,16 @@ function modifylist(actionName,userid,level,parent)
 	{
 		buttons2 = '';
 		$.ajax({
-				url: base_url+"/heirarchy/editlist/format/html",				
+				url: base_url+"/heirarchy/editlist/format/html",
 				type : 'POST',
 				data : 'olduserid='+userid+'&level='+level+'&parent='+parent+'&actionName='+actionName,
 				dataType: 'html',
-				success : function(response){					
+				success : function(response){
 					if(response == 'nodata'){
-						response = '<div class="newframe-div hierarchypopup"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>No employees to update the hierarchy.</div></div>';	
+						response = '<div class="newframe-div hierarchypopup"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>No employees to update the hierarchy.</div></div>';
 						buttons2 = [{
 									id:"dialogclose",
-									text: "Close",								
+									text: "Close",
 									click: function() {
 										   $("#addlist").dialog('close');
 									}
@@ -4856,8 +5240,8 @@ function modifylist(actionName,userid,level,parent)
 									}
 							}];
 					}
-					
-					
+
+
 					$("#addlist").html(response);
 					$("#addlist").dialog({
 						resizable: false,
@@ -4866,7 +5250,7 @@ function modifylist(actionName,userid,level,parent)
 						title: 'Edit - Hierarchy level '+level,
 						closeOnEscape: false,
 						buttons: buttons2
-					});							
+					});
 					$("#addlist").css('display','block');
 				}
 		});
@@ -4875,7 +5259,7 @@ function modifylist(actionName,userid,level,parent)
 
 function savehierarchylevel()
 {
-	var level = $('#levelnumberval').val();	
+	var level = $('#levelnumberval').val();
 	var newuserid = $('#levelselect').val();
 	var actionName = $('#actiontype').val();
 	var options = $('#levelselect > option:selected');
@@ -4887,18 +5271,18 @@ function savehierarchylevel()
 	{
 		$('#levelselect-error').html('Please select employee.');
 		return false;
-	} 
-	else 
+	}
+	else
 	{
 		if(actionName == 'add')
 		{
-			var parent = $('#parentuserid').val();	
+			var parent = $('#parentuserid').val();
 			$.ajax({
-				url: base_url+"/heirarchy/saveadddata/format/json",				
+				url: base_url+"/heirarchy/saveadddata/format/json",
 				type : 'POST',
 				data : 'newuserid='+newuserid+'&level='+level+'&parent='+parent+'&actionName='+actionName,
 				dataType: 'json',
-				success : function(response){					
+				success : function(response){
 					if(response['result'] == 'saved')
 					{
 						window.location = base_url+"/heirarchy/edit";
@@ -4907,21 +5291,21 @@ function savehierarchylevel()
 					{
 						$('#levelselect-error').html('Please select employee.');
 						return false;
-					}					
+					}
 				}
-			});	
+			});
 		}
 		if(actionName == 'edit')
 		{
 			var olduserparent = $('#parentid').val();
 			var olduserid = $('#olduserid').val();
-			
+
 			$.ajax({
-				url: base_url+"/heirarchy/saveeditdata/format/json",				
+				url: base_url+"/heirarchy/saveeditdata/format/json",
 				type : 'POST',
 				data : 'newuserid='+newuserid+'&level='+level+'&actionName='+actionName+'&olduserid='+olduserid+'&olduserparent='+olduserparent, //'&parent='+parent+
 				dataType: 'json',
-				success : function(response){					
+				success : function(response){
 					if(response['result'] == 'updated')
 					{
 						window.location = base_url+"/heirarchy/edit";
@@ -4935,7 +5319,7 @@ function savehierarchylevel()
 						return false;
 					}
 				}
-			});	
+			});
 		}
 	}
 }
@@ -4954,17 +5338,17 @@ function displayHolidayDates(ele)
 	if(id)
 	{
 		$.ajax({
-			url: Url,   
+			url: Url,
 			type : 'POST',
 			data : 'groupid='+id+'&call=ajaxcall'+'&userid='+userid,
 			success : function(response){
-                            $('#grid_empholidays').show();			
-							$('#grid_empholidays').html(response);                                      
+                            $('#grid_empholidays').show();
+							$('#grid_empholidays').html(response);
 			}
 		});
 	}else
 	{
-	    $('#grid_empholidays').hide();	
+	    $('#grid_empholidays').hide();
 	}
 }
 
@@ -4993,13 +5377,37 @@ function downloadLeavesPdf(url, data){
 		                jAlert('Download of the report failed');
 		            }
 		        });
-		        return false; 
+		        return false;
 			}
-	});	
+	});
+}
+
+function downloadOncallsPdf(url, data){
+   $.blockUI({ width:'50px',message: $("#spinner").html() });
+     $.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: function(response) {
+				response = JSON.parse(response);
+				download_url = base_url + '/reports/downloadreport/file_name/' + response.file_name;
+			    var $preparingFileModal = $("#preparing-file-modal");
+		        $.fileDownload(download_url, {
+		            successCallback: function(url) {
+						$.unblockUI();
+		            },
+		            failCallback: function(responseHtml, url) {
+		            	$.unblockUI();
+		                jAlert('Download of the report failed');
+		            }
+		        });
+		        return false;
+			}
+	});
 }
 
 function downloadBUsPdf(url, formId)
-{	
+{
 	$.blockUI({ width:'50px',message: $("#spinner").html() });
     var data = $('#id_param_string').val();
 	if(data == '')
@@ -5021,9 +5429,9 @@ function downloadBUsPdf(url, formId)
 		                jAlert('Download of the report failed');
 		            }
 		        });
-		        return false; 
+		        return false;
 			}
-	});	
+	});
 }
 
 function downloadHolidaysPdf(url, data){
@@ -5045,9 +5453,9 @@ function downloadHolidaysPdf(url, data){
 		                jAlert('Download of the report failed');
 		            }
 		        });
-		        return false; 
+		        return false;
 			}
-	});	
+	});
 }
 
 function downloadLeaveManagementPdf(url, data){
@@ -5069,26 +5477,50 @@ function downloadLeaveManagementPdf(url, data){
 		                jAlert('Download of the report failed');
 		            }
 		        });
-		        return false; 
+		        return false;
 			}
-	});	
+	});
+}
+
+function downloadOncallManagementPdf(url, data){
+   $.blockUI({ width:'50px',message: $("#spinner").html() });
+     $.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: function(response) {
+				response = JSON.parse(response);
+				download_url = base_url + '/reports/downloadreport/file_name/' + response.file_name;
+			    var $preparingFileModal = $("#preparing-file-modal");
+		        $.fileDownload(download_url, {
+		            successCallback: function(url) {
+						$.unblockUI();
+		            },
+		            failCallback: function(responseHtml, url) {
+		            	$.unblockUI();
+		                jAlert('Download of the report failed');
+		            }
+		        });
+		        return false;
+			}
+	});
 }
 
 function getdeptData(id)
-{	
+{
 	url = base_url+"/businessunits/getdeptnames/format/html";
 	var myPos = [ $(window).width() / 5, 150 ];
-	$.ajax({		
+	$.ajax({
 		type: "POST",
 		url: url,
 		data: 'bunitid='+id,
 		dataType: 'html',
-		success: function(response) 
+		success: function(response)
 		{
 			$("#deptinfo").css('display','block');
 			$("#deptinfo").html(response);
 			$("#deptinfo").dialog({
-				open : function(){					
+				open : function(){
 					$('.ui-widget-overlay').addClass('ui-front-overwrite');
 					$('.ui-dialog').removeClass('ui-dialog-buttons');
 					$('.ui-dialog').removeClass('ui-front');
@@ -5096,28 +5528,28 @@ function getdeptData(id)
 				},
 				title: 'Departments List',
 				position: myPos,
-				modal: true, 
+				modal: true,
 				buttons : {
 					"Close" : function() {
-					$(this).dialog("close");								
+					$(this).dialog("close");
 					}
 				}
 			});
 		}
 	});
-			
+
 }
 
 function getempData(deptid)
 {
-	url = base_url+"/departments/getempnames/format/html";	
+	url = base_url+"/departments/getempnames/format/html";
 	var myPos = [ $(window).width() / 5, 150 ];
-	$.ajax({		
+	$.ajax({
 		type: "POST",
 		url: url,
 		data: 'deptid='+deptid,
 		dataType: 'html',
-		success: function(response) 
+		success: function(response)
 		{
 			$("#empinfo").css('display','block');
 			$("#empinfo").html(response);
@@ -5130,33 +5562,33 @@ function getempData(deptid)
 				},
 				title: 'Employees List',
 				position: myPos,
-				modal: true, 
+				modal: true,
 				buttons : {
 					"Close" : function() {
-					$(this).dialog("close");								
+					$(this).dialog("close");
 					}
 				}
 			});
 		}
 	});
-	
+
 }
 
 function getempholidaygroup(id,groupname)
-{	
+{
 	url = base_url+"/holidaygroups/getempnames/format/html";
 	var myPos = [ $(window).width() / 5, 150 ];
-	$.ajax({		
+	$.ajax({
 		type: "POST",
 		url: url,
 		data: 'groupid='+id,
 		dataType: 'html',
-		success: function(response) 
+		success: function(response)
 		{
 			$("#empnamesinfo").css('display','block');
 			$("#empnamesinfo").html(response);
 			$("#empnamesinfo").dialog({
-				open : function(){					
+				open : function(){
 					$('.ui-widget-overlay').addClass('ui-front-overwrite');
 					$('.ui-dialog').removeClass('ui-dialog-buttons');
 					$('.ui-dialog').removeClass('ui-front');
@@ -5164,33 +5596,33 @@ function getempholidaygroup(id,groupname)
 				},
 				title: 'Employees Name',
 				position: myPos,
-				modal: true, 
+				modal: true,
 				buttons : {
 					"Close" : function() {
-					$(this).dialog("close");								
+					$(this).dialog("close");
 					}
 				}
 			});
 		}
 	});
-			
+
 }
 
 function getholidaynames(id)
-{	
+{
 	url = base_url+"/holidaygroups/getholidaynames/format/html";
 	var myPos = [ $(window).width() / 5, 150 ];
-	$.ajax({		
+	$.ajax({
 		type: "POST",
 		url: url,
 		data: 'groupid='+id,
 		dataType: 'html',
-		success: function(response) 
+		success: function(response)
 		{
 			$("#holidaynamesinfo").css('display','block');
 			$("#holidaynamesinfo").html(response);
 			$("#holidaynamesinfo").dialog({
-				open : function(){					
+				open : function(){
 					$('.ui-widget-overlay').addClass('ui-front-overwrite');
 					$('.ui-dialog').removeClass('ui-dialog-buttons');
 					$('.ui-dialog').removeClass('ui-front');
@@ -5198,15 +5630,15 @@ function getholidaynames(id)
 				},
 				title: 'Holiday Names',
 				position: myPos,
-				modal: true, 
+				modal: true,
 				buttons : {
 					"Close" : function() {
-					$(this).dialog("close");								
+					$(this).dialog("close");
 					}
 				}
 			});
 		}
-	});	
+	});
 }
 
 function checkissuingauthority(ele)
@@ -5226,7 +5658,7 @@ function checkissuingauthority(ele)
 	$("#countrylabel").removeClass('required');
 	$("#statelabel").removeClass('required');
 	$("#citylabel").removeClass('required');
-	$("#issuingauthflag").val(""); 
+	$("#issuingauthflag").val("");
 	}
 	$("#errors-issuingauth_country").html("");
 	$("#errors-issuingauth_state").html("");
@@ -5235,13 +5667,13 @@ function checkissuingauthority(ele)
 	if(id)
 	{
 		$.ajax({
-			url: Url,   
+			url: Url,
 			type : 'POST',
 			data : 'doctypeid='+id,
 			dataType: 'json',
 			success : function(response){
 			    if(response['result'] !='')
-				{		
+				{
 			        if(response['result'] == 1)
 					{
 			        	$("#countrylabel").addClass('required');
@@ -5282,7 +5714,7 @@ function displaydates(ele)
 		}else{
 			statusvalue = '';
 		}
-		
+
 	 if(statusvalue == 1)
        {
 	      date_helper();
@@ -5293,21 +5725,21 @@ function displaydates(ele)
             $('#from_date,#to_date').val('');
 			$('#errors-from_date').remove();
 			$('#errors-to_date').remove();
-	   }  
+	   }
 }
 
 function changereportingmanager(empid,status,ishead)
 {
-	var rmanager = $('#reporting_managerId').val();	
+	var rmanager = $('#reporting_managerId').val();
 	Url = base_url+"/employee/changereportingmanager/format/json";
 	if(rmanager == '')
-	{		
+	{
 		$('#errors-reporting_manager').html('Please select reporting manager.');
 		return false;
 	}else{
 	$.blockUI({ width:'50px',message: $("#spinner").html() });
 		$.ajax({
-				url: Url,   
+				url: Url,
 				type : 'POST',
 				data : 'empid='+empid+'&newrmanager='+rmanager+'&status='+status+'&ishead='+ishead,
 				dataType: 'json',
@@ -5315,13 +5747,13 @@ function changereportingmanager(empid,status,ishead)
 					$.unblockUI();
 					$('#successmessagediv').css('display','block');
 					if(response['result']  ==	'success')
-					{		
+					{
 						$('#successmessagediv').html("<div class='ml-alert-1-success'><div class='style-1-icon success'></div>Employee is successfully made inactive.</div>");
 					}else{
 						$('#successmessagediv').html("<div class='ml-alert-1-error'><div class='style-1-icon error'></div>Sorry, employee cannot be made inactive.</div>");
 					}
-					
-					setTimeout(function(){				
+
+					setTimeout(function(){
 						closeiframepopup('employee','');
 					},1000);
 				}
@@ -5356,7 +5788,7 @@ function displayCountryCode(ele)
 		}
 	   else{
 			$.ajax({
-				url: base_url+"/countries/getcountrycode",   
+				url: base_url+"/countries/getcountrycode",
 				type : 'POST',
 				dataType: 'json',
 				data : 'coutryid='+id,
@@ -5373,7 +5805,7 @@ function displayCountryCode(ele)
 					 $('#countrycode').val('default');
 					  $('#othercountrydiv').hide();
 					  $("#citizenship").val("");
-					}		
+					}
 				}
 			});
 	   }
@@ -5389,37 +5821,37 @@ function displayOtherCurrency(ele)
 	}
 	   if(id == 'other')
 		{
-		 
+
 		  $('#othercurrencydiv').show();
 		  $('#othercurrencycodediv').show();
 		  $('#othercurrencyname').val('');
 		  $('#othercurrencycode').val('');
 		  $('#errors-othercurrencyname').hide();
 		  $('#errors-othercurrencycode').hide();
-		 
+
 		}
 	   else
 		   {
 		   $('#othercurrencydiv').hide();
 		   $('#othercurrencycodediv').hide();
-		  
+
 		   }
-	  
+
 }
 
 
 
-function validateCountry(tBox) { 
-    var curVal = tBox.value; 
+function validateCountry(tBox) {
+    var curVal = tBox.value;
 	if(curVal !='')
 	{
-	
+
 		var re = /^[^ ][a-z0-9 ]*$/i;
 		$('#errors-othercountry').remove();
 		if(!re.test(curVal))
 		{
-		
-		
+
+
 			$('#othercountry').parent().append("<span class='errors' id='errors-othercountry'>Please enter valid country name.</span>");
 		}
 		else
@@ -5429,7 +5861,7 @@ function validateCountry(tBox) {
     }else
     {
 	    $('#errors-othercountry').remove();
-    }  	
+    }
 }
 
 
@@ -5445,7 +5877,7 @@ function validate_otherdocument(ele)
         else
         {
             $('#errors-'+id).remove();
-        } 
+        }
     }
 
 function getdetailsoforghead(ele)
@@ -5458,9 +5890,9 @@ function getdetailsoforghead(ele)
 	}
 	if(id !='')
 	{
-		$.ajax({				
-                url: base_url+"/organisationinfo/getcompleteorgdata/format/json",    				
-				type : 'POST',	
+		$.ajax({
+                url: base_url+"/organisationinfo/getcompleteorgdata/format/json",
+				type : 'POST',
 				data : 'userid='+id,
 				dataType: 'json',
 				beforeSend: function () {
@@ -5469,25 +5901,25 @@ function getdetailsoforghead(ele)
 				},
 				success : function(response)
 				{
-					$("#loader").remove();	
+					$("#loader").remove();
 					var result = response['result'];
 					var positionsArr = response['positionsdata'];
-					var defOption = "<option value=''>Select Position</option>";		
-					$('#s2id_position_id .select2-choice span').html('Select Position');
+					var defOption = "<option value=''>Select Career Level</option>";
+					$('#s2id_position_id .select2-choice span').html('Select Career Level');
 					$("#position_id").find('option').remove();
 					$("#position_id").parent().find('.select2-container').find('.select2-search-choice').remove();
 					$("#position_id").html(defOption+positionsArr);
 					$('#rmdiv').css('display','block');
-					$('#rmflag').val('1');					
-					var oldRM  = $("#user_id").val();					
+					$('#rmflag').val('1');
+					var oldRM  = $("#user_id").val();
 					if(oldRM == id)
 					{
 						$('#rmdiv').css('display','none');
-						$('#rmflag').val('0');					
+						$('#rmflag').val('0');
 					}
 					$('#jobtitle_id').val(result['jobtitle_id']);
 					var jobtitle_idText = $("#jobtitle_id option[value='"+result['jobtitle_id']+"']").text();
-					$('#s2id_jobtitle_id').find('a.select2-choice').find('span').html(jobtitle_idText);					
+					$('#s2id_jobtitle_id').find('a.select2-choice').find('span').html(jobtitle_idText);
 					$('#employeeId').val(result['employeeId']);
 					$('#prefix_id').val(result['prefix_id']);
 					var prefixText = $("#prefix_id option[value='"+result['prefix_id']+"']").text();
@@ -5510,33 +5942,33 @@ function getdetailsoforghead(ele)
 
 /**
  * Populting Request reciever, CC reciever and service desk department based on business unit and department selection
- * Request reciever and CC reciever are populated for all groups except (User and Management). 
+ * Request reciever and CC reciever are populated for all groups except (User and Management).
  * Service desk departments are populated which are not there in main_sd_configuration table based on business unit and department selection.
  * This is done to avoid duplicate entries of service desk departments.
- * @param ele 
+ * @param ele
  */
 
 function displayemployees(ele)
 {
 	var elementid = '';
 	var id = '';
-	var dataparam = ''; 
+	var dataparam = '';
 	var bunitid = $("#businessunit_id").val();
 	var deptid = $("#department_id").val();
 
 	var reqfor=$('#request_for').val();
-	
+
 
 	// Removing HTML for multiselect and select dropdowns
 	$('#s2id_request_recievers .select2-search-choice').remove('');
 	$('#s2id_cc_mail_recievers .select2-search-choice').remove('');
 	$('#s2id_service_desk_id .select2-search-choice').remove('');
-	
+
 	$('#service_desk_id').html('');
 	$('#s2id_service_desk_id').find('span').html('Select Category');
 	$('#request_recievers').html('');
-	$('#cc_mail_recievers').html('');		
-	
+	$('#cc_mail_recievers').html('');
+
 	// Removing error divs.
 	$('#errors-service_desk_flag-0').remove();
 	$('#errors-department_id').remove();
@@ -5555,10 +5987,10 @@ function displayemployees(ele)
 			dataparam = 'elementid='+elementid+'&bunitid='+id+'&reqfor='+reqfor;
 			// Making implementation default to business unit wise
 			$('input[name="service_desk_flag"][value="1"]').prop('checked', true);
-			
+
 	}else if(elementid == 'department_id')
 	{
-		
+
 			if(ele.selectedIndex != -1){
 			 id = ele[ele.selectedIndex].value;
 			}else{
@@ -5569,25 +6001,25 @@ function displayemployees(ele)
 	{
 		dataparam = 'bunitid='+bunitid+'&deptid='+id+'&reqfor='+reqfor;
 	}
-	
+
 	if(dataparam!='')
 	{
 		$('#errors-request_recievers').remove();
 		$('#errors-cc_mail_recievers').remove();
 		$('#errors-service_desk_id').remove();
 		$.ajax({
-                url: base_url+"/servicedeskconf/getemployees/format/html",				
-				type : 'POST',	
+                url: base_url+"/servicedeskconf/getemployees/format/html",
+				type : 'POST',
 				data : dataparam,
 				dataType: 'html',
 				beforeSend: function () {
 					$.blockUI({ width:'50px',message: $("#spinner").html() });
 				},
-				success : function(response){	
+				success : function(response){
 					$.unblockUI();
 					var obj = $.parseJSON(response);
 					if(obj)
-					{	
+					{
 				        if($.trim(obj['employee']) == 'noemployees')
 						{
 					        	$('#request_recievers').parent().append("<span class='errors' id='errors-request_recievers'>No employees found.</span>");
@@ -5596,19 +6028,19 @@ function displayemployees(ele)
 				        if($.trim(obj['servicedesk']) == 'nodata')
 						{
 					        	$('#s2id_service_desk_id').parent().append("<span class='errors' id='errors-service_desk_id'>No categories found.</span>");
-		
+
                         }
                         if(obj['employee'] != '' && obj['employee'] != 'null' && $.trim(obj['employee']) != 'noemployees')
-						{ 	
+						{
                         		$('#request_recievers').html(obj['employee']);
                         		$('#cc_mail_recievers').html(obj['employee']);
-                        } 
+                        }
                         if(obj['servicedesk'] != '' && obj['servicedesk'] != 'null' && $.trim(obj['servicedesk']) != 'nodata')
-						{ 	
+						{
                         		$('#service_desk_id').html(obj['servicedesk']);
-                        } 
+                        }
                         if(obj['implement'] != '' && obj['implement'] != 'null' && elementid == 'businessunit_id')
-						{ 
+						{
                         	$('input[name="service_desk_flag"][value="' + obj['implement'] + '"]').prop('checked', true);
                         	if(obj['implement'] == 1)
                         		{
@@ -5620,19 +6052,19 @@ function displayemployees(ele)
                         		displayNormalDepartments("department_id");
                         		}
                         }
-                        
+
                         if($('input[name=service_desk_flag]:checked').val() == 1)
                     	{
                         	$('#department_id').html('');
                     		$('#s2id_department_id').find('span').html('Select Department');
                     		$("#s2id_department_id").parent().parent().addClass('hiddenclass');
                     	}
-                        
+
                         if($('input[name=service_desk_flag]:checked').val() == 0)
                     	{
                     		$("#s2id_department_id").parent().parent().removeClass('hiddenclass');
                     	}
-					}	
+					}
 				}
 			});
 	}
@@ -5650,7 +6082,7 @@ function displayemployees(ele)
 function changeimplementation(ele)
 {
 	var value = $(ele).val();
-	
+
 	$('#errors-service_desk_flag-0').remove();
 	if(value == 0 || value == 1)
 		{
@@ -5663,23 +6095,23 @@ function changeimplementation(ele)
 		    	    	  	$('#service_desk_flag-0').parent().parent().append("<span class='errors' id='errors-service_desk_flag-0'>Please select a business unit.</span>");
 		    	    	  	$('#service_desk_flag-0').removeAttr('checked');
 		    	    	  	$("#service_desk_flag-1").prop("checked", true);
-		    	    	  
+
 		    	    	  }
 		    	      else
 		    	    	  {
 
 		    	    	  	checkduplicateimplementation(2);
-		    	    		 
+
 		    	    	  }
 		    	  }
 		      else if(value == 1)
 		    	  {
 		    	//  $('#s2id_service_desk_id .select2-search-choice').remove('');
 		    	  checkduplicateimplementation(1);
- 	    		 
+
 		    	  }
 		}
-	
+
 }
 
 /**
@@ -5691,22 +6123,22 @@ function displayNormalDepartments(eleId)
 {
   var id;
   var params = '';
-	
-	  id= $("#businessunit_id").val();		
+
+	  id= $("#businessunit_id").val();
 	  params = 'business_id='+id;
-	
+
 	if(id !='')
 	{
 		$.ajax({
-                url: base_url+"/index/getdepartments/format/html",   				
-				type : 'POST',	
+                url: base_url+"/index/getdepartments/format/html",
+				type : 'POST',
 				data : params,
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
-				success : function(response){	
+				success : function(response){
 				        if($.trim(response) == 'nodepartments')
 						 {
 						    $("#loader").remove();
@@ -5714,7 +6146,7 @@ function displayNormalDepartments(eleId)
 							$("#errors-"+eleId).html("Departments are not added for this business unit.");
 							$("#"+eleId).find('option').remove();
 							$('#s2id_'+eleId).find('span').html('Select Department');
-	                        								 
+
 						 }
 				         if(response != '' && response != 'null' && $.trim(response) != 'nodepartments')
 						  {
@@ -5724,11 +6156,11 @@ function displayNormalDepartments(eleId)
                             $("#loader").remove();
 							$("#"+eleId).html(response);
 						  }
-						  	
+
 						}
 			});
 	}
-	
+
 
 }
 
@@ -5739,18 +6171,18 @@ var bunittext = $("#businessunit_id option:selected").text();
 var service_desk_flag = $('input[name=service_desk_flag]:checked').val();
 if(bunitid !='')
 	{
-		$.ajax({				
-	        url: base_url+"/servicedeskconf/getbunitimplementation/format/json",    				
-			type : 'POST',	
+		$.ajax({
+	        url: base_url+"/servicedeskconf/getbunitimplementation/format/json",
+			type : 'POST',
 			data : 'bunitid='+bunitid,
 			dataType: 'json',
 			beforeSend: function () {
-				
-				
+
+
 			},
 			success : function(response)
 			{
-				
+
 				if(response['count'] !='' && response['count'] > 0)
 				{
 					jAlert('Applicability cannot be changed as requests are in pending state for '+bunittext+' business unit.');
@@ -5765,18 +6197,18 @@ if(bunitid !='')
 		    	    	  	$("#service_desk_flag-1").prop("checked", true);
 						}
 					return false;
-				}	
+				}
 				else if(response['result'] !='')
-				{	
+				{
 					if(response['result'] != service_desk_flag)
 						{
 						  jAlert('You are trying to change the applicability. All the previous details will be inactivated.');
 						}
 				}
-				
+
 				if(flag == 1)
 					{
-						
+
 						displayemployees('implementation');
 					}
 				else if(flag == 2)
@@ -5784,15 +6216,15 @@ if(bunitid !='')
 						$('#department_id').html('');
 		    	  		$('#s2id_department_id').find('span').html('Select Department');
 		    	  		$('#department_id').parent().parent().find('label').removeClass('required');
-						$("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+						$("#s2id_department_id").parent().parent().removeClass('hiddenclass');
 						displayNormalDepartments("department_id");
 						$('#department_id').parent().parent().find('label').addClass('required');
 					}
-				
+
 			}
 		});
-	}	
-	
+	}
+
 }
 
 /**
@@ -5804,7 +6236,7 @@ function displayapprovingauthority(ele)
 {
 	var elementid = '';
 	var value = '';
-	var dataparam = ''; 
+	var dataparam = '';
 	var bunitid = $("#businessunit_id").val();
 	var deptid = $("#department_id").val();
 	var approvingauthority = $("#approvingauthority").val();
@@ -5813,7 +6245,7 @@ function displayapprovingauthority(ele)
 	var loader = '';
 	elementid = $(ele).attr('id');
 	if(elementid == 'approvingauthority')
-	{	
+	{
 				if(ele.selectedIndex != -1){
 					value = ele[ele.selectedIndex].value;
 				}else{
@@ -5851,16 +6283,16 @@ function displayapprovingauthority(ele)
 						$('#approver_1').html('');
 						$('#approver_2').html('');
 						$('#approver_3').html('');
-					
+
 					}
-					
-				dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+deptid; 
+
+				dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+deptid;
 				loader = 'approver_1';
 	}
 	else if(elementid == 'approver_1')
-		{	
+		{
 		     if($("#approvingauthority").val() != 1)
-		      {	 
+		      {
 				if(ele.selectedIndex != -1){
 					value = ele[ele.selectedIndex].value;
 				}else{
@@ -5883,33 +6315,33 @@ function displayapprovingauthority(ele)
 				}else{
 					value = '';
 				}
-				
+
 					$('#approver_3').html('');
 					$('#s2id_approver_3 .select2-choice span').html('Select Approver 3');
 				dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+deptid+'&approver_1='+approver_1+'&approver_2='+value;
-		      }	
+		      }
 			loader = 'approver_3';
 		}
-	
-	
-	
+
+
+
 		if(elementid!='' && dataparam!='' && value!='')
 		{
 			$('#errors-approver_1').remove();
 			$('#errors-approver_2').remove();
 			$('#errors-approver_3').remove();
 			$.ajax({
-	                url: base_url+"/servicedeskconf/getapprover/format/html",				
-					type : 'POST',	
+	                url: base_url+"/servicedeskconf/getapprover/format/html",
+					type : 'POST',
 					data : dataparam,
 					dataType: 'html',
 					beforeSend: function () {
-						
+
 						 $("#"+loader).before("<div id='loader'></div>");
 				         $("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 					},
-					success : function(response){	
-						
+					success : function(response){
+
 						$('#loader').remove();
 						if($.trim(response) == 'noemployees')
 						{
@@ -5921,7 +6353,7 @@ function displayapprovingauthority(ele)
 									$('#s2id_approver_3').parent().parent().append("<span class='errors' id='errors-approver_3'>No employees found.</span>");
                         }
                         if(response != '' && response != 'null' && $.trim(response) != 'noemployees')
-						{ 	
+						{
                         		if(elementid == 'approvingauthority')
                         			{
                         				$('#s2id_approver_1 .select2-choice span').html('Select Approver 1');
@@ -5932,22 +6364,22 @@ function displayapprovingauthority(ele)
                         				$("#approver_3").append("<option value='' label='Select Approver 3'>Select Approver 3</option>");
                         				$('#approver_1').html(response);
                         			}
-                        		else if(elementid == 'approver_1')	
+                        		else if(elementid == 'approver_1')
                         			{
                         				$('#s2id_approver_2 .select2-choice span').html('Select Approver 2');
                         				$('#s2id_approver_3 .select2-choice span').html('Select Approver 3');
                         				$('#approver_2').html(response);
-                        			}	
+                        			}
                         		else if(elementid == 'approver_2')
                         			{
                         				$('#s2id_approver_3 .select2-choice span').html('Select Approver 3');
                         				$('#approver_3').html(response);
                         			}
-                        }	
+                        }
 					}
 				});
 		}
-		
+
 }
 
 function addDiv()
@@ -5955,7 +6387,7 @@ function addDiv()
 	var divcount = $("#multi_dept_div > div").length;
 	var idcount = parseInt($('#idcount').val());
 	if(divcount < 5)
-	{	
+	{
 		idcount = idcount + 1;
 		var html = '';
 		html+="<div id='parent_"+idcount+"' class='add_request'>";
@@ -5969,7 +6401,7 @@ function addDiv()
 		html+="</div>";
 		html+="<div class='division'><span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv("+idcount+")'></span></div>";
 		html+="</div>";
-	
+
 		$('#multi_dept_div').append(html);
 		$('#idcount').val(idcount);
 		$("[id^=description]").maxlength();
@@ -5977,7 +6409,7 @@ function addDiv()
 	{
 		jAlert('You can add only 5 requests at a time.');
 	}
-	
+
 }
 
 function addAppQuestionDiv()
@@ -5985,7 +6417,7 @@ function addAppQuestionDiv()
 	var divcount = $("#multi_dept_div > div").length;
 	var idcount = parseInt($('#idcount').val());
 	if(divcount < 5)
-	{	
+	{
 		idcount = idcount + 1;
 		var html = '';
 		html+="<div id='parent_"+idcount+"' class='add_request'>";
@@ -5999,7 +6431,7 @@ function addAppQuestionDiv()
 		html+="</div>";
 		html+="<div class='division'><span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv("+idcount+")'></span></div>";
 		html+="</div>";
-	
+
 		$('#multi_dept_div').append(html);
 		$('#idcount').val(idcount);
 		$("[id^=description]").maxlength();
@@ -6007,7 +6439,7 @@ function addAppQuestionDiv()
 	{
 		jAlert('You can add only 5 questions at a time.');
 	}
-	
+
 }
 function validateQuestion(ele)
 {
@@ -6018,7 +6450,7 @@ function validateQuestion(ele)
 	if(reqValue == '')
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter question.</span>");
-	}		
+	}
 	else if(!re.test(reqValue))
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid question.</span>");
@@ -6043,7 +6475,7 @@ function validaterequestname(ele)
 	if(reqValue == '')
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter request type.</span>");
-	}		
+	}
 	else if(!re.test(reqValue))
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid request type.</span>");
@@ -6063,7 +6495,7 @@ function ff_validaterequestname(ele)
 	if(reqValue == '')
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter question.</span>");
-	}		
+	}
 	else if(!re.test(reqValue))
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid question.</span>");
@@ -6107,7 +6539,7 @@ function displayVendors(ele)
 		  $('.referalwebsitediv').show();
 		   $('.referaldiv').hide();
 	}
-	
+
 }
 // aprrove or reject requisition in grid itself
 function approvedrejectRequisition_grid($flag,$req_id)
@@ -6115,7 +6547,7 @@ function approvedrejectRequisition_grid($flag,$req_id)
 
 	$.ajax({
 	 	url: base_url+"/requisition/approverejectrequisition/format/json",
-	 	type : 'POST',	
+	 	type : 'POST',
 		data : 'flag='+$flag+'&req_id='+$req_id,
 		dataType: 'json',
 		beforeSend: function () {
@@ -6125,8 +6557,8 @@ function approvedrejectRequisition_grid($flag,$req_id)
 				$.unblockUI();
 			if(response.msg=="success")
 			{
-			
-				window.parent.$('#requisitionContainer').dialog("close"); 
+
+				window.parent.$('#requisitionContainer').dialog("close");
 				window.parent.$("#success").show();
 				if($flag==2)
 				{
@@ -6134,14 +6566,14 @@ function approvedrejectRequisition_grid($flag,$req_id)
 				}
 				else
 				{
-				  window.parent.$("#message").after("Requisition Rejected Successfully.");	
+				  window.parent.$("#message").after("Requisition Rejected Successfully.");
 				}
-				parent.location.href = parent.location.href; 
-				
+				parent.location.href = parent.location.href;
+
 			}
 		}
-	});	
-	
+	});
+
 }
 function approvedrejectRequisition($flag,$req_id)
 {
@@ -6150,13 +6582,13 @@ function approvedrejectRequisition($flag,$req_id)
 	   var mdgdta = 'Approve';
 	else
 		var mdgdta = 'Reject';
-	
+
 	var messageAlert = 'Are you sure you want to ' + mdgdta + ' this Requisition? ';
 	jConfirm(messageAlert,"Confirmation",function(r) {
 		if (r == true) {
 			$.ajax({
 	         	url: base_url+"/requisition/approverejectrequisition/format/json",
-	         	type : 'POST',	
+	         	type : 'POST',
 				data : 'flag='+$flag+'&req_id='+$req_id,
 				dataType: 'json',
 				beforeSend: function () {
@@ -6166,7 +6598,7 @@ function approvedrejectRequisition($flag,$req_id)
 					$.unblockUI();
 					if(response.msg=="success")
 					{
-					
+
 						if($flag==2)
 						{
 						   jAlert('Requisition Approved Successfully.');
@@ -6174,34 +6606,34 @@ function approvedrejectRequisition($flag,$req_id)
 						else
 						{
 							jAlert('Requisition Rejected Successfully.');
-						 
+
 						}
 						window.location.href =  base_url+"/requisition";
 					}
 				}
-	    	});	
+	    	});
 		}
 	});
 }
 
 function displaycategories(ele){
-	
+
 var req_val=$(ele).val();
 	var elementid = '';
 	var id = '';
-	var dataparam = ''; 
+	var dataparam = '';
 	var bunitid = $("#businessunit_id").val();
 	var deptid = $("#department_id").val();
 	var reqfor=$('#request_for').val();
-	
+
 	// Removing HTML for multiselect and select dropdowns
 	$('#s2id_request_recievers .select2-search-choice').remove('');
 	$('#s2id_cc_mail_recievers .select2-search-choice').remove('');
 	$('#service_desk_id').html('');
 	$('#s2id_service_desk_id').find('span').html('Select Category');
 	$('#request_recievers').html('');
-	$('#cc_mail_recievers').html('');		
-	
+	$('#cc_mail_recievers').html('');
+
 	// Removing error divs.
 	$('#errors-service_desk_flag-0').remove();
 	$('#errors-department_id').remove();
@@ -6219,10 +6651,10 @@ var req_val=$(ele).val();
 			dataparam = 'elementid='+elementid+'&bunitid='+id+'&reqfor='+reqfor;
 			// Making implementation default to business unit wise
 			$('input[name="service_desk_flag"][value="1"]').prop('checked', true);
-			
+
 	}else if(elementid == 'department_id')
 	{
-		
+
 			if(ele.selectedIndex != -1){
 			 id = ele[ele.selectedIndex].value;
 			}else{
@@ -6238,40 +6670,40 @@ var req_val=$(ele).val();
 		$('#errors-request_recievers').remove();
 		$('#errors-cc_mail_recievers').remove();
 		$('#errors-service_desk_id').remove();
-	
+
 	$.ajax({
-        url: base_url+"/servicedeskconf/getemployees/format/html",				
-		type : 'POST',	
+        url: base_url+"/servicedeskconf/getemployees/format/html",
+		type : 'POST',
 		data : dataparam,
 		dataType: 'html',
 		beforeSend: function () {
 			$.blockUI({ width:'50px',message: $("#spinner").html() });
 		},
-		success : function(response){	
+		success : function(response){
 			$.unblockUI();
 			var obj = $.parseJSON(response);
 			if(obj)
-			{	
-		     
+			{
+
 		        if($.trim(obj['servicedesk']) == 'nodata')
 				{
 			        	$('#s2id_service_desk_id').parent().append("<span class='errors' id='errors-service_desk_id'>No categories found.</span>");
 
                 }
-              
+
                 if(obj['servicedesk'] != '' && obj['servicedesk'] != 'null' && $.trim(obj['servicedesk']) != 'nodata')
-				{ 	
+				{
                 		$('#service_desk_id').html(obj['servicedesk']);
-                } 
-                
-			}	
+                }
+
+			}
 		}
 	});
-	
+
 	}
 
 
-	
+
 }
 function displayassets(ele){
 	var req_val=$(ele).val();
@@ -6279,7 +6711,7 @@ function displayassets(ele){
 		$('.catdiv').hide();
 		$('.reqdiv').hide();
 		$('.assetdiv').show();
-	Url = base_url + "/servicerequests/getuserassets/format/html";	
+	Url = base_url + "/servicerequests/getuserassets/format/html";
 	$.ajax({
 		url: Url,
 		type: 'POST',
@@ -6289,10 +6721,10 @@ function displayassets(ele){
 			$('#asset_id').html(response);
 			//$('.dropdown-button').dropdown();
 		}
-	});	
-		
-		
-		
+	});
+
+
+
 	}else{
 		$('.catdiv').show();
 		$('.reqdiv').show();
@@ -6308,7 +6740,7 @@ function getStates()
       $('#state_id').append(data.options);
        //$('#state_id').trigger("liszt:updated");
   },'json');
-  
+
 }
 
 //Hr module employee search
@@ -6329,16 +6761,16 @@ function employeessearch()
 	if(search_val != '' && ( search_str != '' || role_id != ''))
 	{
 		$.ajax({
-	        url: base_url+"/employee/getmoreemployees/format/html",   				
-			type : 'POST',	
+	        url: base_url+"/employee/getmoreemployees/format/html",
+			type : 'POST',
 			data : params,
 			dataType: 'html',
-			success : function(data){	
-			
+			success : function(data){
+
 				$("#more_employees").html(data);
-				
-				
-			        
+
+
+
 			}
 		});
 	}
@@ -6356,10 +6788,10 @@ function employeessearch()
 		{
 			 $("#role_id").parent().append("<span class='errors' id='errors-role_id'>select role.</span>");
 		}
-		
+
 	}
-	
-		
+
+
 }
 //clear search data
 function clearSearchData()
@@ -6398,17 +6830,17 @@ function getRolesList()
 	$("#search_str").val('');
 	$('#s2id_role_id').find('span').html('Select Role');
 	if(search_val=='')
-	{	
+	{
 		$('#search_div').css('display','none');
 		$('#role_div').css('display','none');
 	}
 	if(search_val=='emp_role')
-	{	
+	{
 		$('#search_div').css('display','none');
 		$('#role_div').css('display','block');
 	}
 	if(search_val=='emp_id' || search_val=='emp_name')
-	{	
+	{
 
 		$("#role_div").css('display','none');
 		$('#search_div').css('display','block');
@@ -6417,7 +6849,7 @@ function getRolesList()
 //view more for employees
 function viewmore()
 {
-	
+
 		$("#viewmorediv").show();
         var offset= $('#offset').val();
 	    var limit=$('#limit').val();
@@ -6426,19 +6858,19 @@ function viewmore()
 		var role_id = $('#role_id').val();
 		var count_remaining = $('#count_remaining').val();
 		var empflag = $('#emp').val();
-		var dataparam = ''; 
+		var dataparam = '';
 		dataparam = 'limit='+limit+'&offset='+offset+'&search_val='+search_val+'&search_str='+search_str+'&count_remaining='+count_remaining+'&role_id='+role_id+'&flag='+1+'&empflag='+empflag;
 		$.ajax({
-                url: base_url+"/employee/getmoreemployees/format/html",   				
-				type : 'POST',	
+                url: base_url+"/employee/getmoreemployees/format/html",
+				type : 'POST',
 				data : dataparam,
 				dataType: 'html',
 				beforeSend: function () {
-				
+
 				},
-				success : function(data){	
+				success : function(data){
 				$('#more_employees').append(data);
-				        
+
 						}
 			});
 }
