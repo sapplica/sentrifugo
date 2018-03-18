@@ -64,16 +64,16 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$where .= " and WEEK(holidaydate,2) = '".$calWeek."'";
 		} else
 		$where .= " and MONTH(holidaydate) = '".$month."'";
-			
+
 		$select = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('s'=>'main_employees_summary'),
 		array('date_of_joining','m.weekend_startday','m.weekend_endday','holiday_names'=>'GROUP_CONCAT(h.holidayname)' ,
-					 'holiday_dates'=>'GROUP_CONCAT(h.holidaydate)'))				
+					 'holiday_dates'=>'GROUP_CONCAT(h.holidaydate)'))
 		->joinInner(array('m'=>'main_leavemanagement'),"m.department_id = s.department_id and m.isactive=1",array())
 		->joinLeft(array('h'=>'main_holidaydates'),"h.groupid = s.holiday_group and h.isactive=1 and YEAR(holidaydate) = '".$year."' ".$where." ",array())
 		->where(" s.user_id = '".$empId."'");
-		//echo $select; 
+		//echo $select;
 		$result = $this->fetchAll($select)->toArray();
 
 		return $result;
@@ -141,12 +141,12 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 				$calWeekVal = strftime('%U',strtotime($loopDate));
 				$dateYearVal = strftime('%Y',strtotime($loopDate));
-				
+
         if($calWeekVal == "00") {
           $prevYear = $dateYearVal - 1;
           $calWeekVal = strftime('%U',strtotime($prevYear.'-12-31'));
-        }			
-				
+        }
+
 				if(!in_array($calWeekVal,$cal_weekArray)){
 					$cal_weekArray[] = $calWeekVal;
 					$yearCalWeekArray[$calWeekVal][] = $dateYearVal;
@@ -333,8 +333,8 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->from(array('el' => 'main_leaverequest'),
 		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','leavetypeid'=>'el.leavetypeid','leavestatus'=>'el.leavestatus','leaveday'=>'el.leaveday','leave_req_id'=>'el.id'))
 	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-		//echo $select;	
+		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND (el.from_date <= '".$endday."' AND el.to_date >= '".$startday."') ");
+		//echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -348,7 +348,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','oncalltypeid'=>'el.oncalltypeid','oncallstatus'=>'el.oncallstatus','oncallday'=>'el.oncallday','oncall_req_id'=>'el.id'))
 	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
 		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-		//echo $select;	
+		//echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -369,7 +369,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 		return $this->fetchAll($select)->toArray();
 	}
-   
+
 	public function getManagement()
 	{
 		$select = $this->select()
