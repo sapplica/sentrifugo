@@ -28,6 +28,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Allow special characters and ensure correct encoding on all pages and emails
 - Remove double slashes from time management URLs to avoid problems with servers that rewrite them out (that's you IIS...)
 - Corrected a bug which didn't allow approving / rejecting / enabling timesheet for the first week of a year that didn't start on a Sunday (2017, you kept this hidden for a whole year, thanks)
+- Corrected leave detection for timesheet cronjob
 
 Docker
 ======
