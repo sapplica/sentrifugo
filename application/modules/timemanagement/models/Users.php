@@ -130,7 +130,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$weekDatesArray = sapp_Global::createDateRangeArray($hidstartweek_date,$hidendweek_date); //echo '<pre>';print_r($weekDatesArray);
 			//End
 
-			$submittedtsdates = $holDates = $weekendDates = $leaveDates = $oncallDates = array();
+			$submittedtsdates = $holDates = $weekendDates = $leaveDates = array();
 
 			$startdateObj = DateTime::createFromFormat("Y-m-d", $hidstartweek_date);
 
@@ -219,19 +219,6 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 			//End
 
-			//To get On call applied by user for the given duration
-			$empOncalls = $this->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
-			if(!empty($empOncalls)){
-				$emponcallDatesArray = array();
-				foreach($empOncalls as $empOncallRow){
-					if($empOncallRow['oncallday'] == 1){
-						$oncallDatesArray = sapp_Global::createDateRangeArray($empOncallRow['from_date'],$empOncallRow['to_date']);
-					}
-					$emponcallDatesArray = array_merge($emponcallDatesArray,$oncallDatesArray);
-				}
-			}
-			//End
-
 			//To get default not working days(saturday and sunday)
 			if($emp_dept_id !='' && $emp_dept_id != NULL){
 				$weekendDetailsArr = $this->getWeekend($hidstartweek_date, $hidendweek_date, $emp_dept_id);
@@ -258,15 +245,6 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 					}
 				}
 			}
-			if(isset($emponcallDatesArray) && count($emponcallDatesArray)> 0 )
-			{
-				foreach($emponcallDatesArray as $emponcallDate)
-				{
-					if(in_array($emponcallDate,$weekDatesArray)){
-						$oncallDates[] = $emponcallDate;
-					}
-				}
-			}
 			if(isset($weekendDetailsArr) && count($weekendDetailsArr)> 0 )
 			{
 				foreach($weekendDetailsArr as $weekendDate)
@@ -278,7 +256,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 
 			$totalDaysArray = array();
-			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$oncallDates,$weekendDates);
+			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$weekendDates);
 			//print_r($totalDaysArray);
 
 			$emptyDataDatesArray = array();
