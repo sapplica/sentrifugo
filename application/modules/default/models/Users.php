@@ -33,8 +33,8 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 	 * @return boolean
 	 */
 	public function isLdapUser($username) {
-			
-		return false;
+
+        	return LDAP_ENABLED == 'true';
 	}
 
 	public function getUserObject($username)
@@ -51,7 +51,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		array('group_id'=>'r.group_id'))
 		->joinLeft(array('e'=>'main_employees'),"e.user_id = u.id",array('e.reporting_manager','e.is_orghead','e.businessunit_id','e.department_id','e.jobtitle_id','e.position_id'))
 		//->where("(u.employeeId = '".$username."' OR u.emailaddress = '".$username."') and u.isactive = 1");
-       ->where("u.isactive = 1 and (u.employeeId = ? OR u.emailaddress = ?)",array($username));
+       ->where("u.isactive = 1 and (u.employeeId = ? OR u.emailaddress = ? OR u.username = ?)",array($username));
 			
 		$result_one = $this->fetchAll($query);
 			
@@ -96,7 +96,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $db->select()
 			->from(array('a' => 'main_users'),array('aid' => 'a.id'))
 			->joinInner(array('r'=>'main_roles'), 'r.id=a.emprole',array("def_status" => "if(r.group_id in (1,5) and a.userstatus = 'new','old',a.userstatus)"))
-			->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND (a.employeeId = ? OR a.emailaddress = ?)",array($corpEmail));
+			->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND (a.employeeId = ? OR a.emailaddress = ? OR a.username = ?)",array($corpEmail));
 			
 			$new_userdata = $db->select()
 			->from(array('ac'=>$userData),array('count'=>'count(*)'))
@@ -118,7 +118,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $this->select()->setIntegrityCheck(false)
 			->from(array('u' => 'main_users'),array('status' => 'u.isactive','isaccountlock' =>'u.emptemplock'))
 			
-			->where("u.employeeId = ? OR u.emailaddress = ?",array($corpEmail));
+			->where("u.employeeId = ? OR u.emailaddress = ? OR u.username",array($corpEmail));
 			
 		}
 		catch(Exception $e)
@@ -135,7 +135,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $this->select()->setIntegrityCheck(false)
 			->from(array('u' => 'main_users'),array())
 			->joinInner(array('e'=>'main_employees'), 'e.user_id=u.id',array('date_of_joining',"doj" => "if(e.date_of_joining <= CURDATE(),1,0)"))
-			->where("u.employeeId = ? OR u.emailaddress = ?",array($corpEmail));
+			->where("u.employeeId = ? OR u.emailaddress = ? OR u.username",array($corpEmail));
 			
 		}
 		catch(Exception $e)

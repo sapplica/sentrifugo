@@ -36,13 +36,15 @@ $req_arr = array(
 			'pdo_mysql' => extension_loaded('pdo_mysql'),
 			'gd' => extension_loaded('gd'),
             'openssl' => extension_loaded('openssl'),
+            'ldap' => extension_loaded('ldap'),
 );
 
 $req_html_arr = array(
 		'php' => "PHP v5.3 or greater",
 		"pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
 		"gd" => "GD Library (gd)",
-        'openssl' => "Open SSL (openssl)"
+        'openssl' => "Open SSL (openssl)",
+        'ldap' => "Lightweight Directory Access Protocol (ldap)",
 );
 $stat_arr = array(0=> "No",1 => "Yes");
 chdir("../");
@@ -55,6 +57,7 @@ $writable_paths = array(
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."db_constants.php",
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."application_constants.php",
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."mail_settings_constants.php",
+    getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."ldap_constants.php",
     getcwd().DIRECTORY_SEPARATOR."logs".DIRECTORY_SEPARATOR."application.log",
     getcwd().DIRECTORY_SEPARATOR."application".DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."AccessControl.php",
 	getcwd().DIRECTORY_SEPARATOR."install"

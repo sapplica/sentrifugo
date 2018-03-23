@@ -63,12 +63,20 @@
 	</div>
 	<div class="new-form-ui">
 	  <label class="required">Last Name </label>
-		<div class="division"><?php echo $this->form->lastname_orghead; ?>			
+		<div class="division"><?php echo $this->form->lastname_orghead; ?>
 			<?php if(isset($this->msgarray['lastname_orghead'])){?>
 				<span class="errors" id="errors-<?php echo $this->form->lastname_orghead->getId(); ?>"><?php echo $this->msgarray['lastname_orghead'];?></span>
-			<?php }?>			
-		</div>	   
+			<?php }?>
+		</div>
 	</div>
+    <div class="new-form-ui">
+        <label class="required">Username </label>
+        <div class="division"><?php echo $this->form->username_orghead; ?>
+            <?php if(isset($this->msgarray['username_orghead'])){?>
+                <span class="errors" id="errors-<?php echo $this->form->username_orghead->getId(); ?>"><?php echo $this->msgarray['username_orghead'];?></span>
+            <?php }?>
+        </div>
+    </div>
 	
     <div class="new-form-ui">
         <label><?php echo $this->form->prefix_id->getLabel(); ;?> </label>
