@@ -39,7 +39,7 @@ ini_set('max_execution_time',0);
 	<link rel="shortcut icon" href="../public/media/images/favicon.ico" />
     <link rel="stylesheet" type="text/css"	href="../public/media/css/select2.css"/>
     <link href="css/style.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
 	<link href="../public/media/css/jquery.alert.css"	rel="stylesheet" type="text/css" />	
      <!--[if IE 8]>  
 	<link rel="stylesheet" type="text/css" href="../public/media/css/ie8.css">  
