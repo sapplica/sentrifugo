@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Sentirfugo Support <support@sentrifugo.com>
+ *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 defined('CODEVERSION')|| define('CODEVERSION', '3.2');
 $filepath = 'install/index.php';
