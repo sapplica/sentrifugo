@@ -4964,6 +4964,7 @@ CREATE TABLE `main_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `emprole` int(11) unsigned DEFAULT NULL,
   `userstatus` enum('new','old') DEFAULT 'new',
+  `username` varchar(255) DEFAULT NULL,
   `firstname` varchar(255) DEFAULT NULL,
   `lastname` varchar(255) DEFAULT NULL,
   `userfullname` varchar(255) DEFAULT NULL,
