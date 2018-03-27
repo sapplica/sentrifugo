@@ -156,129 +156,122 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$auth= Zend_Auth::getInstance();
 
-		try
-		{
-			$db = $this->getInvokeArg('bootstrap')->getResource('db');
-			$user= new Default_Model_Users($db);
+		$db = $this->getInvokeArg('bootstrap')->getResource('db');
+		$user= new Default_Model_Users($db);
 
-			if ($user->isLdapUser(sapp_Global::escapeString($options['username']))) {
+		if ($user->isLdapUser(sapp_Global::escapeString($options['username']))) {
 
-				$options['ldap']= $this->_options['ldap'];
-				$authAdapter= Login_Auth::_getAdapter('ldap', $options);
+			$options['ldap']= $this->_options['ldap'];
+			$authAdapter= Login_Auth::_getAdapter('ldap', $options);
 
-			} else {
+		} else {
 
-				$options['db']= $db;
-				$options['salt']= $this->_options['auth']['salt'];
-				if($isemail = filter_var( $options['username'], FILTER_VALIDATE_EMAIL ))
-					$authAdapter= Login_Auth::_getAdapter('email', $options);
-				else
-					$authAdapter= Login_Auth::_getAdapter('db', $options);
+			$options['db']= $db;
+			$options['salt']= $this->_options['auth']['salt'];
+			if($isemail = filter_var( $options['username'], FILTER_VALIDATE_EMAIL ))
+				$authAdapter= Login_Auth::_getAdapter('email', $options);
+			else
+				$authAdapter= Login_Auth::_getAdapter('db', $options);
 
-			}
+		}
 
-			$result = $auth->authenticate($authAdapter);
+		$result = $auth->authenticate($authAdapter);
 
-			if ($result->isValid()) {
+		if ($result->isValid()) {
 
-				$admin_data = $user->getUserObject($options['username']);
+			$admin_data = $user->getUserObject($options['username']);
 
-				$auth->getStorage()->write($admin_data);
-				$storage = $auth->getStorage()->read();
+			$auth->getStorage()->write($admin_data);
+			$storage = $auth->getStorage()->read();
 				/***
 					Start - Session for time management role.
 				**/
-				$tmRole = $usersModel->getUserTimemanagementRole($storage->id);
-				$timeManagementRole = new Zend_Session_Namespace('tm_role');
-				if(empty($timeManagementRole->tmrole))
-				{
-					$timeManagementRole->tmrole = $tmRole;
-				}
+			$tmRole = $usersModel->getUserTimemanagementRole($storage->id);
+			$timeManagementRole = new Zend_Session_Namespace('tm_role');
+			if(empty($timeManagementRole->tmrole))
+			{
+				$timeManagementRole->tmrole = $tmRole;
+			}
 				/***
 					End - Session for time management role.
 				**/
-				$dataTmp = array();
+			$dataTmp = array();
 
-				$dataTmp['userid'] = ($storage->id)?$storage->id:0;
-				$dataTmp['emprole'] = ($storage->emprole)?$storage->emprole:0;
-				$dataTmp['group_id'] = ($storage->group_id)?$storage->group_id:0;
-				$dataTmp['employeeId'] = ($storage->employeeId)?$storage->employeeId:0;
-				$dataTmp['emailaddress'] = ($storage->emailaddress)?$storage->emailaddress:'';
-				$dataTmp['userfullname'] = ($storage->userfullname)?$storage->userfullname:'';
-				$dataTmp['logindatetime'] = gmdate("Y-m-d H:i:s");
-				if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] != '') {
-					$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-				} else {
-					$ip_address = $_SERVER['REMOTE_ADDR'];
-				}
-				if($ip_address == '::1'){
-					$ip_address = '127.0.0.1';
-				}
-				$dataTmp['empipaddress'] = $ip_address;
-				$dataTmp['profileimg'] = ($storage->profileimg)?$storage->profileimg:'';
+			$dataTmp['userid'] = ($storage->id)?$storage->id:0;
+			$dataTmp['emprole'] = ($storage->emprole)?$storage->emprole:0;
+			$dataTmp['group_id'] = ($storage->group_id)?$storage->group_id:0;
+			$dataTmp['employeeId'] = ($storage->employeeId)?$storage->employeeId:0;
+			$dataTmp['emailaddress'] = ($storage->emailaddress)?$storage->emailaddress:'';
+			$dataTmp['userfullname'] = ($storage->userfullname)?$storage->userfullname:'';
+			$dataTmp['logindatetime'] = gmdate("Y-m-d H:i:s");
+			if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] != '') {
+				$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			} else {
+				$ip_address = $_SERVER['REMOTE_ADDR'];
+			}
+			if($ip_address == '::1'){
+				$ip_address = '127.0.0.1';
+			}
+			$dataTmp['empipaddress'] = $ip_address;
+			$dataTmp['profileimg'] = ($storage->profileimg)?$storage->profileimg:'';
 
-				$lastRecordId = $usersModel->addUserLoginLogManager($dataTmp);
+			$lastRecordId = $usersModel->addUserLoginLogManager($dataTmp);
 
 
-				$orgImg = $usersModel->getOrganizationImg();
+			$orgImg = $usersModel->getOrganizationImg();
 
-				$organizationImg = new Zend_Session_Namespace('organizationinfo');
-				if(empty($organizationImg->orgimg))
+			$organizationImg = new Zend_Session_Namespace('organizationinfo');
+			if(empty($organizationImg->orgimg))
+			{
+				$organizationImg->orgimg = $orgImg;
+			}
+			if(!isset($organizationImg->hideshowmainmenu )){
+				$organizationImg->hideshowmainmenu = 1;
+			}
+
+			/*** Redirect to wizard if not complete - start ***/
+			if($storage->emprole == SUPERADMINROLE)
+			{
+				$wizard_model = new Default_Model_Wizard();
+				$wizardData = $wizard_model->getWizardData();
+				if(!empty($wizardData))
 				{
-					$organizationImg->orgimg = $orgImg;
+					if($wizardData['iscomplete'] == 1)
+						$this->_redirect('wizard');
 				}
-				if(!isset($organizationImg->hideshowmainmenu )){
-				    $organizationImg->hideshowmainmenu = 1;
-				}
+			}
+			/*** Redirect to wizard if not complete - end ***/
 
-				/*** Redirect to wizard if not complete - start ***/
-				if($storage->emprole == SUPERADMINROLE)
+			/*** Redirect to wizard if not complete - start ***/
+			if($storage->group_id == HR_GROUP)
+			{
+				$hrWizardModel = new Default_Model_Hrwizard();
+				$hrwizardData = $hrWizardModel->getHrwizardData();
+				if(!empty($hrwizardData))
 				{
-					$wizard_model = new Default_Model_Wizard();
-					$wizardData = $wizard_model->getWizardData();
-					if(!empty($wizardData))
-					{
-						if($wizardData['iscomplete'] == 1)
-						 $this->_redirect('wizard');
-					}
+					if($hrwizardData['iscomplete'] == 1)
+						$this->_redirect('hrwizard');
 				}
-				/*** Redirect to wizard if not complete - end ***/
+			}
+			/*** Redirect to wizard if not complete - end ***/
 
-				/*** Redirect to wizard if not complete - start ***/
-				if($storage->group_id == HR_GROUP)
-				{
-					$hrWizardModel = new Default_Model_Hrwizard();
-					$hrwizardData = $hrWizardModel->getHrwizardData();
-					if(!empty($hrwizardData))
-					{
-						if($hrwizardData['iscomplete'] == 1)
-						 $this->_redirect('hrwizard');
-					}
-				}
-				/*** Redirect to wizard if not complete - end ***/
+			/*** Previous URL redirection after login - start ***/
+			$prevUrl = new Zend_Session_Namespace('prevUrl');
 
-				/*** Previous URL redirection after login - start ***/
-				$prevUrl = new Zend_Session_Namespace('prevUrl');
-
-				if(isset($prevUrl->prevUrlObject) && $prevUrl->prevUrlObject[0] !='/index/logout'){
-					header('Location:'.$prevUrl->prevUrlObject[0]);
-					Zend_Session::namespaceUnset('prevUrl');
-					exit;
-				 /*** Previous URL redirection after login - end ***/
-				}
-				else
-				$this->_redirect('/index/welcome');
-
+			if(isset($prevUrl->prevUrlObject) && $prevUrl->prevUrlObject[0] !='/index/logout'){
+				header('Location:'.$prevUrl->prevUrlObject[0]);
+				Zend_Session::namespaceUnset('prevUrl');
+				exit;
+				/*** Previous URL redirection after login - end ***/
 			}
 			else
-			{
-				$this->_helper->getHelper("FlashMessenger")->addMessage("The username or password you entered is incorrect.");
-				$this->_redirect('index');
-			}
+				$this->_redirect('/index/welcome');
+
 		}
-		catch(Exception $e)
+		else
 		{
-			echo $e->getMessage();
+			$this->_helper->getHelper("FlashMessenger")->addMessage("The username or password you entered is incorrect.");
+			$this->_redirect('index');
 		}
 	}
 
