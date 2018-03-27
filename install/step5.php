@@ -295,7 +295,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                                                  title="The LDAP search filter used to search for accounts (ex: (&(objectClass=posixAccount)(uid=%s)))."
                                                  class="tooltip"></label>
                 <div>
-                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                    <input type="text" value="<?php if (!$_POST) {
                         echo defined('LDAP_ACCOUNTFILTERFORMAT') ? LDAP_ACCOUNTFILTERFORMAT : '';
                     } else {
                         echo $_POST['accountFilterFormat'];
@@ -309,7 +309,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                                                                 title="The FQDN domain for which the target LDAP server is an authority (e.g., example.com)."
                                                                 class="tooltip"></label>
                 <div>
-                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                    <input type="text" value="<?php if (!$_POST) {
                         echo defined('LDAP_ACCOUNTDOMAINNAME') ? LDAP_ACCOUNTDOMAINNAME : '';
                     } else {
                         echo $_POST['accountDomainName'];
@@ -323,7 +323,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                                                      title="The 'short' domain for which the target LDAP server is an authority. This is usually used to specify the NetBIOS domain name for Windows networks but may also be used by non-AD servers."
                                                      class="tooltip"></label>
                 <div>
-                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                    <input type="text" value="<?php if (!$_POST) {
                         echo defined('LDAP_ACCOUNTDOMAINNAMESHORT') ? LDAP_ACCOUNTDOMAINNAMESHORT : '';
                     } else {
                         echo $_POST['accountDomainNameShort'];
@@ -357,7 +357,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                                                     title="The default base DN used for searching (e.g., for accounts). This option is required for most account related operations and should indicate the DN under which accounts are located."
                                                     class="tooltip"></label>
                 <div>
-                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                    <input type="text" value="<?php if (!$_POST) {
                         echo defined('LDAP_BASEDN') ? LDAP_BASEDN : '';
                     } else {
                         echo $_POST['baseDn'];
@@ -371,7 +371,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                                                     title="Sentrifugo Super Admin Username from a directory."
                                                     class="tooltip"></label>
                 <div>
-                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                    <input type="text" value="<?php if (!$_POST) {
                         echo defined('LDAP_SUPER_ADMIN_USERNAME') ? LDAP_SUPER_ADMIN_USERNAME : '';
                     } else {
                         echo $_POST['superAdminUsername'];
