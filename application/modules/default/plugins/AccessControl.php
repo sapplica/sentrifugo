@@ -624,30 +624,6 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:userloginlog'));
                     $acl->allow('admin', 'default:userloginlog', array('index','empnameauto','empidauto','empipaddressauto','empemailauto'));
 
-		 $acl->addResource(new Zend_Acl_Resource('default:addemployeeleaves'));
-                            $acl->allow('management', 'default:addemployeeleaves', array('index','add','edit','view','Add Employee Leave'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:announcements'));
-                            $acl->allow('management', 'default:announcements', array('index','getdepts','uploadsave','uploaddelete','add','edit','delete','view','Announcements'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:appraisalcategory'));
-                            $acl->allow('management', 'default:appraisalcategory', array('index','addpopup','getappraisalcategory','add','edit','delete','view','Parameters'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:appraisalhistoryself'));
-                            $acl->allow('management', 'default:appraisalhistoryself', array('index','view','My Appraisal History'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:disciplinarymyincidents'));
-                    $acl->allow('admin', 'default:disciplinarymyincidents', array('index','view','edit','saveemployeeappeal','getdisciplinaryincidentpdf'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryteamincidents'));
-                    $acl->allow('admin', 'default:disciplinaryteamincidents', array('index','view'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryallincidents'));
-                    $acl->allow('admin', 'default:disciplinaryallincidents', array('index','view'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryviolation'));
-                    $acl->allow('admin', 'default:disciplinaryviolation', array('index','add','view','edit','delete','addpopup'));
-
 	   }
 	   if($role == 2 )
            {
