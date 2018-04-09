@@ -3093,7 +3093,7 @@ CREATE TABLE `main_patches_version` (
 
 /*Data for the table `main_patches_version` */
 
-insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.1.1',NOW(),NOW(),1);
+insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.2',NOW(),NOW(),1);
 
 /*Table structure for table `main_payfrequency` */
 
