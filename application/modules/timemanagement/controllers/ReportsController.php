@@ -30,11 +30,11 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		if(!$checkTmEnable){
 			$this->_redirect('error');
 		}*/
-		
+
 		//check Time management module enable
 		// if(!sapp_Helper::checkTmEnable())
 			// $this->_redirect('error');
-		
+
 		$auth = Zend_Auth::getInstance();
 		$loginuserGroup=0;
 		$loginuserRole=0;
@@ -42,9 +42,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		 		$loginuserGroup = $auth->getStorage()->read()->group_id;
 		 		$loginuserRole = $auth->getStorage()->read()->emprole;
 		 	}
-		if(!($loginuserGroup==3 || ($loginuserGroup=='' && $loginuserRole==1) || $loginuserGroup==1))	
+		if(!($loginuserGroup==3 || ($loginuserGroup=='' && $loginuserRole==1) || $loginuserGroup==1))
 			$this->_redirect('error');
-		
+
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('employeereports', 'html')->initContext();
 		$ajaxContext->addActionContext('projectsreports', 'html')->initContext();
@@ -72,15 +72,15 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$month_last_day = date('Y-m-t');
 		$month_first_day = sapp_Global::change_date($month_first_day,'database');
 		$month_last_day = sapp_Global::change_date($month_last_day,'database');
-			
+
 		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 
 		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
-			
-			
+
+
 	}
 
 	public function employeereportsAction(){
@@ -98,7 +98,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$end_date = sapp_Global::change_date($end_date,'database');
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
-		//pdf and excel flags 
+		//pdf and excel flags
 		$is_pdf = ($this->_getParam('is_pdf')!='' && $this->_getParam('is_pdf')!='undefined')? $this->_getParam('is_pdf'):"";
 		$is_excel = ($this->_getParam('is_excel')!='' && $this->_getParam('is_excel')!='undefined')? $this->_getParam('is_excel'):"";
 		$call = $this->_getParam('call');
@@ -165,7 +165,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			}
 			$this->_helper->layout->disableLayout();
 			//getting the employee reports data
-			$result = $reportsmodel->getEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param,1);	
+			$result = $reportsmodel->getEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param,1);
 			//for pdf
 			if(!empty($is_pdf))
 			{
@@ -206,9 +206,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$this->view->by =$by;
 			$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 		}
-			
+
 	}
-	
+
 	public function billingreportAction(){
 
 		$reportsmodel = new Timemanagement_Model_Reports();
@@ -225,8 +225,8 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$end_date = sapp_Global::change_date($end_date,'database');
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
-      
-		//pdf and excel flags 
+
+		//pdf and excel flags
 		$is_pdf = ($this->_getParam('is_pdf')!='' && $this->_getParam('is_pdf')!='undefined')? $this->_getParam('is_pdf'):"";
 		$is_excel = ($this->_getParam('is_excel')!='' && $this->_getParam('is_excel')!='undefined')? $this->_getParam('is_excel'):"";
 		$call = $this->_getParam('call');
@@ -235,7 +235,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
     $this->view->start_date = $start_date;
 		$this->view->end_date = $end_date;
-		$this->view->selected_period_hidden = $selected_period_hidden;						
+		$this->view->selected_period_hidden = $selected_period_hidden;
 		$this->view->projecttype = $projecttype;
 		$this->view->call = $call ;
 
@@ -292,12 +292,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		$this->view->sort =$sort;
 		$this->view->by =$by;
-		
+
 		//getting the employee reports data
 		$result = array();
-		
-		$emp_billing_data = $reportsmodel->getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date);	
-		
+
+		$emp_billing_data = $reportsmodel->getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date);
+
 		$index = 1;
     $total_time = 0;
     $total_billing_hours = 0;
@@ -308,7 +308,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   	$total_on_call_days = 0;
 		$billable_total = 0;
 
-		foreach($emp_billing_data as $temp_emp_billing_data){		
+		foreach($emp_billing_data as $temp_emp_billing_data){
 			$empid = $temp_emp_billing_data['user_id'];
     	$total_emp_time = 0;
     	$total_emp_billing_hours = 0;
@@ -323,55 +323,59 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$project_name = '';
 			$current_project_type_id = '';
 			$current_project_type = '';
-		
+
 			$proj_billing_data = $reportsmodel->getBillingProjData($empid, $start_date, $end_date, $projecttype);
 			$leave_billing_data = $reportsmodel->getBillingLeaveData($empid, $start_date, $end_date);
 			$on_call_billing_data = $reportsmodel->getBillingOnCallData($empid, $start_date, $end_date);
 			$work_schedule_hours = $reportsmodel->getWorkScheduleHours($empid);
-		
-			foreach($proj_billing_data as $temp_hours_task_week){	
+
+			foreach($proj_billing_data as $temp_hours_task_week){
     		$totalweektime = 0;
     		$totalweekbillinghours = 0;
-          	
+
     		if ($temp_hours_task_week['sun_date'] >= $start_date && $temp_hours_task_week['sun_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['sun_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['sun_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sun_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sun_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['sun_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['sun_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -379,47 +383,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				
-				            
+	  		}
+
     		if ($temp_hours_task_week['mon_date'] >= $start_date && $temp_hours_task_week['mon_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['mon_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['mon_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['mon_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['mon_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['mon_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['mon_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -427,47 +435,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['tue_date'] >= $start_date && $temp_hours_task_week['tue_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['tue_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['tue_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['tue_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['tue_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['tue_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['tue_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -475,47 +487,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['wed_date'] >= $start_date && $temp_hours_task_week['wed_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['wed_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['wed_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['wed_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['wed_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['wed_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['wed_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -523,47 +539,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['thu_date'] >= $start_date && $temp_hours_task_week['thu_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['thu_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['thu_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['thu_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['thu_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['thu_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['thu_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -571,47 +591,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['fri_date'] >= $start_date && $temp_hours_task_week['fri_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['fri_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['fri_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['fri_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['fri_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['fri_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['fri_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -619,47 +643,51 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['sat_date'] >= $start_date && $temp_hours_task_week['sat_date'] <= $end_date) {
        		list($hours,$minutes) = explode(':', $temp_hours_task_week['sat_duration'], 2);
-					
-       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {			
-    		    if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
-					    $billable_rate = $temp_hours_task_week['billable_rate'];
+
+       		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
+						if ($temp_hours_task_week['billable_rate_task'] != '' && $temp_hours_task_week['billable_rate_task'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_task'];
 	  		    }
-						
+
+    		    if ($temp_hours_task_week['billable_rate_emp'] != '' && $temp_hours_task_week['billable_rate_emp'] != 0) {
+					    $billable_rate = $temp_hours_task_week['billable_rate_emp'];
+	  		    }
+
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
 					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
-										            
+
 						$day_time = 0;
-          	
+
 						if ($hours_status != 'rejected') {
             	$hours_status = $temp_hours_task_week['sat_status'];
           	}
-       		
+
 						if (is_numeric($hours) && $hours <> 0) {
 							$day_time = $day_time + $hours;
 						}
-       		
+
        			if (is_numeric($minutes) && $minutes <> 0) {
     					$day_time = $day_time + ($minutes / 60);
 						}
-						
+
 						$totalweektime = $totalweektime + $day_time;
 
             if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
-   
-              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+
+              foreach($work_schedule_hours as $temp_work_schedule_hours){
 			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sat_date'] &&
 						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sat_date'])
-                    $work_schedule_hours_day = $temp_work_schedule_hours['sat_duration'];     
+                    $work_schedule_hours_day = $temp_work_schedule_hours['sat_duration'];
               }
-						   
+
 						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
        			  } else {
@@ -667,8 +695,8 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						  }
 					  }
        		}
-	  		}				            
-          	          	            						            	            						
+	  		}
+
     		if ($temp_hours_task_week['task'] == 'Overtime') {
        		$total_emp_overtime = $total_emp_overtime + $totalweektime;
     		}
@@ -679,27 +707,27 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
        		$total_emp_time = $total_emp_time + $totalweektime;
 					$total_emp_billing_hours = $total_emp_billing_hours + $totalweekbillinghours;
     		}
-				
+
 				$billable_emp_total = $billable_emp_total + ($totalweekbillinghours * $billable_rate);
-			}				
-	
+			}
+
     	foreach ($leave_billing_data as $temp_leave) {
 				if ($temp_leave['leaveday'] == '1') {
     			$total_emp_leave_days = $total_emp_leave_days + $temp_leave['appliedleavescount'];
     		} else {
     			$partial_emp_leave_days = $partial_emp_leave_days + $temp_leave['appliedleavescount'];
-    		}	
-  		}	
-	
+    		}
+  		}
+
     	foreach ($on_call_billing_data as $temp_oncall) {
   			$total_emp_on_call_days = $total_emp_on_call_days + $temp_oncall['appliedoncallscount'];
-  		}	
+  		}
 
       if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-			  $result[$index]['Full Name'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['userfullname']); 
-    	  $result[$index]['Enterprise ID'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['office_faxnumber']); 
-    	  $result[$index]['Business Unit'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['businessunit_name']); 
+			  $result[$index]['Full Name'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['userfullname']);
+    	  $result[$index]['Enterprise ID'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['office_faxnumber']);
+    	  $result[$index]['Business Unit'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['businessunit_name']);
 			  $result[$index]['Project Name'] = iconv("UTF-8", "UTF-8//IGNORE", $project_name);
 			  $result[$index]['Project Type'] = iconv("UTF-8", "UTF-8//IGNORE", $current_project_type);
         $result[$index]['Project Hours'] = round($total_emp_time, 2);
@@ -711,11 +739,11 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	  	  $result[$index]['Partial Day Leaves Total'] = round($partial_emp_leave_days, 2);
 	  	  $result[$index]['Billable Hours'] = round($total_emp_billing_hours, 2);
 	  	  $result[$index]['Billable Rate'] = $billable_rate;
-				
+
 				$billable_emp_total = round(($total_emp_billing_hours * $billable_rate), 2);
-				
+
 	  	  $result[$index]['Billable Total'] = round($billable_emp_total, 2);
-        
+
 			  $total_time = $total_time + $total_emp_time;
         $total_overtime = $total_overtime + $total_emp_overtime;
         $total_on_call_overtime = $total_on_call_overtime + $total_emp_on_call_overtime;
@@ -723,12 +751,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   	    $total_leave_days = $total_leave_days + $total_emp_leave_days;
     	  $partial_leave_days = $partial_leave_days + $partial_emp_leave_days;
         $total_billing_hours = $total_billing_hours + $total_emp_billing_hours;
-			  $billable_total = $billable_total + $billable_emp_total;				
+			  $billable_total = $billable_total + $billable_emp_total;
 			}
-			
+
 			$index++;
 		}
-		
+
   	$result[$index]['Full Name'] = 'Total';
   	$result[$index]['Enterprise ID'] = '';
   	$result[$index]['Business Unit'] = '';
@@ -744,7 +772,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   	$result[$index]['Billable Hours'] = round($total_billing_hours, 2);
 	  $result[$index]['Billable Rate'] = '';
   	$result[$index]['Billable Total'] = number_format(round($billable_total, 2), 2, '.', '');
-			
+
 		//for pdf
 		if(!empty($is_pdf))
 		{
@@ -787,7 +815,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		{
 			$this->view->dataArray = $result;
 		}
-			
+
 	}
 
 	public function projectsreportsAction(){
@@ -805,7 +833,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$end_date = sapp_Global::change_date($end_date,'database');
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
-		//pdf and excel flags 
+		//pdf and excel flags
 		$is_pdf = ($this->_getParam('is_pdf')!='' && $this->_getParam('is_pdf')!='undefined')? $this->_getParam('is_pdf'):"";
 		$is_excel = ($this->_getParam('is_excel')!='' && $this->_getParam('is_excel')!='undefined')? $this->_getParam('is_excel'):"";
 		$call = $this->_getParam('call');
@@ -813,7 +841,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		if($call == 'ajaxcall'){
 			$this->_helper->layout->disableLayout();
 		}
-			
+
 		$view = Zend_Layout::getMvcInstance()->getView();
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
@@ -895,12 +923,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	        elseif (!empty($is_excel)) //for excel
 	        {
 				$cols_param_arr = array('project_name' => 'Project','project_type' => 'Project Type','duration'=>'Duration');
-				sapp_Global::export_to_excel($result,$cols_param_arr,"ProjectsReport.xlsx");	        	
+				sapp_Global::export_to_excel($result,$cols_param_arr,"ProjectsReport.xlsx");
 	        }
             exit;
 		}
 		else //for reports grid
-		{		
+		{
 			$employeedata = $reportsmodel->getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData,
 			$call, $dashboardcall, $start_date, $end_date, $empid,$org_start_date,$org_end_date,$param);
 
@@ -950,7 +978,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$get_emp_proj_duration = $reportsmodel->getEmpProjDuration($emp_id,$start_date,$end_date,$projectId,$params);
 		$this->view->get_emp_proj_duration = $get_emp_proj_duration;
 	}
-	
+
 	public function getprojecttaskdurationAction()
 	{
 		$month_first_day = date('Y-m-01');
@@ -959,7 +987,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$projectId = $this->_getParam('projectId');
-		
+
 		$param = $this->_getParam('params');
 		$params = $param;
 		if($param=="Last7days")
@@ -989,4 +1017,3 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	}
 
 }
-
