@@ -1,0 +1,57 @@
+version: '3.2'
+
+services:
+  app:
+    image: meupatrocinio/apache2.4-php5.4-ssl-nr-rg
+    container_name: web
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8080:80
+    env_file: .env
+    depends_on:
+      - mysql
+    
+
+  mysql:
+     image: mysql:5.7
+     restart: always
+     env_file: .env
+     volumes:
+       - ./mysql/data:/var/lib/mysql
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      env_file: .env
+      restart: always
+      ports:
+        - 8081:80
+#version: '3.2'
+#
+#services:
+#  app :
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    working_dir: /var/www
+#    volumes:
+#      - ./:/var/www/html
+#    ports:
+#      - 8080:80
+#
+#  mysql:
+#      image: mysql
+#      restart: always
+#      env_file: .env
+#      volumes:
+#        - ./mysql/init:/docker-entrypoint-initdb.d:ro
+#        - ./mysql/data:/var/lib/mysql
+#
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: phpmyadmin
+#    env_file: .env
+#    restart: always
+#    ports:
+#      - 8081:80
