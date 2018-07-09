@@ -95,7 +95,7 @@ class Default_Model_Competencylevel extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'competencylevel';
 		
-		$tableFields = array('action'=>'Action','competencylevel' => 'Competency Level','description' => 'Description');
+		$tableFields = array('action'=>'Action','competencylevel' => 'Competency Area','description' => 'Description');
 		
 			
 		$tablecontent = $this->getCompetencyLevelData($sort, $by, $pageNo, $perPage,$searchQuery);     

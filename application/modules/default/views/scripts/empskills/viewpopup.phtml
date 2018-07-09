@@ -26,8 +26,8 @@
 <?php 
 $skill_last_used = $this->form->year_skill_last_used->getValue();
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Skill',(!empty($this->data['skillname']))?$this->data['skillname']:"...",'Years of Experience',(!empty($this->data['yearsofexp']))?$this->data['yearsofexp']:"...");
-sapp_Helper::viewBody('nor','Competency Level',(!empty($this->data['competencylevelid']))?$this->data['competencylevelid']:"...",'Skill Last Used Year',(!empty($skill_last_used))?$this->form->year_skill_last_used->getValue():"...");
+sapp_Helper::viewBody('alt','Skill',(!empty($this->data['skillname']))?$this->data['skillname']:"...",'Client Dept.',(!empty($this->data['yearsofexp']))?$this->data['yearsofexp']:"...");
+sapp_Helper::viewBody('nor','Competency Area',(!empty($this->data['competencylevelid']))?$this->data['competencylevelid']:"...",'Skill Last Used Year',(!empty($skill_last_used))?$this->form->year_skill_last_used->getValue():"...");
 sapp_Helper::viewFooter();
 ?>
 		 <div class="new-form-ui-submit" id="formSubmit">

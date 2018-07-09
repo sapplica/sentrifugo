@@ -45,7 +45,7 @@ class Timemanagement_Bootstrap extends Zend_Application_Module_Bootstrap
 		'controller' => 'index',
 		'action' => 'week',
 		'calWeek' => '',
-		'flag' => '',
+		'flag' => 'none',
 		'day' => '',		
 		));
 		$router->addRoute('weekview', $route);

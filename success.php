@@ -145,11 +145,12 @@ function sendconfirmationmail($content,$encodedPswd)
 	if($pos !== false)
 		$mail->setFrom(MAIL_USERNAME,'Do not Reply');
 	else
-		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+		$mail->setFrom(DONOTREPLYEMAIL,'Do not Reply');
 
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
+		$mail->CharSet = 'UTF-8';
     
     if(!$mail->Send())
         return $mail->ErrorInfo;
@@ -215,7 +216,7 @@ if(!empty($_POST))
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="shortcut icon" href="public/media/images/favicon.ico" />
      <link href="public/media/css/successstyle.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
    
 	
 </head>

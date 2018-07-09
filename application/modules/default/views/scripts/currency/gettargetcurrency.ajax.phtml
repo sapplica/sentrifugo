@@ -20,7 +20,7 @@
  ********************************************************************************/
 
 	foreach ($this->targetcurrencydata as $target) {
-	$this->currencyconverterform->targetcurrency->addMultiOption($target['id'].'!@#'.$target['targetcurr'],utf8_encode($target['targetcurr']));
+	$this->currencyconverterform->targetcurrency->addMultiOption($target['id'].'!@#'.$target['targetcurr'],$target['targetcurr']);
 	}
 	echo $this->currencyconverterform->targetcurrency;
 ?>  

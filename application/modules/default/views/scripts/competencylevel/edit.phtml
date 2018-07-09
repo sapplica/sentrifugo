@@ -33,7 +33,7 @@ else
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Competency Level <img class="tooltip" title="Ex: Basic, Intermediately" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Competency Area <img class="tooltip" title="Ex: Basic, Intermediately" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->competencylevel; ?></div>
 			<?php if(isset($this->msgarray['competencylevel'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->competencylevel->getId(); ?>"><?php echo $this->msgarray['competencylevel'];?></span>

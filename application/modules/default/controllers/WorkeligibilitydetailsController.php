@@ -165,7 +165,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 						$workeligibilityform->issuingauth_country->addMultiOption('','Select Country');
 		 						foreach ($countrieslistArr as $countrieslistres)
 		 						{
-		 							$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+		 							$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 		 						}
 		 					}
 		 					else
@@ -419,7 +419,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 					
 				$workeligibilityform->issuingauth_state->addMultiOption('','Select State');
 				foreach($statesmodeldata as $res)
-				$workeligibilityform->issuingauth_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+				$workeligibilityform->issuingauth_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 					
 				if(isset($issuingauth_state) && $issuingauth_state != 0 && $issuingauth_state != '')
 				$workeligibilityform->setDefault('issuingauth_state',$issuingauth_state);
@@ -432,7 +432,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 					
 				$workeligibilityform->issuingauth_city->addMultiOption('','Select City');
 				foreach($citiesmodeldata as $res)
-				$workeligibilityform->issuingauth_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$workeligibilityform->issuingauth_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 					
 				if(isset($issuingauth_city) && $issuingauth_city != 0 && $issuingauth_city != '')
 				$workeligibilityform->setDefault('issuingauth_city',$issuingauth_city);
@@ -509,7 +509,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 
 		 							foreach ($countrieslistArr as $countrieslistres)
 		 							{
-		 								$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+		 								$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 		 							}
 		 						}
 		 						else

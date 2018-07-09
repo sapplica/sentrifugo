@@ -123,7 +123,7 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'positions';
 		
-		$tableFields = array('action'=>'Action','positionname' => 'Position','jobtitlename' => 'Job Title','description' => 'Description');
+		$tableFields = array('action'=>'Action','positionname' => 'Career Level','jobtitlename' => 'Career Track','description' => 'Description');
 		$tablecontent = $this->getPositionData($sort, $by, $pageNo, $perPage,$searchQuery);     
 		
 		$dataTmp = array(

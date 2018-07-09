@@ -30,7 +30,7 @@ require_once 'public/constants.php';
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="shortcut icon" href="public/media/images/favicon.ico" />
      <link href="public/media/css/successstyle.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
     <link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
     <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
 	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>

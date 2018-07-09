@@ -205,14 +205,14 @@ class Default_AgencylistController extends Zend_Controller_Action
 							$statesmodel = new Default_Model_States();
 							$statesData = $statesmodel->getStatesList($countryId);
 							foreach($statesData as $res)
-							$agencylistform->state_1->addMultiOption($res['id'],utf8_encode($res['state_name']));
+							$agencylistform->state_1->addMultiOption($res['id'],$res['state_name']);
 						}
 						if($stateId != '')
 						{
 							$citiesmodel = new Default_Model_Cities();
 							$citiesData = $citiesmodel->getCitiesList($stateId);
 							foreach($citiesData as $res)
-							$agencylistform->city_1->addMultiOption($res['id'],utf8_encode($res['city_name']));
+							$agencylistform->city_1->addMultiOption($res['id'],$res['city_name']);
 						}
 						$agencylistform->country_1->setValue($countryId);
 						$agencylistform->state_1->setValue($stateId);
@@ -248,14 +248,14 @@ class Default_AgencylistController extends Zend_Controller_Action
 							$statesmodel = new Default_Model_States();
 							$statesData = $statesmodel->getStatesList($countryId);
 							foreach($statesData as $res)
-							$agencylistform->state_2->addMultiOption($res['id'],utf8_encode($res['state_name']));
+							$agencylistform->state_2->addMultiOption($res['id'],$res['state_name']);
 						}
 						if($stateId != '')
 						{
 							$citiesmodel = new Default_Model_Cities();
 							$citiesData = $citiesmodel->getCitiesList($stateId);
 							foreach($citiesData as $res)
-							$agencylistform->city_2->addMultiOption($res['id'],utf8_encode($res['city_name']));
+							$agencylistform->city_2->addMultiOption($res['id'],$res['city_name']);
 						}
 						$agencylistform->country_2->setValue($countryId);
 						$agencylistform->state_2->setValue($stateId);
@@ -292,14 +292,14 @@ class Default_AgencylistController extends Zend_Controller_Action
 							$statesmodel = new Default_Model_States();
 							$statesData = $statesmodel->getStatesList($countryId);
 							foreach($statesData as $res)
-							$agencylistform->state_3->addMultiOption($res['id'],utf8_encode($res['state_name']));
+							$agencylistform->state_3->addMultiOption($res['id'],$res['state_name']);
 						}
 						if($stateId != '')
 						{
 							$citiesmodel = new Default_Model_Cities();
 							$citiesData = $citiesmodel->getCitiesList($stateId);
 							foreach($citiesData as $res)
-							$agencylistform->city_3->addMultiOption($res['id'],utf8_encode($res['city_name']));
+							$agencylistform->city_3->addMultiOption($res['id'],$res['city_name']);
 						}
 						$agencylistform->country_3->setValue($countryId);
 						$agencylistform->state_3->setValue($stateId);
@@ -734,7 +734,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_1);
 			foreach($statesData as $res)
 			{
-				$agencylistform->state_1->addMultiOption($res['id'],utf8_encode($res['state_name']));
+				$agencylistform->state_1->addMultiOption($res['id'],$res['state_name']);
 			}
 			if(isset($state_1) && $state_1 != 0 && $state_1 != '')
 			$agencylistform->setDefault('state_1',$state_1);
@@ -743,7 +743,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_1);
 			foreach($citiesData as $res)
 			{
-				$agencylistform->city_1->addMultiOption($res['id'],utf8_encode($res['city_name']));
+				$agencylistform->city_1->addMultiOption($res['id'],$res['city_name']);
 			}
 			if(isset($city_1) && $city_1 != 0 && $city_1 != '')
 			$agencylistform->setDefault('city_1',$city_1);
@@ -757,7 +757,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_2);
 			foreach($statesData as $res)
 			{
-				$agencylistform->state_2->addMultiOption($res['id'],utf8_encode($res['state_name']));
+				$agencylistform->state_2->addMultiOption($res['id'],$res['state_name']);
 			}
 			if(isset($state_2) && $state_2 != 0 && $state_2 != '')
 			$agencylistform->setDefault('state_2',$state_2);
@@ -766,7 +766,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_2);
 			foreach($citiesData as $res)
 			{
-				$agencylistform->city_2->addMultiOption($res['id'],utf8_encode($res['city_name']));
+				$agencylistform->city_2->addMultiOption($res['id'],$res['city_name']);
 			}
 			if(isset($city_2) && $city_2 != 0 && $city_2 != '')
 			$agencylistform->setDefault('city_2',$city_2);
@@ -780,7 +780,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_3);
 			foreach($statesData as $res)
 			{
-				$agencylistform->state_3->addMultiOption($res['id'],utf8_encode($res['state_name']));
+				$agencylistform->state_3->addMultiOption($res['id'],$res['state_name']);
 			}
 			if(isset($state_3) && $state_3 != 0 && $state_3 != '')
 			$agencylistform->setDefault('state_3',$state_3);
@@ -789,7 +789,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_3);
 			foreach($citiesData as $res)
 			{
-				$agencylistform->city_3->addMultiOption($res['id'],utf8_encode($res['city_name']));
+				$agencylistform->city_3->addMultiOption($res['id'],$res['city_name']);
 			}
 			if(isset($city_3) && $city_3 != 0 && $city_3 != '')
 			$agencylistform->setDefault('city_3',$city_3);

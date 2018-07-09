@@ -111,7 +111,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 		}
 		$objName = 'myemployees';$emptyroles=0;
 		
-		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'Email','employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>' Work Phone','jobtitle_name'=>'Job Title','contactnumber'=>'Contact Number');
+		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'Email','employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>' Work Phone','jobtitle_name'=>'Career Track','contactnumber'=>'Contact Number');
 		
 		$employeeModel = new Default_Model_Employee();
 		$tablecontent = $employeeModel->getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1,$exParam1);  

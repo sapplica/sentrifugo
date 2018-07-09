@@ -102,7 +102,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$roles_arr = $role_model->getRolesDataByID($data['emprole']); 
 						if(sizeof($roles_arr) > 0)
 						{ 			                    
-							$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+							$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],$roles_arr[0]['rolename']);
 							$data['emprole']=$roles_arr[0]['rolename'];
 							
 						}
@@ -159,7 +159,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$jobtitleData = $jobtitlesModel->getJobTitleList(); 			
 					if(sizeof($jobtitleData) > 0)
 					{ 			
-						$employeeform->jobtitle_id->addMultiOption('','Select a Job Title');
+						$employeeform->jobtitle_id->addMultiOption('','Select a Career Track');
 						foreach ($jobtitleData as $jobtitleres){
 							$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
 						}
@@ -168,7 +168,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']); 
 					if(sizeof($positionlistArr) > 0)
 					{ 			
-						$employeeform->position_id->addMultiOption('','Select a Position');
+						$employeeform->position_id->addMultiOption('','Select a Career Level');
 						foreach ($positionlistArr as $positionlistres){
 							$employeeform->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);
 						}
@@ -1195,8 +1195,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$empcommdetailsform->current_country->addMultiOption('','Select Country');
 						foreach ($countrieslistArr as $countrieslistres)
 						{
-							$empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
-							$empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+							$empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
+							$empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 						}
 					}
 					else
@@ -1531,7 +1531,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 		  $this->_redirect('error');
 		} 			
 	}
-	//Employee Experience details...(GRID)
+	//Employee Subcontrator details...(GRID)
 	public function experienceAction()
 	{
 	    if(defined('EMPTABCONFIGS'))
@@ -1625,7 +1625,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 							'jsFillFnName' => '',
 							'searchArray' => $searchArray,
 							'add'=>'add',
-							'menuName'=>'Experience Details',
+							'menuName'=>'Subcontrator Details',
 							'formgrid' => 'true',
 							'unitId'=>$Uid,
 							'call'=>$call,'context'=>'mydetails',
@@ -1797,6 +1797,181 @@ class Default_MydetailsController extends Zend_Controller_Action
 							'searchArray' => $searchArray,
 							'add'=>'add',
 							'menuName'=>'Employee Leaves',
+							'formgrid'=>'true','unitId'=>$Uid,
+							'call'=>$call,'context'=>'mydetails'
+						);			
+						array_push($data,$dataTmp);
+						$permission = sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginUserRole,'edit');
+						$this->view->dataArray = $data;
+						$this->view->call = $call ;
+						$this->view->id = $Uid;
+						$this->view->messages = $this->_helper->flashMessenger->getMessages();
+						$this->view->employeedata = $empdata[0];
+						$this->view->usergroup = $loginuserGroup;
+						$this->view->permission = $permission;
+					}
+					$this->view->empdata = $empdata; 	
+				}
+				}
+				catch(Exception $e)
+				{
+					$this->view->rowexist = "norows";
+				}
+				$this->view->usergroup = $loginuserGroup;
+			}
+			else
+			{
+		 	  $this->_redirect('error');
+		    }
+        }
+		else
+		{
+		 	$this->_redirect('error');
+		}    			
+	}
+    
+  public function oncallsAction()
+	{
+	    if(defined('EMPTABCONFIGS'))
+		{
+		    $empOrganizationTabs = explode(",",EMPTABCONFIGS);
+			if(in_array('emp_oncalls',$empOrganizationTabs))
+			{
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity()){
+							$loginUserId = $auth->getStorage()->read()->id;
+							$loginUserRole = $auth->getStorage()->read()->emprole;
+							$loginuserGroup = $auth->getStorage()->read()->group_id;
+				}
+				$id = $loginUserId;
+				$call = $this->_getParam('call');
+				if($call == 'ajaxcall')
+				{
+					$this->_helper->layout->disableLayout();
+					$userID = ($this->_getParam('unitId') !='')? $this->_getParam('unitId'):$this->_getParam('userid');
+				}	
+				$Uid = ($id)?$id:$userID;
+				$employeeoncallsModel = new Default_Model_Employeeoncalls();
+				$oncallmanagementModel = new Default_Model_Oncallmanagement();	 		
+				$employeeModal = new Default_Model_Employee();
+				try
+				{
+					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					if($empdata == 'norows')
+					{
+					   $this->view->rowexist = "norows";
+					   $this->view->empdata = "";
+					}
+					else
+					{
+						$this->view->rowexist = "rows";
+						if(!empty($empdata))
+						{
+							if($Uid)
+							{
+							   $emponcallsform = new Default_Form_emponcalls();
+							   $employeeoncallsModal = new Default_Model_Employeeoncalls();
+							   $currentdata = '';
+							   $oncalltransferArr = $oncallmanagementModel->getWeekendDetails($empdata[0]['department_id']);
+							   $prevyeardata = $employeeoncallsModal->getPreviousYearEmployeeoncallData($Uid);
+							   $currentyeardata = $employeeoncallsModal->getsingleEmployeeoncallData($Uid);
+							   if(empty($currentyeardata))
+								{
+									$currentdata = "empty";
+									$currentyearoncallcount ='';
+								} 
+								else
+								{
+									$currentdata = "notempty";
+									$currentyearoncallcount = $currentyeardata[0]['emp_oncall_limit'];
+								}					 
+							
+							$this->view->currentdata = $currentdata;					
+							$oncalltransfercount = '';   $previousyear = '';   $isoncalltrasnferset = '';
+							$data = $employeeoncallsModal->getsingleEmployeeoncallData($id);
+							$used_oncalls = 0;   $date=date('Y');
+						   if(!empty($data))
+							{
+								 $emponcallsform->populate($data[0]);
+								 $used_oncalls=$data[0]['used_oncalls'];
+							}
+							$emponcallsform->alloted_year->setValue($date);
+							if(!empty($oncalltransferArr) && $oncalltransferArr[0]['is_oncalltransfer'] == 1 && !empty($prevyeardata) && is_numeric($prevyeardata[0]['remainingoncalls']) && (int)$prevyeardata[0]['remainingoncalls'] > 0 && $prevyeardata[0]['alloted_year'] !='' && empty($currentyeardata))
+							{
+								 $oncalltransfercount = $prevyeardata[0]['remainingoncalls'];
+								 $previousyear = $prevyeardata[0]['alloted_year'];
+								 $isoncalltrasnferset = 1;
+								 $emponcallsform->submitbutton->setAttrib('onClick','return showoncallalert('.$oncalltransfercount.','.$previousyear.')');
+								 $emponcallsform->setAttrib('action',BASE_URL.'mydetails/oncalls/');
+							 
+							}
+							else
+							{
+							 $emponcallsform->setAttrib('action',BASE_URL.'mydetails/oncalls/');
+							} 
+							$this->view->form = $emponcallsform;
+							$this->view->data = $data;
+							$this->view->id = $Uid;
+							$this->view->oncalltransfercount = $oncalltransfercount;
+							
+						}
+						//Post values....
+						if($this->getRequest()->getPost())
+						{	
+							$result = $this->empaddorremoveoncalls($emponcallsform,$Uid,$used_oncalls,$oncalltransfercount,$isoncalltrasnferset,$currentyearoncallcount);	
+							$this->view->msgarray = $result; 
+						}  		
+						$objname = $this->_getParam('objname');
+						$refresh = $this->_getParam('refresh');
+						$data = array();$searchQuery = '';	$searchArray = array();	$tablecontent = '';
+						if($refresh == 'refresh')
+						{
+							$sort = 'DESC';$by = 'e.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
+						}
+						else 
+						{
+							$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+							$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'e.modifieddate';
+							$perPage = $this->_getParam('per_page',10);
+							$pageNo = $this->_getParam('page', 1);
+							$searchData = $this->_getParam('searchData');	
+							$searchData = rtrim($searchData,',');			
+							/** search from grid - START **/
+							$searchData = $this->_getParam('searchData');	
+							if($searchData != '' && $searchData!='undefined')
+							{
+								$searchValues = json_decode($searchData);
+								foreach($searchValues as $key => $val)
+								{
+									$searchQuery .= " ".$key." like '%".$val."%' AND ";
+									$searchArray[$key] = $val;
+								}
+								$searchQuery = rtrim($searchQuery," AND");					
+							}
+							/** search from grid - END **/
+						}
+								
+						$objName = 'emponcalls';
+
+						$tableFields = array('action'=>'Action','emp_oncall_limit'=>'Allotted On Call Limit','used_oncalls'=>'Used On Call','remainingoncalls'=>'On Call Balance','alloted_year'=>'Alloted Year');
+						
+
+						$tablecontent = $employeeoncallsModel->getEmpOncallsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
+						$dataTmp = array(
+							'userid'=>$Uid, 
+							'sort' => $sort,
+							'by' => $by,
+							'pageNo' => $pageNo,
+							'perPage' => $perPage,				
+							'tablecontent' => $tablecontent,
+							'objectname' => $objName,
+							'extra' => array(),
+							'tableheader' => $tableFields,
+							'jsGridFnName' => 'getEmployeeAjaxgridData',
+							'jsFillFnName' => '',
+							'searchArray' => $searchArray,
+							'add'=>'add',
+							'menuName'=>'Employee On Call',
 							'formgrid'=>'true','unitId'=>$Uid,
 							'call'=>$call,'context'=>'mydetails'
 						);			
@@ -2183,9 +2358,9 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$basecurrencymodeldata = $currencymodel->getCurrencyList();
 								if(sizeof($basecurrencymodeldata) > 0)
 								{ 			
-									   $empsalarydetailsform->currencyid->addMultiOption('','Select Salary Currency');
+									   $empsalarydetailsform->currencyid->addMultiOption('','Select Cost Currency');
 									foreach ($basecurrencymodeldata as $basecurrencyres){
-										$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
+										$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],$basecurrencyres['currency']);
 									}
 								}else
 								{
@@ -2194,7 +2369,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								}
 								
 								$payfreqData = $payfrequencyModal->getActivePayFreqData();
-				 				$empsalarydetailsform->salarytype->addMultiOption('','Select Pay Frequency');
+				 				$empsalarydetailsform->salarytype->addMultiOption('','Select Charge Frequency');
 								if(sizeof($payfreqData) > 0)
 								{
 									foreach ($payfreqData as $payfreqres){
@@ -2203,7 +2378,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						
 								}else
 								{
-									$msgarray['salarytype'] = 'Pay frequency is not configured yet.';
+									$msgarray['salarytype'] = 'Charge Frequency is not configured yet.';
 									$emptyFlag++;
 						
 								}
@@ -2211,28 +2386,28 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
 								if(!empty($bankaccounttypeArr))
 								{
-									$empsalarydetailsform->bankaccountid->addMultiOption('','Select Bank Account Type');
+									$empsalarydetailsform->bankaccountid->addMultiOption('','Select Bill Code');
 									foreach ($bankaccounttypeArr as $bankaccounttyperes){
 										$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttyperes['id'],$bankaccounttyperes['bankaccounttype']);
 										
 									}
 								}else
 								{
-									$msgarray['bankaccountid'] = 'Bank account types are not configured yet.';
+									$msgarray['bankaccountid'] = 'Bill Codes are not configured yet.';
 									$emptyFlag++;
 								}
 								
 								$accountclasstypeArr = $accountclasstypemodel->getAccountClassTypeList();
 								if(!empty($accountclasstypeArr))
 								{
-									$empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Type');
+									$empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Bill Code');
 									foreach ($accountclasstypeArr as $accountclasstyperes){
 										$empsalarydetailsform->accountclasstypeid->addMultiOption($accountclasstyperes['id'],$accountclasstyperes['accountclasstype']);
 										
 									}
 								}else
 								{
-									$msgarray['accountclasstypeid'] = 'Account class types are not configured yet.';
+									$msgarray['accountclasstypeid'] = 'Economics Profiles are not configured yet.';
 									$emptyFlag++;
 								}
 								
@@ -3245,7 +3420,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 									
 								foreach ($countrieslistArr as $countrieslistres)
 								{
-									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 									
 								}
 							}
@@ -3459,7 +3634,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 									
 								foreach ($countrieslistArr as $countrieslistres)
 								{
-									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 								}
 							}
 							else
@@ -4035,6 +4210,21 @@ class Default_MydetailsController extends Zend_Controller_Action
 								);
 						$Id = $employeeleavesModel->SaveorUpdateEmpLeaves($data, $where);
 				break;
+        
+				case 'oncalls':	//Employee oncalls...
+						$employeeoncallsModel = new Default_Model_Employeeoncalls();
+						
+						$emp_oncall_limit = $this->_request->getParam('oncall_limit');
+										
+						$data = array('user_id'=>$user_id,
+									'emp_oncall_limit'=>$emp_oncall_limit,
+									'used_oncalls'=>$used_oncalls,
+									'alloted_year'=>$date->get('yyyy'),
+									'modifiedby'=>$loginUserId,
+									'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
+								);
+						$Id = $employeeoncallsModel->SaveorUpdateEmpOncalls($data, $where);
+				break;
 				
 				case 'certification':	//Employee training and certification details....
 								$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();	
@@ -4337,7 +4527,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$Id = $empadditionaldetailsModal->SaveorUpdateEmpAdditionalData($data, $where);
 				break;
 				
-				case 'salarydetails':	//Employee salary account details.....
+				case 'salarydetails':	//Employee cost account details.....
 							$empsalarydetailsModal = new Default_Model_Empsalarydetails();
 							$id = $this->_request->getParam('id'); 
 							$user_id = $loginUserId;
@@ -4372,12 +4562,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{	
 			   $tableid = $id;
-			     if($tabName == "skills" || $tabName == "leaves" || $tabName == "holidays" || $tabName == "medicalclaims")
+			     if($tabName == "skills" || $tabName == "leaves" || $tabName == "oncalls" || $tabName == "holidays" || $tabName == "medicalclaims")
 					$msgStr = "Employee ".$tabName." updated successfully.";
 				else if($tabName == "employee")
 						$msgStr = "Employee details updated successfully.";
 				else if($tabName == "salarydetails")
-						$msgStr = "Employee salary details updated successfully.";
+						$msgStr = "Employee cost details updated successfully.";
 				else if($tabName == "creditcard")
 						$msgStr = "Employee corporate card details updated successfully.";						
 				else
@@ -4388,12 +4578,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 			else
 			{
 				$tableid = $Id; 	
-				if($tabName == "skills" || $tabName == "leaves" || $tabName == "holidays" || $tabName == "medicalclaims")
+				if($tabName == "skills" || $tabName == "leaves" || $tabName == "oncalls" || $tabName == "holidays" || $tabName == "medicalclaims")
 					$msgStr = "Employee ".$tabName." added successfully.";
 				else if($tabName == "employee")
 						$msgStr = "Employee details added successfully.";
 				else if($tabName == "salarydetails")
-						$msgStr = "Employee salary details added successfully.";
+						$msgStr = "Employee cost details added successfully.";
 				else if($tabName == "creditcard")
 						$msgStr = "Employee corporate card details added successfully.";							
 				else
@@ -4924,6 +5114,64 @@ class Default_MydetailsController extends Zend_Controller_Action
 			}
 	
 	}
+  
+  public function empaddorremoveoncalls($emponcallsform,$userid,$used_oncalls,$oncalltransfercount,$isoncalltrasnferset,$currentyearoncallcount)
+	{
+		
+	  $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserId = $auth->getStorage()->read()->id;
+		} 
+		if($emponcallsform->isValid($this->_request->getPost()))
+		{
+			$employeeoncallsModel = new Default_Model_Employeeoncalls();
+			$id = $this->_request->getParam('id'); 	//Id hidden field in form....
+			$user_id = $userid;
+			$emp_oncall_limit = $this->_request->getParam('oncall_limit');
+			if($oncalltransfercount !='' && $currentyearoncallcount =='')
+			 $emp_oncall_limit = ($emp_oncall_limit + $oncalltransfercount);
+			else
+			 $emp_oncall_limit = ($emp_oncall_limit + $currentyearoncallcount);
+			 
+			$isoncalltrasnfer = 0; 
+			if($isoncalltrasnferset == 1)	   $isoncalltrasnfer = 1;				
+				
+			$date = new Zend_Date();
+			$actionflag = '';	$tableid  = ''; 
+			
+			$Id = $employeeoncallsModel->SaveorUpdateEmployeeOncalls($user_id, $emp_oncall_limit,$isoncalltrasnfer,$loginUserId);
+			 if($id)
+			   {
+				 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee On Call details updated successfully."));
+				 $actionflag = 2;
+				 $tableid = $id;
+			   }
+			   else
+			   {
+				  $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee On Call details added successfully.")); 					   
+				  $actionflag = 1;
+				  $tableid = $Id;	
+			   }
+				$menuID = EMPLOYEE;
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+				$this->_redirect('mydetails/oncalls/');
+    			   
+			}
+			else
+			{
+     			$messages = $emponcallsform->getMessages();
+				foreach ($messages as $key => $val)
+					{
+						foreach($val as $key2 => $val2)
+						 {
+							$msgarray[$key] = $val2;
+							break;
+						 }
+					}
+				return $msgarray;	
+			}
+	
+	}
 	
 	public function updateempdetails($employeeform)
 	{	
@@ -5159,7 +5407,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$employeeform->department_id->addMultiOption('','Select Department');
 				foreach($departmentlistArr as $departmentlistresult)
 				{
-					$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+					$employeeform->department_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
 				}  
 				if(isset($department_id) && $department_id != 0 && $department_id != '')
 					$employeeform->setDefault('department_id',$department_id);			
@@ -5171,7 +5419,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$employeeform->reporting_manager->addMultiOption('','Select Reporting Manager');
 				foreach($reportingManagerArr as $reportingManagerresult)
 				{
-					$employeeform->reporting_manager->addMultiOption($reportingManagerresult['id'],utf8_encode($reportingManagerresult['userfullname']));
+					$employeeform->reporting_manager->addMultiOption($reportingManagerresult['id'],$reportingManagerresult['userfullname']);
 				}  
 				if(isset($reporting_manager) && $reporting_manager != 0 && $reporting_manager != '')
 					$employeeform->setDefault('reporting_manager',$reporting_manager);			
@@ -5182,10 +5430,10 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$positionsmodel = new Default_Model_Positions();
 				$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
 				$employeeform->position_id->clearMultiOptions(); 
-				$employeeform->position_id->addMultiOption('','Select Position');
+				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
-					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));
+					$employeeform->position_id->addMultiOption($positionlistRes['id'],$positionlistRes['positionname']);
 				}  
 				if(isset($position_id) && $position_id != 0 && $position_id != '')
 					$employeeform->setDefault('position_id',$position_id);			

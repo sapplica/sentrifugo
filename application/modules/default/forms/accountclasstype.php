@@ -35,7 +35,7 @@ class Default_Form_accountclasstype extends Zend_Form
         $accountclasstype->setAttrib('maxLength', 20);
         
         $accountclasstype->setRequired(true);
-        $accountclasstype->addValidator('NotEmpty', false, array('messages' => 'Please enter account class type.'));  
+        $accountclasstype->addValidator('NotEmpty', false, array('messages' => 'Please enter Economics Profile.'));  
         $accountclasstype->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -43,7 +43,7 @@ class Default_Form_accountclasstype extends Zend_Form
 							 'options'     => array( 
 							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
 								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid account class type.'
+										 'regexNotMatch'=>'Please enter valid Economics Profile.'
 								 )
 							 )
 						 )
@@ -54,7 +54,7 @@ class Default_Form_accountclasstype extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $accountclasstype->getValidator('Db_NoRecordExists')->setMessage('Account class type already exists.');
+        $accountclasstype->getValidator('Db_NoRecordExists')->setMessage('Economics Profile already exists.');
 		
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);

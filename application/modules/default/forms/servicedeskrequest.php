@@ -47,12 +47,6 @@ class Default_Form_servicedeskrequest extends Zend_Form
 			$servicedeskrequest->addFilter(new Zend_Filter_StringTrim());
 			$servicedeskrequest->setRequired(true);
 	        $servicedeskrequest->addValidator('NotEmpty', false, array('messages' => 'Please enter request type.'));
-			$servicedeskrequest->addValidator("regex",true,array(                           
-	                           'pattern'=>'/^[a-zA-Z0-9\- ]+$/',
-	                           'messages'=>array(
-	                               'regexNotMatch'=>'Please enter valid request type.'
-	                           )
-	        	));
 	        $servicedeskrequest->addValidator(new Zend_Validate_Db_NoRecordExists(
 		                                            array(  'table'=>'main_sd_reqtypes',
 		                                                     'field'=>'service_request_name',

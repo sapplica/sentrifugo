@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Billing PDF</title>
+</head>
+
+<body>
+<table  cellspacing="0" cellpadding="0" style="width: 100%; font-family: Arial">
+	<tr>
+		<td style="width: 50%; font-size: 22px;"><?php echo (!empty($this->flag) && $this->flag == 1)?'Project Reports':'Billing Report'; ?></td>
+		<td style="width: 50%; font-size: 14px; text-align: right;;"><?php echo date('F jS, Y')?></td>
+	</tr>
+</table>
+<table cellspacing="0" cellpadding="12" border="0" style="margin-top: 16px; border: 1px solid #cfcfcf; font-family: Arial; font-size: 12px; border-collapse: collapse;">
+<?php
+	if(!empty($this->reportsdata))
+	{
+		?>
+			<tr style="font-weight: bold;">
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Name</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Enterprise ID</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Business Unit</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Project Name</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Project Type</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Project Hours</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Status</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Overtime Hours</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">On Call Overtime Hours</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Full Day On Call Total</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Full Day Leaves Total</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Partial Day Leaves Total</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Billable Hours</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Billable Rate</th>
+        <th style="text-align: left;padding-top: 6px;  padding-bottom: 6px;letter-spacing: .5px;">Billable Total</th>
+			</tr>
+      <?php $i = 1; foreach($this->reportsdata as $data) { ?>
+			    <tr <?php echo ($i%2 != 0)?'style="background: #f8f8f8;"':'';?> >
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Full Name'])?$data['Full Name']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Enterprise ID'])?$data['Enterprise ID']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Business Unit'])?$data['Business Unit']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Project Name'])?$data['Project Name']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Project Type'])?$data['Project Type']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Project Hours'])?$data['Project Hours']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Status'])?$data['Status']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Overtime Hours'])?$data['Overtime Hours']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['On Call Overtime Hours'])?$data['On Call Overtime Hours']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Full Day On Call Total'])?$data['Full Day On Call Total']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Full Day Leaves Total'])?$data['Full Day Leaves Total']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Partial Day Leaves Total'])?$data['Partial Day Leaves Total']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Hours'])?$data['Billable Hours']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Rate'])?$data['Billable Rate']:'';?></td>
+			        <td style="border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Total'])?$data['Billable Total']:'';?></td>
+			    </tr>
+			<?php  $i++; } ?>			
+	<?php
+ 	}
+	else
+	{
+
+	}
+?>
+</table>
+</body>
+</html>

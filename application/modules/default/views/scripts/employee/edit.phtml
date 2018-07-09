@@ -243,20 +243,20 @@ $report_opt = $this->report_opt;
 <?php } ?>
 												
 				<div class="new-form-ui">
-				  <label>Job Title</label>
+				  <label class="required">Career Track</label>
 				<div class="division"><?php echo $this->form->jobtitle_id; ?>
                 				<?php if(isset($this->msgarray['jobtitle_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
 				<?php }?>
 
 				<?php if(in_array('jobtitles',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Career Tracks');"> Add Career Track</span>			
 				<?php } ?>
                 </div>
 				</div>
 				
 				<div class="new-form-ui">
-				  <label >Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				  <label class="required">Career Level <img class="tooltip" title="Select Career Track to populate Career Levels" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->position_id; ?>
                 				<?php if(isset($this->msgarray['position_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
@@ -265,7 +265,7 @@ $report_opt = $this->report_opt;
 				<?php } ?>
 
 				  <?php if(in_array('position',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'positions/addpopup' ?>','Position');"> Add Position</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'positions/addpopup' ?>','Career Level');"> Add Career Level</span>			
 				  <?php } ?>
                 </div>
 				
@@ -308,7 +308,7 @@ $report_opt = $this->report_opt;
 				</div>
                         <?php }?>			
 				<div class="new-form-ui">
-				  <label>Years of Experience</label>
+				  <label>Client user ID</label>
 				<div class="division"><?php echo $this->form->years_exp; ?></div>
 				<?php if(isset($this->msgarray['years_exp'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->years_exp->getId(); ?>"><?php echo $this->msgarray['years_exp'];?></span>
@@ -324,7 +324,7 @@ $report_opt = $this->report_opt;
 				</div>
 				
 				<div class="new-form-ui">
-				  <label ><?php echo $this->form->extension_number->getLabel(); ?></label>
+				  <label class="required"><?php echo $this->form->extension_number->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->extension_number; ?></div>
 				<?php if(isset($this->msgarray['extension_number'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->extension_number->getId(); ?>"><?php echo $this->msgarray['extension_number'];?></span>
@@ -332,7 +332,7 @@ $report_opt = $this->report_opt;
 				</div>
 				
 				<div class="new-form-ui">
-				  <label ><?php echo $this->form->office_faxnumber->getLabel(); ?></label>
+				  <label class="required"><?php echo $this->form->office_faxnumber->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->office_faxnumber; ?></div>
 				<?php if(isset($this->msgarray['office_faxnumber'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->office_faxnumber->getId(); ?>"><?php echo $this->msgarray['office_faxnumber'];?></span>

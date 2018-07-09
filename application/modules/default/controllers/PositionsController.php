@@ -101,12 +101,12 @@ class Default_PositionsController extends Zend_Controller_Action
 		{
 			foreach ($jobtitleidmodeldata as $jobtitleidres)
 			{
-				$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+				$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 			}
 		}
 		else
 		{
-			$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+			$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 			$emptyFlag++;
 		}
 		$this->view->form = $positionsform;
@@ -155,7 +155,7 @@ class Default_PositionsController extends Zend_Controller_Action
 					{
 						foreach ($jobtitleidmodeldata as $jobtitleidres)
 						{
-							$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+							$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 							$data[0]['jobtitleid']=$jobtitleidres['jobtitlename'];
 						}
 					}
@@ -214,12 +214,12 @@ class Default_PositionsController extends Zend_Controller_Action
 				{
 					foreach ($jobtitleidmodeldata as $jobtitleidres)
 					{
-						$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+						$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 					}
 				}
 				else
 				{
-					$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+					$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 					$emptyFlag++;
 				}
 				if(!empty($data) && $data != 'norows')
@@ -272,20 +272,20 @@ class Default_PositionsController extends Zend_Controller_Action
 			{
 				foreach ($jobtitleidmodeldata as $jobtitleidres)
 				{
-					$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+					$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 					$this->view->notdisplayposition = 0;
 				}
 			}
 			else
 			{
-				$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+				$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 					
 				$emptyFlag++;
 			}
 			$this->view->emptyFlag=$emptyFlag;
 		}else{
 			$jobtitleidres = $jobtitlesmodel->getsingleJobTitleData($jobtitleid);
-			$positionsform->jobtitleid->addMultiOption($jobtitleidres[0]['id'],utf8_encode($jobtitleidres[0]['jobtitlename']));
+			$positionsform->jobtitleid->addMultiOption($jobtitleidres[0]['id'],$jobtitleidres[0]['jobtitlename']);
 			$positionsform->setDefault('jobtitleid',$jobtitleid);
 			$this->view->notdisplayposition = $jobtitleid;
 		}
@@ -406,12 +406,12 @@ class Default_PositionsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position updated successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Level updated successfully."));
 			}
 			else
 			{
 				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position added successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Level added successfully."));
 			}
 			$menuID = POSITIONS;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -455,17 +455,17 @@ class Default_PositionsController extends Zend_Controller_Action
 				sapp_Global::send_configuration_mail("Positions", $position_data[0]['positionname']);
 				$menuID = POSITIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$messages['message'] = 'Position deleted successfully.';
+				$messages['message'] = 'Career Level deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
-			{	 $messages['message'] = 'Position cannot be deleted.';
+			{	 $messages['message'] = 'Career Level cannot be deleted.';
 			$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Position cannot be deleted.';
+			$messages['message'] = 'Career Level cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 			// delete success message after delete in view

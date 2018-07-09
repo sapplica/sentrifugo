@@ -140,7 +140,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 				}else
 				{
 				
-					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
+					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'emponcallsummary' || $dataArray['objectname'] ==  'empscreening')
 					{
 						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
                         $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
@@ -171,12 +171,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			            elseif($dataArray['objectname'] == 'manageremployeevacations'){
 			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'leaverequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel Leave\' class="fa fa-ellipsis-v" ></a>';
 			            }
+			            elseif($dataArray['objectname'] == 'manageremployeeoncalls'){
+			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'oncallrequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel On Call\' class="fa fa-ellipsis-v" ></a>';
+			            }
 			            else {
                         	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            }
 			            
 						if($dataArray['objectname'] == 'pendingleaves')
 						   $delete_str = '<a id="cancel_leave_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
+						else if($dataArray['objectname'] == 'pendingoncalls')
+	 						 $delete_str = '<a id="cancel_oncall_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel On Call\' class="sprite cancel-lev" ></a>';
 						else if($dataArray['objectname'] == 'usermanagement')
 							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						else if($dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements')
@@ -502,7 +507,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						} 
 						$welcome = 'false';
 						$urlString = $_SERVER['REQUEST_URI'];
-						if (strpos($urlString,'welcome') !== false || strpos($urlString,'pendingleaves') !== false) {
+						if (strpos($urlString,'welcome') !== false || strpos($urlString,'pendingleaves') !== false || strpos($urlString,'pendingoncalls') !== false) {
 							$welcome = 'true';
 						}
 					
@@ -769,6 +774,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												</script>";
 									}
 								}
+								if($controllerName == 'pendingoncalls' && isset($p['approved_cancel_flag']))
+								{
+									if($p['approved_cancel_flag'] == 'no')
+									{
+										echo "<script type='text/javascript'>
+												$(document).ready(function() { 
+												$('#cancel_oncall_".$p['id']."').remove();
+												});
+												</script>";
+									}
+								}
 								if($controllerName == 'disciplinarymyincidents' && isset($p['incident_status']) && isset($p['dateexpired']))
 								{
 									if($p['incident_status'] != 'Initiated' || $p['dateexpired'] == 'expired')
@@ -966,10 +982,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										}
 										break;
 									default:	 	                               
-	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 									    break;								 
 								}											
-								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")		
+								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")		
 							}							
 						}
 					}

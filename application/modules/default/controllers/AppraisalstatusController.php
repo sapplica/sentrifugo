@@ -239,7 +239,7 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
 				{
 					foreach($departmentlistArr as $dept)
 					{
-						$options_data .= sapp_Global::selectOptionBuilder($dept['id'],utf8_encode($dept['deptname']));
+						$options_data .= sapp_Global::selectOptionBuilder($dept['id'],$dept['deptname']);
 					}
 					$result['result'] = $options_data;
 					$result['msg'] = 'true';

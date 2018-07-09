@@ -352,7 +352,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		$competencylevelModel = new Default_Model_Competencylevel();
 		$competencylevelArr = $competencylevelModel->getCompetencylevelList();
 		$msgarray = array();
-                $empskillsform->competencylevelid->addMultiOption('','Select Competency Level');
+                $empskillsform->competencylevelid->addMultiOption('','Select Competency Area');
 		if(!empty($competencylevelArr))
 		{
 			
@@ -362,7 +362,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			}
 		}else
 		{
-			$msgarray['competencylevelid'] = 'Competency levels are not configured yet.';
+			$msgarray['competencylevelid'] = 'Competency Areas are not configured yet.';
 			$emptyFlag++;
 		}
 		$empskillsform->setAttrib('action',BASE_URL.'empskills/addpopup/unitId/'.$id);
@@ -450,7 +450,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 
 		if(sizeof($competencylevelArr)>0)
 		{
-			$empskillsform->competencylevelid->addMultiOption('','Select Competency Level');
+			$empskillsform->competencylevelid->addMultiOption('','Select Competency Area');
 			foreach ($competencylevelArr as $competencylevelres){
 				$empskillsform->competencylevelid->addMultiOption($competencylevelres['id'],$competencylevelres['competencylevel']);
 					
