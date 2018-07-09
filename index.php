@@ -35,6 +35,7 @@ require_once 'public/site_constants.php';
 require_once 'public/email_constants.php';
 require_once 'public/emptabconfigure.php';
 require_once 'public/db_constants.php';
+require_once 'public/ldap_constants.php';
 require_once 'public/application_constants.php';
 require_once 'public/mail_settings_constants.php';
 require_once 'application/modules/default/library/sapp/Global.php';

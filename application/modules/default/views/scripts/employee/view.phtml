@@ -53,6 +53,7 @@ $data = $this->data;
 				sapp_Helper::viewBody('alt',$this->form->prefix_id->getLabel(),(!sapp_Helper::SappEmpty($this->data['prefix_id']))?$this->data['prefix_id']:"...",$this->form->firstname->getLabel(),(!sapp_Helper::SappEmpty($this->form->firstname->getValue()))?$this->form->firstname->getValue():"...");
 				
 				sapp_Helper::viewBody('nor',$this->form->lastname->getLabel(),(!sapp_Helper::SappEmpty($this->form->lastname->getValue()))?$this->form->lastname->getValue():"...",$this->form->modeofentry->getLabel(),(!sapp_Helper::SappEmpty($this->form->modeofentry->getValue()))?$this->form->modeofentry->getValue():"...");
+                sapp_Helper::viewBody('nor',$this->form->username->getLabel(),(!sapp_Helper::SappEmpty($this->form->username->getValue()))?$this->form->username->getValue():"...",'','');
 				
 ?>				
 			    <div  id="iddiv_canditatename">				 
