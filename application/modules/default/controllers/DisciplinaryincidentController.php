@@ -402,7 +402,7 @@ public function editAction()
                     $form->employee_dept_id->addMultiOption('','Select Department');
                     foreach($departmentlistArr as $departmentlistresult)
                     {
-                        $form->employee_dept_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+                        $form->employee_dept_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
                     }
                      
                     if(isset($employee_dept_id) && $employee_dept_id != 0 && $employee_dept_id != '')

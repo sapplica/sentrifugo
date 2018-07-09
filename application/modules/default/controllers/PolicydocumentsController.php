@@ -222,7 +222,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 		{
 			foreach($categoriesObj as $categories)
 			{
-				$documentsAddForm->category_id->addMultiOption($categories['id'],utf8_encode($categories['category']));
+				$documentsAddForm->category_id->addMultiOption($categories['id'],$categories['category']);
 			}
 		}
 
@@ -444,7 +444,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 					$documentsAddForm->category_id->addMultiOption('','Select Category');
 					foreach($categoriesObj as $categories)
 					{
-						$documentsAddForm->category_id->addMultiOption($categories['id'],utf8_encode($categories['category']));
+						$documentsAddForm->category_id->addMultiOption($categories['id'],$categories['category']);
 					}
 				}
 				$documentsAddForm->setDefault('category_id',$res['category_id']);
@@ -618,7 +618,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 				$categoriesObj = $categoriesModel->getCategoryById($res['category_id']);
 				if(!empty($categoriesObj))
 				{
-					$documentsAddForm->category_id->addMultiOption($categoriesObj['id'],utf8_encode($categoriesObj['category']));
+					$documentsAddForm->category_id->addMultiOption($categoriesObj['id'],$categoriesObj['category']);
 					$res['category_id']= $categoriesObj['category'];
 				}
 				else 
@@ -859,7 +859,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 					$categoriesObj = $categoriesModel->getCategoryById($category_id);
 					if(!empty($categoriesObj))
 					{
-						$multipleDocsForm->category_id->addMultiOption($categoriesObj['id'],utf8_encode($categoriesObj['category']));
+						$multipleDocsForm->category_id->addMultiOption($categoriesObj['id'],$categoriesObj['category']);
 					}
 					$multipleDocsForm->setDefault('category_id',$category_id);
 					$this->view->category_id = $category_id;

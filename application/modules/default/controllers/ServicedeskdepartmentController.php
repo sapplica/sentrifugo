@@ -413,7 +413,7 @@ public function addpopupAction()
 				$servicedeskdepartmentData = $servicedeskdepartmentmodel->getSDDepartmentData();
 				$opt ='';
 				foreach($servicedeskdepartmentData as $record){
-					$opt .= sapp_Global::selectOptionBuilder($record['id'], utf8_encode($record['service_desk_name']));
+					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['service_desk_name']);
 				}
 				$this->view->departmentData = $opt;
 					
@@ -459,7 +459,7 @@ public function addpopupAction()
 		            {
 		                foreach($data as $opt)
 		                {                    
-		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
+		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], $opt['service_request_name'], '');
 		                }
 		            }
         			
@@ -470,7 +470,7 @@ public function addpopupAction()
         		    {
 		                foreach($data as $opt)
 		                {                    
-		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['name']), '');
+		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], $opt['name'], '');
 		                }
 		            }
         		}
@@ -483,7 +483,7 @@ public function addpopupAction()
 	            {
 	                foreach($data as $opt)
 	                {                    
-	                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
+	                    $options .= sapp_Global::selectOptionBuilder($opt['id'], $opt['service_request_name'], '');
 	                }
 	            }
         	}            

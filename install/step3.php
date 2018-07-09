@@ -111,10 +111,11 @@ function write_app_constants($app_name,$email)
     $filename = '../public/application_constants.php';
     if(file_exists($filename))
     {
-        
-            $db_content = "<?php
-       defined('SUPERADMIN_EMAIL') || define('SUPERADMIN_EMAIL','".$email."');
-       defined('APPLICATION_NAME') || define('APPLICATION_NAME','".$app_name."');
+      $install_date = date('Y-m-d');
+      $db_content = "<?php
+ defined('SUPERADMIN_EMAIL') || define('SUPERADMIN_EMAIL','".$email."');
+ defined('APPLICATION_NAME') || define('APPLICATION_NAME','".$app_name."');
+ defined('APPLICATION_INSTALL_DATE') || define('APPLICATION_INSTALL_DATE','".$install_date."');
      ?>";
             try{
                 $mysqlPDO = new PDO('mysql:host='.SENTRIFUGO_HOST.';dbname='.SENTRIFUGO_DBNAME.'',SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD);

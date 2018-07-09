@@ -96,7 +96,7 @@ if($actionName == 'viewsettings'){
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
 
-<!--<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>-->
+<!--<link href='//fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>-->
 	<!--[if IE 9]>  
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
 <![endif]-->  
@@ -182,6 +182,17 @@ if($actionName == 'viewsettings'){
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
 <?php 
 if($controllerName == "leaverequest")
+{
+?>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fullcalendar.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fullcalendar.print.css" media='print'/>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/fullcalendar.js"></script>
+<?php 
+}
+?>
+
+<?php 
+if($controllerName == "oncallrequest")
 {
 ?>
     <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fullcalendar.css" />
@@ -1124,7 +1135,7 @@ if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){
             <div class="newframe-div">
                 <div class="new-form-ui height32">
                     <div class="division">
-                        <input type="text" maxlength="12"  id="number_value" name="number_value">
+                        <input type="text" maxlength="15"  id="number_value" name="number_value">
                     </div>
                     <span class="errors" id="errors-contactnumber"></span>
                 </div>
@@ -1137,6 +1148,10 @@ if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){
     									
         <div id="empleaves-alert" style="display:none;">
             <div class="newframe-div"><div id="empleavesmessage"></div></div>
+        </div>									
+        
+        <div id="emponcalls-alert" style="display:none;">
+          <div class="newframe-div"><div id="emponcallsmessage"></div></div>
         </div>									
 <?php } ?>
 <script type="text/javascript" language="javascript">
@@ -1169,8 +1184,9 @@ $('.toggleleftwrapper').click(function(){
 });
 //End Toggle Left Menu   
 //for menu div to be displayed
-<?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs','assetdetails');
+<?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','emponcalls','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs','assetdetails');
 	  $leavestabs = array('cancelleaves','approvedleaves','rejectedleaves');	
+    $oncallstabs = array('canceloncalls','approvedoncalls','rejectedoncalls');	
 ?>
 
    $(document).ready(function(){ 
@@ -1212,6 +1228,8 @@ $('.toggleleftwrapper').click(function(){
                 <?php if(in_array($controllerName,$employeetabs)){?>
                      selected_obj = $("li[menu-url='<?php echo BASE_URL."employee" ;?>']");
                 <?php }elseif(in_array($controllerName,$leavestabs)){?> 
+                	selected_obj = $("div[menu-url='<?php echo BASE_URL.$controllerName ;?>']");    
+                <?php }elseif(in_array($controllerName,$oncallstabs)){?> 
                 	selected_obj = $("div[menu-url='<?php echo BASE_URL.$controllerName ;?>']");    
                 <?php }else{?>
 				<?php if($module == 'expenses'){ ?>
@@ -1273,6 +1291,12 @@ if(parent_div != "dummy")
 //to add selected class for leave tabs
 <?php if(in_array($controllerName,$leavestabs)){?> 
 	$("li[menu-url='<?php echo BASE_URL."pendingleaves" ;?>']").find("a").addClass("side-menu-selected");    
+<?php } ?>
+//end
+
+//to add selected class for oncall tabs
+<?php if(in_array($controllerName,$oncallstabs)){?> 
+	$("li[menu-url='<?php echo BASE_URL."pendingoncalls" ;?>']").find("a").addClass("side-menu-selected");    
 <?php } ?>
 //end
 

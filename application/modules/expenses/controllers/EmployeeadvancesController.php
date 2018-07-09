@@ -122,7 +122,7 @@ class Expenses_EmployeeadvancesController extends Zend_Controller_Action
 		if(sizeof($usersData) > 0)
 		{
 			foreach ($usersData as $user){
-				$advancesForm->to_id->addMultiOption($user['id'],utf8_encode($user['userfullname']));
+				$advancesForm->to_id->addMultiOption($user['id'],$user['userfullname']);
 				
 			}
 
@@ -144,7 +144,7 @@ class Expenses_EmployeeadvancesController extends Zend_Controller_Action
 		{
 			
 			foreach ($currencyData as $currency){
-				$advancesForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+				$advancesForm->currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 			if(empty($configData)){	
 				$msgarray['currency_id'] = 'Default currency is not selected yet.';
@@ -222,7 +222,7 @@ class Expenses_EmployeeadvancesController extends Zend_Controller_Action
 				{
 					foreach($projectData as $project)
 					{
-						$advancesForm->project_id->addMultiOption($project['id'],utf8_encode($project['project_name']));
+						$advancesForm->project_id->addMultiOption($project['id'],$project['project_name']);
 						
 					}
 				}	

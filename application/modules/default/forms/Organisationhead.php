@@ -37,6 +37,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		
         $firstname_orghead = new Zend_Form_Element_Text('firstname_orghead');
         $firstname_orghead->setAttrib('maxLength', 50);
+        $firstname_orghead->setAttrib('onchange', 'onfieldchanged_orghead()');
         $firstname_orghead->addFilter(new Zend_Filter_StringTrim());
         $firstname_orghead->setRequired(true);
         $firstname_orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter first name of organization head.'));  
@@ -49,6 +50,7 @@ class Default_Form_Organisationhead extends Zend_Form
         	));
         $lastname_orghead = new Zend_Form_Element_Text('lastname_orghead');
         $lastname_orghead->setAttrib('maxLength', 50);
+        $lastname_orghead->setAttrib('onchange', 'onfieldchanged_orghead()');
         $lastname_orghead->addFilter(new Zend_Filter_StringTrim());
         $lastname_orghead->setRequired(true);
         $lastname_orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter last name of organization head.'));  
@@ -59,6 +61,19 @@ class Default_Form_Organisationhead extends Zend_Form
 							   'regexNotMatch'=>'Please enter valid last name.'
                            )
         	));
+
+		$username_orghead = new Zend_Form_Element_Text('username_orghead');
+		$username_orghead->setAttrib('maxLength', 50);
+		$username_orghead->addFilter(new Zend_Filter_StringTrim());
+		$username_orghead->setRequired(true);
+        $username_orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter username of organization head.'));
+        $username_orghead->addValidator("regex",true,array(
+            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+            'messages'=>array(
+
+                'regexNotMatch'=>'Please enter valid last name.'
+            )
+        ));
 			
 		$designation = new Zend_Form_Element_Text('designation');
         $designation->setAttrib('maxLength', 50);
@@ -126,22 +141,16 @@ class Default_Form_Organisationhead extends Zend_Form
         	));
 		$emailaddress->setLabel("Email");
 		$emailaddress->setAttrib("class", "formDataElement");              
-		$emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
-															array('table' => 'main_users',
-															'field' => 'emailaddress',
-															'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('user_id',0).'" and isactive!=0'
-															)));
-		$emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
 		
 		$jobtitle = new Zend_Form_Element_Select('jobtitle_id');
-		$jobtitle->setLabel("Job Title");
-		$jobtitle->addMultiOption('','Select Job Title');
+		$jobtitle->setLabel("Career Track");
+		$jobtitle->addMultiOption('','Select Career Track');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
 		$jobtitle->setRegisterInArrayValidator(false);	
 		
 		$position = new Zend_Form_Element_Select('position_id');
-		$position->setLabel("Position");
-		$position->addMultiOption('','Select Position');
+		$position->setLabel("Career Level");
+		$position->addMultiOption('','Select Career Level');
 		$position->setRegisterInArrayValidator(false);	
 		
 		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining_head');
@@ -156,7 +165,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
-		 $this->addElements(array($id,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit,$employeeNumId));//$email,$secondaryemail,
+		 $this->addElements(array($id,$description,$lastname_orghead,$username_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit,$employeeNumId));//$email,$secondaryemail,
 		 
 		 $this->setElementDecorators(array('ViewHelper')); 
 		 $this->setElementDecorators(array('File'),array('org_image'));

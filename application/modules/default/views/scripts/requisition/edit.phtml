@@ -115,7 +115,7 @@ sapp_Global::generateClientValidations($this->form);
         <div class="division"><input type='text' disabled value='<?php echo $this->data['onboard_date'];?>' /></div>
     </div>
     <div class="new-form-ui">
-        <label>Job Title</label>
+        <label>Career Track</label>
         <div class="division">
         	<select disabled>
             	<option><?php echo $this->data['jtitle_name'];?></option>
@@ -124,7 +124,7 @@ sapp_Global::generateClientValidations($this->form);
         </div>
     </div>
     <div class="new-form-ui">
-        <label >Position</label>
+        <label >Career Level</label>
         <div class="division">
         	<select disabled>
             	<option><?php echo $this->data['position_name'];?></option>
@@ -138,7 +138,7 @@ sapp_Global::generateClientValidations($this->form);
         <div class="division"><input type='text' value='<?php //echo $this->data['req_no_positions'];?>' disabled /></div>
     </div>
     <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
+        <label>My Scheduling Request</label>
         <div class="division"><textarea disabled><?php //echo $this->data['jobdescription'];?></textarea></div>
     </div>-->
     <!--<div class="new-form-ui textareaheight">
@@ -147,7 +147,7 @@ sapp_Global::generateClientValidations($this->form);
     </div>-->
     <div style="border:1px solid #c6c6c6; clear:both; margin-bottom:30px;">
      <div class="main_view_child">
-       <div class="width_20_left"><label>Job Description</label></div>
+       <div class="width_20_left"><label>My Scheduling Request</label></div>
        <div class="width_80_right"><label><?php echo !empty($this->data['jobdescription'])?$this->data['jobdescription']:"...";?></label></div>
      </div>
 	 <div class="main_view_child">
@@ -282,7 +282,6 @@ else
         <div class="division"><select disabled><option><?php  echo $this->data['mngrname'];?></option></select>		
         </div>
     </div>
-	    
     <div class="new-form-ui">
         <label class="required">Approver -1 </label>
         <input type='hidden' id='approver1' value='<?php echo $data['approver1'] ;?>' />

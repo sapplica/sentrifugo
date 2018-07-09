@@ -207,7 +207,7 @@ if($auth->hasIdentity())
 		$display_dates_array = array();
 		foreach($display_dates as $keydate => $statusarr)
 		{
-			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)))
+			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)) && $keydate>=APPLICATION_INSTALL_DATE)
 			{
 				if($display_dates[$keydate]!='submitted' && $display_dates[$keydate]!='approved') {
 					$display_dates_array[$keydate] = $statusarr;
@@ -338,7 +338,7 @@ $data = $storage->read();
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquerytour.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
 <link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
@@ -924,7 +924,7 @@ if($loginuserRole == SUPERADMINROLE)
             <div class="newframe-div">
                 <div class="new-form-ui height32">
                     <div class="division">
-                        <input type="text" maxlength="10"  id="number_value" name="number_value">
+                        <input type="text" maxlength="15"  id="number_value" name="number_value">
                     </div>
                     <span class="errors" id="errors-contactnumber"></span>
                 </div>
@@ -937,6 +937,10 @@ if($loginuserRole == SUPERADMINROLE)
     									
         <div id="empleaves-alert" style="display:none;">
             <div class="newframe-div"><div id="empleavesmessage"></div></div>
+        </div>									
+        
+        <div id="emponcalls-alert" style="display:none;">
+          <div class="newframe-div"><div id="emponcallsmessage"></div></div>
         </div>									
 <?php } ?>
 <div class="menu-head ">

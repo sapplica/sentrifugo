@@ -199,12 +199,12 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					  $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Competency level updated successfully."));
+					  $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Competency Area updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 	
-					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Competency level added successfully."));
+					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Competency Area added successfully."));
 					}   
 					$menuID = COMPETENCYLEVEL;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -341,20 +341,20 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 			  $Id = $competencylevelmodel->SaveorUpdateCompetencyLevelData($data, $where);
 			    if($Id == 'update')
 				{
-                                sapp_Global::send_configuration_mail("Competency Level", $compentency_data[0]['competencylevel']);
+                                sapp_Global::send_configuration_mail("Competency Area", $compentency_data[0]['competencylevel']);
 				   $menuID = COMPETENCYLEVEL;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
-				   $messages['message'] = 'Competency level deleted successfully.';
+				   $messages['message'] = 'Competency Area deleted successfully.';
 				    $messages['msgtype'] = 'success';
 				}   
 				else
-                {	$messages['message'] = 'Competency level cannot be deleted.';	
+                {	$messages['message'] = 'Competency Area cannot be deleted.';	
 					$messages['msgtype'] = 'error';
 				}
 			}
 			else
 			{ 
-			 $messages['message'] = 'Competency level cannot be deleted.';
+			 $messages['message'] = 'Competency Area cannot be deleted.';
 			  $messages['msgtype'] = 'error';
 			}
 			// delete success message after delete in view

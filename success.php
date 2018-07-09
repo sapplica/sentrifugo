@@ -23,6 +23,7 @@ require_once 'public/db_constants.php';
 require_once 'public/constants.php';
 require_once 'public/application_constants.php';
 require_once 'public/mail_settings_constants.php';
+require_once 'public/ldap_constants.php';
 if(file_exists($filepath))
 	require 'install/PHPMailer/PHPMailerAutoload.php';
 else
@@ -47,7 +48,9 @@ if(!empty($_POST))
 							$encodedPswd = md5($generatedPswd);
 							$query = "update main_users  set emppassword = '".$encodedPswd."' where emailaddress = '".SUPERADMIN_EMAIL."' and id= 1 ";
 							$mysqlPDO->query($query);
-							$mail = sendconfirmationmail($_POST['mailcontent'],$generatedPswd);
+							$username = LDAP_ENABLED == 'true' ? LDAP_SUPER_ADMIN_USERNAME : "empp0001";
+							$generatedPswd = LDAP_ENABLED == 'true' ? 'Your AD password' : $generatedPswd;
+							$mail = sendconfirmationmail($_POST['mailcontent'], $username, $generatedPswd);
 							$renamefolder = renamefolder();
 							if($mail != 'true')
 							{
@@ -55,7 +58,7 @@ if(!empty($_POST))
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : $username</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to open application.</div>";
 								}
@@ -63,7 +66,7 @@ if(!empty($_POST))
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : $username</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
@@ -76,14 +79,14 @@ if(!empty($_POST))
 								{
 								  $msgarray['error'] = "<div class='sucss_mess_info'>Mail has been succesfully sent to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : $username</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to open application.</div>";
 								}else 
 								{
 								  $msgarray['error'] = "<div>Mail has been succesfully sent to ".SUPERADMIN_EMAIL."</div><br/>
 								  						<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : $username</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
@@ -103,7 +106,7 @@ if(!empty($_POST))
 }
 
 
-function sendconfirmationmail($content,$encodedPswd)
+function sendconfirmationmail($content, $username, $encodedPswd)
 {
 	$htmlcontentdata = '<div style="width:100%;">
 			            <div style="background-color:#eeeeee; width:80%; margin:0 auto; position:relative;">
@@ -113,7 +116,7 @@ function sendconfirmationmail($content,$encodedPswd)
 			                       <div>
 										<div>Dear Super Admin,</div><br/>
 										<div>Sentrifugo has been successfully installed. Following are the Super Admin login credentials for '.APPLICATION_NAME.':</div><br/>
-										<div>Username : empp0001</div>
+										<div>Username : '.$username.'</div>
 										<div>Password : '.$encodedPswd.'</div><br/><br/>
 										<div>'.$content.'</div>
 								  </div>
@@ -145,11 +148,12 @@ function sendconfirmationmail($content,$encodedPswd)
 	if($pos !== false)
 		$mail->setFrom(MAIL_USERNAME,'Do not Reply');
 	else
-		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+		$mail->setFrom(DONOTREPLYEMAIL,'Do not Reply');
 
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
+		$mail->CharSet = 'UTF-8';
     
     if(!$mail->Send())
         return $mail->ErrorInfo;
@@ -215,7 +219,7 @@ if(!empty($_POST))
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="shortcut icon" href="public/media/images/favicon.ico" />
      <link href="public/media/css/successstyle.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
    
 	
 </head>

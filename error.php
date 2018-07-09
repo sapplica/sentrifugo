@@ -33,7 +33,7 @@ if(!empty($_GET))
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="shortcut icon" href="public/media/images/favicon.ico" />
      <link href="public/media/css/successstyle.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
    
 	
 </head>

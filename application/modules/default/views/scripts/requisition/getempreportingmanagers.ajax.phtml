@@ -27,7 +27,7 @@ $options_data = "";
 	{
             $options_data .= sapp_Global::selectOptionBuilder('', 'Select A Reporting Manager');
 		foreach ($this->RMdata as $opt) {
-			$options_data .= sapp_Global::selectOptionBuilder($opt['id'],ucwords(utf8_encode($opt['name'])),$opt['profileimg'] );
+			$options_data .= sapp_Global::selectOptionBuilder($opt['id'],ucwords($opt['name']),$opt['profileimg'] );
 		}
 		echo $options_data;
 	}

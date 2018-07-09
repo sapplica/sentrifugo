@@ -160,7 +160,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 				}else
 				{
 				
-					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
+					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'emponcallsummary' || $dataArray['objectname'] ==  'empscreening')
 					{
 						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
                         $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
@@ -189,6 +189,8 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
                         $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 						if($dataArray['objectname'] == 'pendingleaves')
 						   $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
+						else if($dataArray['objectname'] == 'pendingoncalls')
+	 						 $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel On Call\' class="sprite cancel-lev" ></a>';
 						else if($dataArray['objectname'] == 'usermanagement')
 							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						else   

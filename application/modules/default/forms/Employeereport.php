@@ -50,7 +50,7 @@ class Default_Form_Employeereport extends Zend_Form
         // Form elelment name 'emailaddress' has to be DB table field name
         $email_id = new Zend_Form_Element_Text("emailaddress");
         $email_id->setLabel("Email ID");
-		$email_id->setAttrib('name', '');
+    		$email_id->setAttrib('name', '');
         $email_id->setAttrib('id', 'idemailaddress');        
         
         // Form elelment name 'userfullname' has to be DB table field name
@@ -65,12 +65,12 @@ class Default_Form_Employeereport extends Zend_Form
 		
         
         $jobtitle = new Zend_Form_Element_Select("jobtitle_id");
-        $jobtitle->setLabel("Job Title");
+        $jobtitle->setLabel("Career Track");
         $jobtitle->setAttrib("onchange", "getpositions_req('department','business_unit','position_id','jobtitle_id');");        
         
         $position_id = new Zend_Form_Element_Select("position_id");
-        $position_id->setLabel("Position");        
-        $position_id->addMultiOptions(array(''=>'Select Position'));
+        $position_id->setLabel("Career Level");        
+        $position_id->addMultiOptions(array(''=>'Select Career Level'));
         
         $emp_type = new Zend_Form_Element_Select("emp_status_id");
         $emp_type->setLabel("Employment Status");        
@@ -102,7 +102,7 @@ class Default_Form_Employeereport extends Zend_Form
         $submit->setAttrib('id', 'idsubmitbutton');
         $submit->setLabel('Report'); 
         
-        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$email_id, $emp_name,$jobtitle,$position_id,
+        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$email_id,$emp_name,$jobtitle,$position_id,
                                  $emp_type,$emprole,$department_id,$businessunit_id,$employeeid,$isactive));
         $this->setElementDecorators(array('ViewHelper')); 
     }

@@ -31,7 +31,7 @@ class sapp_Mail
 	
 	public static function _email($options = array()) {
 		
-		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:SUPERADMIN_EMAIL;
+		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:DONOTREPLYEMAIL;
 		$options['fromName'] = (!empty($options['fromName']))?$options['fromName']:DONOTREPLYNAME;
 		
 		$orglogo = '';
@@ -113,7 +113,7 @@ class sapp_Mail
 
 public static function _checkMail($options = array()) {
 		
-		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:SUPERADMIN_EMAIL;
+		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:DONOTREPLYEMAIL;
 		$options['fromName'] = (!empty($options['fromName']))?$options['fromName']:DONOTREPLYNAME;
 		
 		$orglogo = '';
@@ -231,6 +231,8 @@ public static function _checkMail($options = array()) {
 	    }		
 		if(array_key_exists('cc', $options))
 			$mail->addCc($options['cc']);
+
+		$mail->CharSet = 'UTF-8';
        
 		if(!$mail->Send()) {
 			return false;

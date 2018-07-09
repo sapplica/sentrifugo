@@ -1,0 +1,105 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_reports" class="all-grid-control">'; $endDiv = '</div>';
+}
+
+echo $div;
+  echo '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';
+  echo '<div class="table-header "><span>Billing Report</span></div>';
+	echo '<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 250px; height: auto;">';
+    echo '<div class="details_data_display_block newtablegrid" id="reportgrid" style="overflow: auto; width: 250px; height: auto; background-color: rgb(204, 204, 204); padding-bottom: 10px; background-position: initial initial; background-repeat: initial initial;">';
+  	  echo '<table class="grid" align="center" width="100%" cellspacing="0" cellpadding="4" border="0">';
+  		  echo '<thead>';
+  			  echo '<tr>';
+  				  echo "<th>Full Name</th>";
+  					echo '<th>Enterprise ID</th>';
+  					echo '<th>Business Unit</th>';
+  					echo '<th>Project Name</th>';
+  					echo '<th>Project Type</th>';
+            echo '<th>Project Hours</th>';
+  					echo '<th>Status</th>';
+  					echo '<th>Overtime Hours</th>';
+  					echo '<th>On Call Overtime Hours</th>';
+  					echo '<th>Full Day On Call Total</th>';
+  					echo '<th>Full Day Leaves Total</th>';
+  					echo '<th>Partial Day Leaves Total</th>';
+  					echo '<th>Billable Hours</th>';
+  					echo '<th>Billable Rate</th>';
+  					echo '<th>Billable Total</th>';
+  			  echo '</tr>';
+  			echo '</thead>';
+  		  echo '<tbody>';			
+          $i = 1; 
+          
+          foreach($this->dataArray as $data)		
+          {
+  					$cell_color = ($i % 2 == 0 ? "row1" : "row2");
+  					
+            echo '<tr onclick="selectrow(reportgrid,this); " class='.$cell_color.' ">';
+              echo '<td><span title="'.$data['Full Name'].' ">'.$data['Full Name'].'</span></td>';
+              echo '<td><span title="'.$data['Enterprise ID'].' ">'.$data['Enterprise ID'].'</span></td>';
+              echo '<td><span title="'.$data['Business Unit'].' ">'.$data['Business Unit'].'</span></td>';
+              echo '<td><span title="'.$data['Project Name'].' ">'.$data['Project Name'].'</span></td>';
+              echo '<td><span title="'.$data['Project Type'].' ">'.$data['Project Type'].'</span></td>';
+              echo '<td><span title="'.$data['Project Hours'].' ">'.$data['Project Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Status'].' ">'.$data['Status'].'</span></td>';
+              echo '<td><span title="'.$data['Overtime Hours'].' ">'.$data['Overtime Hours'].'</span></td>';
+              echo '<td><span title="'.$data['On Call Overtime Hours'].' ">'.$data['On Call Overtime Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day On Call Total'].' ">'.$data['Full Day On Call Total'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day Leaves Total'].' ">'.$data['Full Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Partial Day Leaves Total'].' ">'.$data['Partial Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Hours'].' ">'.$data['Billable Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Rate'].' ">'.$data['Billable Rate'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Total'].' ">'.$data['Billable Total'].'</span></td>';
+  					echo '</tr>';
+  					
+  					$i++;
+          }	
+  			echo '</tbody>';						
+  		echo '</table>';		
+  	echo '</div>';    
+  echo '</div>';
+  echo '<div class="table-btm ">';
+  echo '</div>';
+	echo "<script type='text/javascript' language='javascript'>";
+	$script = "$(document).ready(function(){
+								$('#reportgrid').slimScrollHorizontal({
+									alwaysVisible: true,
+									start: 'left',
+									position: 'bottom',
+								}).css({ background: '#ccc', paddingBottom: '10px' }); 
+								
+								var id = $('#columnId').val();
+								var coldata = $('#'+id).val();
+								var focusID = $('#columnId').val();
+                var fval = $('#'+focusID).attr('data-focus');
+                
+								if(fval == '' || fval == null) $('#'+focusID).focus().val('').val(coldata);
+						});";
+  echo $script;
+	echo "</script>";
+echo $endDiv;
+?>

@@ -35,11 +35,11 @@ class Default_Form_jobtitles extends Zend_Form
 		$jobtitlecode = new Zend_Form_Element_Text('jobtitlecode');
         $jobtitlecode->setAttrib('maxLength', 20);
         $jobtitlecode->setRequired(true);
-        $jobtitlecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job title code.'));
+        $jobtitlecode->addValidator('NotEmpty', false, array('messages' => 'Please enter Career Track code.'));
 		$jobtitlecode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
                            'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid job title code.'
+                               'regexNotMatch'=>'Please enter valid Career Track code.'
                            )
         	));
         $jobtitlecode->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -48,16 +48,16 @@ class Default_Form_jobtitles extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Job title code already exists.'); 		
+        $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Career Track code already exists.'); 		
       
 		$jobtitlename = new Zend_Form_Element_Text('jobtitlename');
         $jobtitlename->setAttrib('maxLength', 50);
         $jobtitlename->setRequired(true);
-        $jobtitlename->addValidator('NotEmpty', false, array('messages' => 'Please enter job title.'));  
+        $jobtitlename->addValidator('NotEmpty', false, array('messages' => 'Please enter Career Track.'));  
 		$jobtitlename->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\&\s]*$/', 
                            'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid job title.'
+                               'regexNotMatch'=>'Please enter valid Career Track.'
                            )
         	));
 	
@@ -89,10 +89,10 @@ class Default_Form_jobtitles extends Zend_Form
         $jobpaygradecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job pay grade code.')); 
 		
 		$jobpayfrequency = new Zend_Form_Element_Select('jobpayfrequency');
-        $jobpayfrequency->setLabel('Job pay frequency');
-        $jobpayfrequency->addMultiOption('','Select Pay Frequency');		
+        $jobpayfrequency->setLabel('Job Charge Frequency');
+        $jobpayfrequency->addMultiOption('','Select Charge Frequency');		
 		$jobpayfrequency->setRequired(true);
-		$jobpayfrequency->addValidator('NotEmpty', false, array('messages' => 'Please select job pay frequency.')); 				
+		$jobpayfrequency->addValidator('NotEmpty', false, array('messages' => 'Please select job Charge Frequency.')); 				
 		$jobpayfrequency->setRegisterInArrayValidator(false);	
       		
 		$comments = new Zend_Form_Element_Textarea('comments');

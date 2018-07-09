@@ -26,7 +26,7 @@ $options_data .= sapp_Global::selectOptionBuilder('', 'Select Position');
 	if($this->flag != 'true')
 	{
 	foreach ($this->positionlistArr as $positionlist) {
-			$options_data .= sapp_Global::selectOptionBuilder($positionlist['id'],utf8_encode($positionlist['positionname']));
+			$options_data .= sapp_Global::selectOptionBuilder($positionlist['id'],$positionlist['positionname']);
 		}
 		echo $options_data;
 	}

@@ -104,21 +104,21 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$msgarray = array();
 
 		 					$basecurrencymodeldata = $currencymodel->getCurrencyList();
-                            $empsalarydetailsform->currencyid->addMultiOption('','Select Salary Currency');
+                            $empsalarydetailsform->currencyid->addMultiOption('','Select Cost Currency');
 		 					if(sizeof($basecurrencymodeldata) > 0)
 		 					{
 		 						
 		 						foreach ($basecurrencymodeldata as $basecurrencyres){
-		 							$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
+		 							$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],$basecurrencyres['currency']);
 		 						}
 		 					}else
 		 					{
-		 						$msgarray['currencyid'] = 'Salary currencies are not configured yet.';
+		 						$msgarray['currencyid'] = 'Cost currencies are not configured yet.';
 		 						$emptyFlag++;
 		 					}
 		 					
 		 				$payfreqData = $payfrequencyModal->getActivePayFreqData();
-		 				$empsalarydetailsform->salarytype->addMultiOption('','Select Pay Frequency');
+		 				$empsalarydetailsform->salarytype->addMultiOption('','Select Charge Frequency');
 						if(sizeof($payfreqData) > 0)
 						{
 							foreach ($payfreqData as $payfreqres){
@@ -127,13 +127,13 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 				
 						}else
 						{
-							$msgarray['salarytype'] = 'Pay frequency is not configured yet.';
+							$msgarray['salarytype'] = 'Charge frequency is not configured yet.';
 							$emptyFlag++;
 				
 						}
 
 		 					$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
-                                                        $empsalarydetailsform->bankaccountid->addMultiOption('','Select Account Type');
+                                                        $empsalarydetailsform->bankaccountid->addMultiOption('','Select Bill Code');
 		 					if(!empty($bankaccounttypeArr))
 		 					{
 		 						
@@ -143,12 +143,12 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 						}
 		 					}else
 		 					{
-		 						$msgarray['bankaccountid'] = 'Account types are not configured yet.';
+		 						$msgarray['bankaccountid'] = 'Bill Codes are not configured yet.';
 		 						$emptyFlag++;
 		 					}
 
 		 					$accountclasstypeArr = $accountclasstypemodel->getAccountClassTypeList();
-                                                        $empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Class Type');
+                                                        $empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Economics Profile');
 		 					if(!empty($accountclasstypeArr))
 		 					{
 		 						
@@ -158,7 +158,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 						}
 		 					}else
 		 					{
-		 						$msgarray['accountclasstypeid'] = 'Account class types are not configured yet.';
+		 						$msgarray['accountclasstypeid'] = 'Economics Profiles are not configured yet.';
 		 						$emptyFlag++;
 		 					}
 
@@ -457,13 +457,13 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details updated successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee cost details updated successfully."));
 						
 				}
 				else
 				{
 					$tableid = $Id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details added successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee cost details added successfully."));
 				}
 				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);

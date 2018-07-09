@@ -408,7 +408,7 @@ class Default_DisciplinaryviolationController extends Zend_Controller_Action
 				$disciplinaryviolationtypesData = $disciplinaryviolationmodel->getallDisciplinaryViolationTypesData();
 				$opt ='';
 				foreach($disciplinaryviolationtypesData as $record){
-					$opt .= sapp_Global::selectOptionBuilder($record['id'], utf8_encode($record['violationname']));
+					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['violationname']);
 				}
 				$this->view->violationtypesData = $opt;
 					

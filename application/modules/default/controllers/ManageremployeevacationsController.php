@@ -146,7 +146,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
 								if($employeeleavetypeArr !='norows')
 								{
-									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
+									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],$employeeleavetypeArr[0]['leavetype']);		   
 								}
 								  
 								if($data['leaveday'] == 1)
@@ -253,7 +253,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 							$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
 								if($employeeleavetypeArr != 'norows')
 								{
-									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));
+									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],$employeeleavetypeArr[0]['leavetype']);
 									$data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];	   
 								}
 								else
@@ -280,7 +280,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								if($data['leavestatus'] == 'Approved') {
 									$managerleaverequestform->managerstatus->setLabel("Cancel");
 									$managerleaverequestform->managerstatus->clearMultiOptions();
-	                                $managerleaverequestform->managerstatus->addMultiOption(3,utf8_encode("Cancel"));
+	                                $managerleaverequestform->managerstatus->addMultiOption(3,"Cancel");
 								}
 																						
 															$from_date = sapp_Global::change_date($data['from_date'], 'view');

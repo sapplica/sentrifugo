@@ -1,8 +1,8 @@
 <?php
-/********************************************************************************* 
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2015 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,7 @@ $os_string = php_uname('s');
 
 if (strpos(strtoupper($os_string), 'WIN')!==false)
 {
-	// Win 
+	// Win
  defined('SERVER_OS') || define('SERVER_OS','windows');
 }
 else
@@ -39,7 +39,7 @@ else
 defined('LIMIT')|| define('LIMIT', 20);
 defined('NA')|| define('NA', 0);
 defined('YEAR')|| define('YEAR', 1900);
-defined('PERPAGE')|| define('PERPAGE', 20);
+defined('PERPAGE')|| define('PERPAGE', 200);
 defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
@@ -85,6 +85,7 @@ defined('BGCHECKS')|| define('BGCHECKS', 5);
 defined('ORGANIZATION')|| define('ORGANIZATION', 1);
 defined('BENEFITS')|| define('BENEFITS', 15);
 defined('LEAVES')|| define('LEAVES', 31);
+defined('ONCALLS')|| define('ONCALLS', 901);
 defined('STAFFING')|| define('STAFFING', 6);
 defined('COMPLIANCES')|| define('COMPLIANCES', 7);
 defined('REPORTS')|| define('REPORTS', 8);
@@ -104,12 +105,14 @@ defined('ASSETCATEGORIES')|| define('ASSETCATEGORIES', 190);
 defined('SUBASSET')|| define('SUBASSET', 200);
 defined('AGENCYLIST')|| define('AGENCYLIST', 69);
 defined('APPROVEDLEAVES')|| define('APPROVEDLEAVES', 63);
+defined('APPROVEDONCALLS')|| define('APPROVEDONCALLS', 906);
 defined('APPROVEDREQUISITIONS')|| define('APPROVEDREQUISITIONS', 134);
 defined('ASSIGNMENTENTRYREASONCODE')|| define('ASSIGNMENTENTRYREASONCODE', 122);
 defined('ATTENDANCESTATUSCODE')|| define('ATTENDANCESTATUSCODE', 126);
 defined('BANKACCOUNTTYPE')|| define('BANKACCOUNTTYPE',  123);
 defined('BUSINESSUNITS')|| define('BUSINESSUNITS',  10);
 defined('CANCELLEAVES')|| define('CANCELLEAVES',   64);
+defined('CANCELONCALLS')|| define('CANCELONCALLS',   907);
 defined('CITIES')|| define('CITIES', 102);
 defined('COMPETENCYLEVEL')|| define('COMPETENCYLEVEL',  124);
 defined('PERFORMANCEAPPRSETUP')|| define('PERFORMANCEAPPRSETUP',  50);
@@ -122,9 +125,11 @@ defined('WEEKDAYS')|| define('WEEKDAYS',81);
 defined('DEPARTMENTS')|| define('DEPARTMENTS',11);
 defined('EDUCATIONLEVELCODE')|| define('EDUCATIONLEVELCODE', 125);
 defined('EEOCCATEGORY')|| define('EEOCCATEGORY',  115);
+defined('PROJECTTYPE')|| define('PROJECTTYPE',  920);
 defined('EMAILCONTACTS')|| define('EMAILCONTACTS', 136);
 defined('EMPBENEFITSUSENROLLMENT')|| define('EMPBENEFITSUSENROLLMENT',39);
 defined('EMPLEAVESUMMARY')|| define('EMPLEAVESUMMARY', 45);
+defined('EMPONCALLSUMMARY')|| define('EMPONCALLSUMMARY', 903);
 defined('EMPSCREENING')|| define('EMPSCREENING',23);
 defined('EMPLOYEE')|| define('EMPLOYEE',14);
 defined('EMPLOYMENTSTATUS')|| define('EMPLOYMENTSTATUS', 114);
@@ -143,11 +148,15 @@ defined('LANGUAGE')|| define('LANGUAGE',  121);
 defined('LEAVEMANAGEMENT')|| define('LEAVEMANAGEMENT', 44);
 defined('LEAVEREQUEST')|| define('LEAVEREQUEST',   61);
 defined('EMPLOYEELEAVETYPES')|| define('EMPLOYEELEAVETYPES',   128);
+defined('ONCALLMANAGEMENT')|| define('ONCALLMANAGEMENT', 902);
+defined('ONCALLREQUEST')|| define('ONCALLREQUEST',   904);
+defined('EMPLOYEEONCALLTYPES')|| define('EMPLOYEEONCALLTYPES',   909);
 defined('LICENSETYPE')|| define('LICENSETYPE',93);
 defined('HOLIDAYDATES')|| define('HOLIDAYDATES',   42);
 defined('HOLIDAYGROUPS')|| define('HOLIDAYGROUPS', 41);
 defined('USERMANAGEMENT')|| define('USERMANAGEMENT', 2);
 defined('MANAGEREMPLOYEEVACATIONS')|| define('MANAGEREMPLOYEEVACATIONS',   65);
+defined('MANAGEREMPLOYEEONCALLS')|| define('MANAGEREMPLOYEEONCALLS',   908);
 defined('MARITALSTATUS')|| define('MARITALSTATUS', 87);
 defined('MILITARYSERVICE')|| define('MILITARYSERVICE', 108);
 defined('MONTHSLIST')|| define('MONTHSLIST', 82);
@@ -163,10 +172,12 @@ defined('ORGANISATIONINFO')|| define('ORGANISATIONINFO', 9);
 defined('STRUCTURE')|| define('STRUCTURE',  12);
 defined('PAYFREQUENCY')|| define('PAYFREQUENCY', 117);
 defined('PENDINGLEAVES')|| define('PENDINGLEAVES', 62);
+defined('PENDINGONCALLS')|| define('PENDINGONCALLS', 905);
 defined('POSITIONS')|| define('POSITIONS', 120);
 defined('PREFIX')|| define('PREFIX', 88);
 defined('RACECODE')|| define('RACECODE',89);
 defined('REJECTEDLEAVES')|| define('REJECTEDLEAVES',135);
+defined('REJECTEDONCALLS')|| define('REJECTEDONCALLS',910);
 defined('REJECTEDREQUISITIONS')|| define('REJECTEDREQUISITIONS', 138);
 defined('REMUNERATIONBASIS')|| define('REMUNERATIONBASIS',118);
 defined('ROLES')|| define('ROLES', 20);
@@ -217,6 +228,7 @@ defined('ALL_EXIT_PROCS')|| define('ALL_EXIT_PROCS', 181);
 defined('POLICY_DOCS_CATEGORIES')|| define('POLICY_DOCS_CATEGORIES', 182);
 defined('MANAGE_POLICY_DOCS')|| define('MANAGE_POLICY_DOCS', 183);
 defined('ADD_EMPLOYEE_LEAVES')|| define('ADD_EMPLOYEE_LEAVES', 184);
+defined('ADD_EMPLOYEE_ONCALLS')|| define('ADD_EMPLOYEE_ONCALLS', 911);
 defined('ASSETS')|| define('ASSETS', 186);
 defined('DISCIPLINARY')|| define('DISCIPLINARY', 201);
 defined('VIOLATION_TYPE')|| define('VIOLATION_TYPE', 202);
@@ -225,6 +237,7 @@ defined('MY_INCIDENT')|| define('MY_INCIDENT', 204);
 defined('TEAM_INCIDENT')|| define('TEAM_INCIDENT', 205);
 defined('CLIENTS')|| define('CLIENTS', 208);
 defined('EXIT_QUESTIONS')|| define('EXIT_QUESTIONS', 210);
+defined('WORK_SCHEDULE')|| define('WORK_SCHEDULE', 930);
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
@@ -238,11 +251,11 @@ defined('EXITPROCEDURE')|| define('EXITPROCEDURE', 177);
 
 //Manage Moduels Array
 defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,REPORTS,SERVICEDESK,PERFORMANCEAPPRAISAL)));
-// Employee documents 
+// Employee documents
 defined('EMP_MAX_DOCS')|| define('EMP_MAX_DOCS', 20);
 
 //Defining messaged for for deleting menu records
-defined('ACCOUNTCLASSTYPE_DELETE')|| define('ACCOUNTCLASSTYPE_DELETE', 'account class type');
+defined('ACCOUNTCLASSTYPE_DELETE')|| define('ACCOUNTCLASSTYPE_DELETE', 'Economics Profile');
 defined('HUMANRESOURCE_DELETE')|| define('HUMANRESOURCE_DELETE', 'human resource');
 defined('BGCHECKS_DELETE')|| define('BGCHECKS_DELETE', 'background check');
 defined('STAFFING_DELETE')|| define('STAFFING_DELETE', 'staffing');
@@ -252,14 +265,16 @@ defined('RESOURCEREQUISITION_DELETE')|| define('RESOURCEREQUISITION_DELETE', 're
 defined('TIMEMANAGEMENT_DELETE')|| define('TIMEMANAGEMENT_DELETE', 'time management');
 defined('AGENCYLIST_DELETE')|| define('AGENCYLIST_DELETE', 'agency');
 defined('APPROVEDLEAVES_DELETE')|| define('APPROVEDLEAVES_DELETE', 'leave');
+defined('APPROVEDONCALLS_DELETE')|| define('APPROVEDONCALLS_DELETE', 'on call');
 defined('APPROVEDREQUISITIONS_DELETE')|| define('APPROVEDREQUISITIONS_DELETE', 'approved requisition');
 defined('ASSIGNMENTENTRYREASONCODE_DELETE')|| define('ASSIGNMENTENTRYREASONCODE_DELETE', 'assignment entry reason code');
 defined('ATTENDANCESTATUSCODE_DELETE')|| define('ATTENDANCESTATUSCODE_DELETE', 'attendance status code');
-defined('BANKACCOUNTTYPE_DELETE')|| define('BANKACCOUNTTYPE_DELETE',  'bank account type');
+defined('BANKACCOUNTTYPE_DELETE')|| define('BANKACCOUNTTYPE_DELETE',  'Bill Code');
 defined('BUSINESSUNITS_DELETE')|| define('BUSINESSUNITS_DELETE',  'business unit');
 defined('CANCELLEAVES_DELETE')|| define('CANCELLEAVES_DELETE',   'cancelled leave');
+defined('CANCELONCALLS_DELETE')|| define('CANCELONCALLS_DELETE',   'cancelled on call');
 defined('CITIES_DELETE')|| define('CITIES_DELETE', 'city');
-defined('COMPETENCYLEVEL_DELETE')|| define('COMPETENCYLEVEL_DELETE',  'competency level');
+defined('COMPETENCYLEVEL_DELETE')|| define('COMPETENCYLEVEL_DELETE',  'Competency Area');
 defined('PERFORMANCEAPPRSETUP_DELETE')|| define('PERFORMANCEAPPRSETUP_DELETE',  'performance appraisal setup');
 defined('COUNTRIES_DELETE')|| define('COUNTRIES_DELETE', 'country');
 defined('CURRENCY_DELETE')|| define('CURRENCY_DELETE',  'currency');
@@ -274,6 +289,7 @@ defined('EMPJOBHISTORY_DELETE')|| define('EMPJOBHISTORY_DELETE', 'job history');
 defined('EXPERIENCEDETAILS_DELETE')|| define('EXPERIENCEDETAILS_DELETE', 'experience details');
 defined('EDUCATIONDETAILS_DELETE')|| define('EDUCATIONDETAILS_DELETE', 'education details');
 defined('EMPLEAVES_DELETE')|| define('EMPLEAVES_DELETE', 'leave details');
+defined('EMPONCALLS_DELETE')|| define('EMPONCALLS_DELETE', 'on call details');
 defined('EMPHOLIDAYS_DELETE')|| define('EMPHOLIDAYS_DELETE', 'holiday details');
 defined('TRAININGANDCERTIFICATIONDETAILS_DELETE')|| define('TRAININGANDCERTIFICATIONDETAILS_DELETE', 'certification details');
 defined('MEDICALCLAIMS_DELETE')|| define('MEDICALCLAIMS_DELETE', 'medical claim details');
@@ -288,9 +304,11 @@ defined('WEEKDAYS_DELETE')|| define('WEEKDAYS_DELETE','week day');
 defined('DEPARTMENTS_DELETE')|| define('DEPARTMENTS_DELETE','department');
 defined('EDUCATIONLEVELCODE_DELETE')|| define('EDUCATIONLEVELCODE_DELETE', 'education level code');
 defined('EEOCCATEGORY_DELETE')|| define('EEOCCATEGORY_DELETE',  'EEOC category');
+defined('PROJECTTYPE_DELETE')|| define('PROJECTTYPE_DELETE',  'Project type');
 defined('EMAILCONTACTS_DELETE')|| define('EMAILCONTACTS_DELETE', 'email contact');
 defined('EMPBENEFITSUSENROLLMENT_DELETE')|| define('EMPBENEFITSUSENROLLMENT_DELETE','employee benefits us enrollment');
 defined('EMPLEAVESUMMARY_DELETE')|| define('EMPLEAVESUMMARY_DELETE', 'leave');
+defined('EMPONCALLSUMMARY_DELETE')|| define('EMPONCALLSUMMARY_DELETE', 'on call');
 defined('EMPSCREENING_DELETE')|| define('EMPSCREENING_DELETE',   'Background check process');
 defined('EMPLOYEE_DELETE')|| define('EMPLOYEE_DELETE','employee');
 defined('EMPLOYMENTSTATUS_DELETE')|| define('EMPLOYMENTSTATUS_DELETE', 'employment status');
@@ -299,18 +317,22 @@ defined('GENDER_DELETE')|| define('GENDER_DELETE',  'gender');
 defined('GEOGRAPHYGROUP_DELETE')|| define('GEOGRAPHYGROUP_DELETE','geography group');
 defined('IDENTITYCODES_DELETE')|| define('IDENTITYCODES_DELETE', 'identity code');
 defined('APPRAISALINITIALIZATION_DELETE')|| define('APPRAISALINITIALIZATION_DELETE','appraisal initialization');
-defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'job title');
+defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'Career Track');
 defined('PERFORMANCEKIPS_DELETE')|| define('PERFORMANCEKIPS_DELETE', 'performace KIP');
 defined('PERFORMANCEKRAS_DELETE')|| define('PERFORMANCEKRAS_DELETE', 'performace KRA');
 defined('LANGUAGE_DELETE')|| define('LANGUAGE_DELETE',  'language');
 defined('LEAVEMANAGEMENT_DELETE')|| define('LEAVEMANAGEMENT_DELETE', 'leave management');
 defined('LEAVEREQUEST_DELETE')|| define('LEAVEREQUEST_DELETE',   'leave request');
 defined('EMPLOYEELEAVETYPES_DELETE')|| define('EMPLOYEELEAVETYPES_DELETE',   'leave type');
+defined('ONCALLMANAGEMENT_DELETE')|| define('ONCALLMANAGEMENT_DELETE', 'on call management');
+defined('ONCALLREQUEST_DELETE')|| define('ONCALLREQUEST_DELETE',   'on call request');
+defined('EMPLOYEEONCALLTYPES_DELETE')|| define('EMPLOYEEONCALLTYPES_DELETE',   'on call type');
 defined('LICENSETYPE_DELETE')|| define('LICENSETYPE_DELETE','license type');
 defined('HOLIDAYDATES_DELETE')|| define('HOLIDAYDATES_DELETE',   'holiday');
 defined('HOLIDAYGROUPS_DELETE')|| define('HOLIDAYGROUPS_DELETE', 'holiday group');
 defined('USERMANAGEMENT_DELETE')|| define('USERMANAGEMENT_DELETE', 'user');
 defined('MANAGEREMPLOYEEVACATIONS_DELETE')|| define('MANAGEREMPLOYEEVACATIONS_DELETE','vacation');
+defined('MANAGEREMPLOYEEONCALLS_DELETE')|| define('MANAGEREMPLOYEEONCALLS_DELETE','oncall');
 defined('MARITALSTATUS_DELETE')|| define('MARITALSTATUS_DELETE', 'marital status');
 defined('MILITARYSERVICE_DELETE')|| define('MILITARYSERVICE_DELETE', 'military status');
 defined('MONTHSLIST_DELETE')|| define('MONTHSLIST_DELETE', 'month');
@@ -324,12 +346,14 @@ defined('REQUISITION_DELETE')|| define('REQUISITION_DELETE','requisition');
 defined('HEIRARCHY_DELETE')|| define('HEIRARCHY_DELETE','heirarchy');
 defined('ORGANISATIONINFO_DELETE')|| define('ORGANISATIONINFO_DELETE', 'organisation information');
 defined('STRUCTURE_DELETE')|| define('STRUCTURE_DELETE',  'structure');
-defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'pay frequency');
+defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'Charge Frequency');
 defined('PENDINGLEAVES_DELETE')|| define('PENDINGLEAVES_DELETE', 'pending leave');
-defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','position');
+defined('PENDINGONCALLS_DELETE')|| define('PENDINGONCALLS_DELETE', 'pending on call');
+defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','career level');
 defined('PREFIX_DELETE')|| define('PREFIX_DELETE', 'prefix');
 defined('RACECODE_DELETE')|| define('RACECODE_DELETE','race code');
 defined('REJECTEDLEAVES_DELETE')|| define('REJECTEDLEAVES_DELETE','rejected leave');
+defined('REJECTEDONCALLS_DELETE')|| define('REJECTEDONCALLS_DELETE','rejected on call');
 defined('REJECTEDREQUISITIONS_DELETE')|| define('REJECTEDREQUISITIONS_DELETE','rejected requisition');
 defined('REMUNERATIONBASIS_DELETE')|| define('REMUNERATIONBASIS_DELETE','remuneration basis');
 defined('ROLES_DELETE')|| define('ROLES_DELETE', 'role');
@@ -364,6 +388,7 @@ defined('APPRAISALMANAGER_DELETE')|| define('APPRAISALMANAGER_DELETE','feedforwa
 defined('FEEDFORWARDQUESTIONS_DELETE')|| define('FEEDFORWARDQUESTIONS_DELETE','feedforward question');
 
 defined('ADDEMPLOYEELEAVES_DELETE')|| define('ADDEMPLOYEELEAVES_DELETE','Employee Leaves');
+defined('ADDEMPLOYEEONCALLS_DELETE')|| define('ADDEMPLOYEEONCALLS_DELETE','Employee On Call');
 defined('CATEGORIES_DELETE')|| define('CATEGORIES_DELETE','category');
 defined('POLICYDOCUMENTS_DELETE')|| define('POLICYDOCUMENTS_DELETE','document');
 defined('VISAANDIMMIGRATIONDETAILS_DELETE')|| define('VISAANDIMMIGRATIONDETAILS_DELETE','visa and immigration details');
@@ -393,21 +418,21 @@ defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installatio
 defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
 defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
 defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
-       
+
 $domain = "";
 if(isset($_SERVER['HTTP_HOST']))
 {
-	
+
     $domainurl = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
-  
+
     $domainurl .= '://'. $_SERVER['HTTP_HOST'];
-   
+
     $domain = $domainurl;
     $domainurl .= rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']),'/');
-   
-    // Base URI 
+
+    // Base URI
     $base_uri = parse_url($domainurl, PHP_URL_PATH);
-  
+
     if(substr($base_uri, 0, 1) != '/') $base_uri = '/'.$base_uri;
     if(substr($base_uri, -1, 1) != '/') $base_uri .= '/';
 }
@@ -416,7 +441,7 @@ else
     $domainurl = 'http://localhost';
     $base_uri = '/';
 }
-		 
+
 // Define Project Name
 
 defined('DOMAIN') || define('DOMAIN', $domainurl.'/');
@@ -454,7 +479,7 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 
 // define path upto /public
 defined('MEDIA_PATH') || define('MEDIA_PATH', $domainurl.'/public/media/');
-    
+
 // define path upto /servicedesk uploads
 defined('SD_FILES_PATH') || define('SD_FILES_PATH', $domainurl.'/public/uploads/servicedesk/');
 
@@ -466,7 +491,7 @@ defined('CA_FILES_PATH') || define('CA_FILES_PATH', $domainurl.'/public/uploads/
 defined('CA_FILES_TEMP_PATH') || define('CA_FILES_TEMP_PATH', $domainurl.'/public/uploads/ca_temp/');
 
 // define path upto /scripts
-defined('SCRIPTS_PATH') || define('SCRIPTS_PATH', $domainurl.'/public/scripts/');    
+defined('SCRIPTS_PATH') || define('SCRIPTS_PATH', $domainurl.'/public/scripts/');
 
 // define main xml layout file name
 defined('MAIN_XML_LAYOUT') || define('MAIN_XML_LAYOUT', 'main.xml');
@@ -505,17 +530,17 @@ defined('GLITCH_APP_ENV') || define('GLITCH_APP_ENV', 'development');
 
 // Define path to Glitch directory
 defined('GLITCH_CONFIGS_PATH') || define('GLITCH_CONFIGS_PATH', APP_LIBRARY_PATH . '/Glitch/Config/ini.php');
-	
-	
+
+
 //Define Upload image path
 defined('USER_UPLOAD_PATH') || define('USER_UPLOAD_PATH',realpath(dirname(__FILE__)).'/uploads/profile');
 
 defined('USER_PREVIEW_UPLOAD_PATH') || define('USER_PREVIEW_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/preview');
 defined('EMP_EXCEL_UPLOAD_PATH') || define('EMP_EXCEL_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/emp_excel');
 
-// Define paths to upload files	
-defined('UPLOAD_PATH_RESUMES') || define('UPLOAD_PATH_RESUMES', realpath(dirname(__FILE__)).'/uploads/resumes');	
-defined('UPLOAD_PATH_FEEDBACK') || define('UPLOAD_PATH_FEEDBACK', realpath(dirname(__FILE__)).'/uploads/feedback');	
+// Define paths to upload files
+defined('UPLOAD_PATH_RESUMES') || define('UPLOAD_PATH_RESUMES', realpath(dirname(__FILE__)).'/uploads/resumes');
+defined('UPLOAD_PATH_FEEDBACK') || define('UPLOAD_PATH_FEEDBACK', realpath(dirname(__FILE__)).'/uploads/feedback');
 
 // Define Service Desk files
 defined('SD_TEMP_UPLOAD_PATH') || define('SD_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/sd_temp/');
@@ -528,7 +553,7 @@ defined('EMP_DOC_UPLOAD_PATH') || define('EMP_DOC_UPLOAD_PATH', realpath(dirname
 // Define Company Announcements files
 // Path of attachment files when Announcement saved as draft
 defined('CA_TEMP_UPLOAD_PATH') || define('CA_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/ca_temp/');
-// Path of attachment files when Announcement posted 
+// Path of attachment files when Announcement posted
 defined('CA_UPLOAD_PATH') || define('CA_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/announcements/');
 
 // Define policy Documents upload path
@@ -569,7 +594,7 @@ defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(
 
 defined('TIMEMANAGEMENT_DELETE')|| define('TIMEMANAGEMENT_DELETE', 'time management');
 /**
- * TIME MANAGEMENT CONSTANTS GOES FROM HERE 
+ * TIME MANAGEMENT CONSTANTS GOES FROM HERE
  * =========================================
  */
 
@@ -577,8 +602,8 @@ defined('TIMEMANAGEMENT_DELETE')|| define('TIMEMANAGEMENT_DELETE', 'time managem
 defined('TM_MEDIA_PATH') || define('TM_MEDIA_PATH', $domainurl.'/public/media/timemanagement/');
 defined('EXPENSES_MEDIA_PATH') || define('EXPENSES_MEDIA_PATH', $domainurl.'/public/media/expenses/');
 defined('ASSETS_MEDIA_PATH') || define('ASSETS_MEDIA_PATH', $domainurl.'/public/media/assets/');
-defined('DEFAULTTASKS_DELETE')|| define('DEFAULTTASKS_DELETE','default task'); 
-defined('CLIENTS_DELETE')|| define('CLIENTS_DELETE','client'); 
+defined('DEFAULTTASKS_DELETE')|| define('DEFAULTTASKS_DELETE','default task');
+defined('CLIENTS_DELETE')|| define('CLIENTS_DELETE','client');
 defined('PROJECTS_DELETE')|| define('PROJECTS_DELETE','project');
 defined('EXPENSECATEGORY_DELETE')|| define('EXPENSECATEGORY_DELETE','expense category');
 defined('ASSETS_DELETE')|| define('ASSETS_DELETE','assets');
@@ -593,19 +618,17 @@ defined('LEADPROJECTS_DELETE')|| define('LEADPROJECTS_DELETE','lead projects del
 defined('EXIT_MEDIA_PATH') || define('EXIT_MEDIA_PATH', $domainurl.'/public/media/exit/');
 //==========================END FOR TIME MANAGEMENT CONSTANTS=============================
 /**
- * EXPENSES CONSTANTS GOES FROM HERE 
+ * EXPENSES CONSTANTS GOES FROM HERE
  * =========================================
  */
-defined('TRIPS_DELETE')|| define('TRIPS_DELETE','trip'); 
+defined('TRIPS_DELETE')|| define('TRIPS_DELETE','trip');
 //==========================END FOR EXPENSES CONSTANTS=============================
 /**
- * EXPENSES CONSTANTS GOES FROM HERE 
+ * EXPENSES CONSTANTS GOES FROM HERE
  * =========================================
  */
-defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset category'); 
+defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset category');
 //==========================END FOR EXPENSES CONSTANTS=============================
 
 
-defined('MYEMPLOYEEEXPENSES_DELETE')|| define('MYEMPLOYEEEXPENSES_DELETE','employee expenses'); 
- 
-
+defined('MYEMPLOYEEEXPENSES_DELETE')|| define('MYEMPLOYEEEXPENSES_DELETE','employee expenses');
