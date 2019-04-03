@@ -77,7 +77,7 @@ function enableLeaves(userid) {
 function validateEmployeLeaves() {
 	var errorcount = 0;
 	var enabledcount = 0;
-	var re = /^[0-9]+$/;
+	var re = /^\d{0,2}(\.\d{1,1})?$/;
 	$('.emp_leave_cls').each(function(i){                            
         var ele= $(this).find('.add_emp_leaves');                            
         var elementid = $(ele).attr('id');
@@ -93,7 +93,7 @@ function validateEmployeLeaves() {
         }
         else if(!re.test(reqValue))
         {
-            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter only number.</span>");
+            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Only 1 digit allowed after decimal.</span>");
             $(ele).addClass('borderclass');
             errorcount++;
         }else if(!$(ele).is(':disabled'))

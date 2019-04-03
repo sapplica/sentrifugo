@@ -967,6 +967,31 @@ function validateratingsonsubmit()
     	}
     }
 	
+    function validateNumberInputForEmpLeave(ele,msg)
+    {
+    	
+    	var elementid = $(ele).attr('id');
+    	var value = $(ele).val();
+    	var re = /^\d{0,2}(\.\d{1,1})?$/;
+        $('#errors-'+elementid).remove();
+    	$(ele).removeClass('borderclass');
+    	if(value == '')
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter leaves.</span>");
+    		$(ele).addClass('borderclass');
+    	}		
+    	else if(!re.test(value))
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Only 1 digit allowed after decimal.</span>");
+    		$(ele).addClass('borderclass');
+    	}
+    	else
+    	{
+    		$('#errors-'+elementid).remove();
+    		$(ele).removeClass('borderclass');
+    	}
+    }
+    
     function updateleavedetails(leaveid,controllername)
     {
     	if(!leaveid)
