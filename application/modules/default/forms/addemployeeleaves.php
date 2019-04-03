@@ -32,7 +32,7 @@ class Default_Form_addemployeeleaves extends Zend_Form
         
         $emp_leave_limit = new Zend_Form_Element_Text('leave_limit');
 		$emp_leave_limit->setLabel("Allot Leave Limit");
-        $emp_leave_limit->setAttrib('maxLength', 3);
+        $emp_leave_limit->setAttrib('maxLength', 4);
         $emp_leave_limit->addFilter(new Zend_Filter_StringTrim());
         
 		if($id_val == '') {
@@ -64,7 +64,7 @@ class Default_Form_addemployeeleaves extends Zend_Form
 		
 		$emp_leave_limit->addValidator("regex",true,array(
                 
-						   'pattern'=>'/^(\-?[1-9]|\-?[1-9][0-9])$/',
+						   'pattern'=>'/^\d{0,2}(\.\d{1,1})?$/',
                 
                            'messages'=>array(
                                'regexNotMatch'=>'Leave limit must be in the range of 0 to 100.'

@@ -43,7 +43,7 @@
 				   <td id="empname_<?php echo $val['user_id'];?>" class="check_field"> <?php echo $val['userfullname'];?> </td>
 				  	<td class="leaves_edit_field" id="newleavelimit_<?php echo $val['user_id'];?>">
 					   <div class="add-employee-div">
-					   	<input type="text" disabled="disabled" class="add_emp_leaves disable_class" maxlength=2 id="user_id_<?php echo $val['user_id'];?>" name="user_id[<?php echo $val['user_id'];?>]" value="<?php echo !empty($val['emp_leave_limit'])?$val['emp_leave_limit']:'';?>" onblur='validateNumberInput(this,"number")' onkeyup='validateNumberInput(this,"number")'>
+					   	<input type="text" disabled="disabled" class="add_emp_leaves disable_class" maxlength=4 id="user_id_<?php echo $val['user_id'];?>" name="user_id[<?php echo $val['user_id'];?>]" value="<?php echo !empty($val['emp_leave_limit'])?$val['emp_leave_limit']:'';?>" onblur='validateNumberInputForEmpLeave(this,"number")' onkeyup='validateNumberInputForEmpLeave(this,"number")'>
 					   </div>
 					   <div onclick="enableLeaves('<?php echo $val['user_id'];?>')" class="mrgetop7">
 					   		<span class="sprite edit"></span>	
