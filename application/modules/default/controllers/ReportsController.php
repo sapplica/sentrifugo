@@ -2031,6 +2031,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$department = $this->_request->getParam('department');
 		$leavestatus = $this->_request->getParam('leavestatus');
 		$from_date = $this->_request->getParam('from_date');
+                $to_date = $this->_request->getParam('to_date');
 		$pageno = $this->_request->getParam('pageno',1);
 		$perpage = intval($this->_request->getParam('perpage',PERPAGE));
 		if($perpage == 0)
@@ -2060,11 +2061,16 @@ class Default_ReportsController extends Zend_Controller_Action
 		if($from_date !='')
 		{
 			$from_date = sapp_Global::change_date($from_date,'database');
-			$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+			$searchQuery .= 'DATE(l.from_date) >= "'.$from_date.'" AND ';
+		}
+                if($to_date !='')
+		{
+			$to_date = sapp_Global::change_date($to_date,'database');
+			$searchQuery .= 'DATE(l.to_date) <= "'.$to_date.'" AND ';
 		}
 		$searchQuery = rtrim($searchQuery," AND");
 			
-		$leavestatusArr = $reportsmodel->getEmpLeaveHistory($sortby, $by,$pageno,$perpage,$searchQuery);
+                $leavestatusArr = $reportsmodel->getEmpLeaveHistory($sortby, $by,$pageno,$perpage,$searchQuery);
 		$leavestatusCount = $reportsmodel->getEmpLeaveHistoryCount($searchQuery);
 		$departmentlistArr = $departmentsmodel->getDepartmentWithCodeList();
 			
@@ -2365,7 +2371,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
 		}
 		$searchQuery = rtrim($searchQuery," AND");
-		$leavestatusArr = $reportsmodel->getEmpLeaveHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
+                $leavestatusArr = $reportsmodel->getEmpLeaveHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
 
 		$emp_arr = $leavestatusArr;
 		require_once 'Classes/PHPExcel.php';

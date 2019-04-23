@@ -62,6 +62,9 @@
 		from_date = $('#from_date').val();
 		if(from_date !='')
 		  $('#from_dateclear').show();
+                to_date = $('#to_date').val();
+		if(to_date !='')
+		  $('#to_dateclear').show();
    }else{
 	   if($('#employeenameclear').is(':visible'))
 	   {
@@ -84,6 +87,10 @@
 	   {
 		 $('#from_date').val(from_date);
 	   }
+           if($('#to_dateclear').is(':visible'))
+	   {
+		 $('#to_date').val(to_date);
+	   }
 
    }
 	  
@@ -101,7 +108,7 @@
 	$.ajax({
 				url: base_url+"/reports/leavesreport/format/html",   
 				type : 'POST',	
-				data : 'employeename='+hiddenempname+'&department='+department+'&leavestatus='+leavestatus+'&from_date='+from_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
+				data : 'employeename='+hiddenempname+'&department='+department+'&leavestatus='+leavestatus+'&from_date='+from_date+'&to_date='+to_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
 				dataType: 'html',
 				beforeSend: function () {
 				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  
@@ -162,6 +169,10 @@
      if($('#from_date').val() !=''){
     	 from_date= '';
    	  $('#from_date').val(''); 
+     }
+     if($('#to_date').val() !=''){
+    	 to_date= '';
+   	  $('#to_date').val(''); 
      }
 	  /* Start Make all hidden variables to default */
 	   $('#perpagetext').val('20');
@@ -363,6 +374,15 @@ echo $this->reportsheader('leavesreport');
 						 </div>
 					</div>
 					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->to_date->getLabel(); ?></label>
+						 <button type="button" id="to_dateclear" name="todateclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('to_dateclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->to_date; ?>
+							<span id="errors-<?php echo $this->form->to_date->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:"";?>
+							</span>
+						 </div>
+					</div>
 					
 					
 					<div class="new-form-ui-submit mrgetop5">
@@ -408,7 +428,7 @@ $(document).ready(function(){
     displayleavereportsajax('');
 	$('#perpage').val('<?php echo $this->perpage; ?>');
 	
-if(employeename !='' || department!='' || leavestatus!='' || from_date!='')
+if(employeename !='' || department!='' || leavestatus!='' || from_date!='' || to_date!='')
   clearleavestatus();
   
 $('#employeename').autocomplete({
@@ -443,6 +463,21 @@ return $( "<li>" )
  
 
 				$('#from_date').datepicker({
+					showOn:'both',
+					//maxDate: new Date, 
+					
+					
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+					showButtonPanel: true 
+								
+				});
+                                
+                                $('#to_date').datepicker({
 					showOn:'both',
 					//maxDate: new Date, 
 					
