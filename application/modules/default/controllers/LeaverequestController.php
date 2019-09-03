@@ -1066,10 +1066,12 @@ class Default_LeaverequestController extends Zend_Controller_Action
 						$message = '<div>Hi,</div><div>The below leave(s) has been cancelled.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Approved'){
 						$leavestatus =2;
-						if(!empty($leavetypeArr)) {
-							if($leavetypeArr[0]['leavepredeductable'] == 1) {		
-							  	$updateemployeeleave = $leaverequestmodel->updateemployeeleaves($leave_details['appliedleavescount'],$leave_details['user_id']);
-							  }
+						if($leave_details['leavestatus']!='Approved') {
+							if(!empty($leavetypeArr)) {
+								if($leavetypeArr[0]['leavepredeductable'] == 1) {		
+									$updateemployeeleave = $leaverequestmodel->updateemployeeleaves($leave_details['appliedleavescount'],$leave_details['user_id']);
+								  }
+							}
 						}
 						$successmsg ='Leave request approved succesfully.';
 						$subject = 'Leave request approved';
