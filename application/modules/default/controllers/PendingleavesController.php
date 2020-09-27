@@ -86,7 +86,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			}
 			$leavesArray = array('pendingleaves','cancelleaves','approvedleaves','rejectedleaves');
 			$objName = 'pendingleaves';
-			$queryflag = 'pending';
+			$queryflag = 'index';
 			if(!empty($flag)){
 				if(in_array($flag, $leavesArray)) {
 					//$objName = ($flag=='approvedleaves')?'pendingleaves':$flag;

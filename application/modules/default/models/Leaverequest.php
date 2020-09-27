@@ -127,6 +127,10 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		}  
 		if($queryflag !='')
 		{
+		   if($queryflag == 'index')
+		   {
+		     $where .=" AND (l.leavestatus = 1 OR l.leavestatus = 2) ";
+		   }
 		   if($queryflag == 'pending')
 		   {
 		     $where .=" AND l.leavestatus = 1 ";
