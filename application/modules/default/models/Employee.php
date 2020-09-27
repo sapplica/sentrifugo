@@ -40,10 +40,11 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		$controllerName = $request->getRequest()->getControllerName();
         //the below code is used to get data of employees from summary table.
         $employeesData=""; 
+        // Allowing employee to see self card and page
         if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))                            
-        	$where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." ";
+        	$where = "  e.isactive != 5 "; // $where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." "
         else	  
-        	$where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." ";
+        	$where = "  e.isactive = 1 "; // $where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." "
         
         if($managerid !='')
             $where .= " AND e.reporting_manager = ".$managerid." ";
@@ -76,10 +77,11 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		$controllerName = $request->getRequest()->getControllerName();
         //the below code is used to get data of employees from summary table.
         $employeesData=""; 
+        // Allowing employee to see self card and page
         if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))                            
-        	$where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." ";
+        	$where = "  e.isactive != 5 "; // $where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." "
         else	  
-        	$where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." ";
+        	$where = "  e.isactive = 1 "; // $where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." "
         
         if($managerid !='')
             $where .= " AND e.reporting_manager = ".$managerid." ";

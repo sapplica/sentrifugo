@@ -1039,9 +1039,13 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$performanceflag = 'true';
 		$ff_flag = 'true';
 
-		try
+		try {
+			
+		} catch (Exception $e) {
+			
+		}
 		{
-			if($id!='' && is_numeric($id) && $id>0 && $id!=$loginUserId)
+			if($id!='' && is_numeric($id) && $id>0) // Removed && $id!=$loginUserId to activate view for self page
 			{
 				$appEmpRatingsData = $appEmpRatingsModel->getSelfAppraisalDataByEmpID($id);
 				if(sizeof($appEmpRatingsData)>0 && $appEmpRatingsData[0]['status'] == 1)
