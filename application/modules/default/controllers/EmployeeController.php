@@ -1039,11 +1039,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$performanceflag = 'true';
 		$ff_flag = 'true';
 
-		try {
-			
-		} catch (Exception $e) {
-			
-		}
+		try
 		{
 			if($id!='' && is_numeric($id) && $id>0) // Removed && $id!=$loginUserId to activate view for self page
 			{
