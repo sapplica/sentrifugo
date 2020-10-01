@@ -231,6 +231,16 @@ public static function _checkMail($options = array()) {
 	    }		
 		if(array_key_exists('cc', $options))
 			$mail->addCc($options['cc']);
+
+		if(array_key_exists('attachments', $options))
+		{
+			$sizeAttachments = sizeof($options['attachments']);
+			for($i=0;$i<$sizeAttachments;$i++)
+			{
+				$filePath = $options['attachments'][$i];
+				$mail->addAttachment($filePath);
+			}
+		}
        
 		if(!$mail->Send()) {
 			return false;
