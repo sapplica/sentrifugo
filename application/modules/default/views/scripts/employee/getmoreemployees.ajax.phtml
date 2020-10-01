@@ -51,7 +51,7 @@ foreach($data as $emp)
                 <ul>
                     <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
                     <li><i class="fa fa-envelope" aria-hidden="true"></i><span><?php echo $emp['emailaddress']; ?></span></li>
-                    <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
+                    <?php if($emp['contactnumber']) {?><li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li> <?php } ?>
                 </ul>
             </div>
 			</a>
