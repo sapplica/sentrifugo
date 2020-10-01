@@ -108,7 +108,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                                             ))                               
                                 ->where($where)
                                 ->limit($limit, $offset)
-								->order('e.modifieddate desc');
+								->order('e.firstname asc', 'e.lastname asc'); // ->order('e.modifieddate desc'); Listing of employees should be in alphabetical order of name
    
         return $this->fetchAll($employeesData)->toArray();  		
     }
