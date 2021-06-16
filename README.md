@@ -168,8 +168,8 @@ Table of Contents:
 		Web Installer  
 		-------------
 		- MAMP users; the AMP stack for MAC needs to be started manually.
-		- Using a JavaScript enabled browser go to http://<webhost>/sentrifugo/; Where <webhost> is localhost if it is installed in the machine you are 
-		currently working on, IP address if it is remotely hosted
+		- Using a JavaScript enabled browser go to `http://<webhost>/sentrifugo/`; Where `<webhost>` is localhost if it is installed in the machine you are 
+		currently working on, or an IP address if it is remotely hosted
 		
 		Pre-requisites
 		--------------
