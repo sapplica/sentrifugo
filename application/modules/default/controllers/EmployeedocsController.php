@@ -345,6 +345,14 @@ class Default_EmployeedocsController extends Zend_Controller_Action
             $fileName = $_FILES["myfile"]["name"];
             $fileName = preg_replace('/[^a-zA-Z0-9.\']/', '_', $fileName);			  	
             $newName  = time().'_'.$user_id.'_'.str_replace(' ', '_', $fileName);
+		
+		// Block php shell upload
+		$allowed = array('php', 'phtml', 'phps');
+		$filename = $_FILES['myfile']['name'];
+		$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		if (in_array($ext, $allowed)) {
+			$this->_helper->json(array('error' => 'php files not allowed'));
+		}
 
             $filedata['original_name'] = $fileName;
             $filedata['new_name'] = $newName;
